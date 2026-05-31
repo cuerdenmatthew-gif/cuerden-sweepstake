@@ -183,11 +183,11 @@ def fetch_live_points_and_activity(_key):
 
 # --- 4. DISPLAY LAYOUT ---
 
-# Render Logo if it exists in GitHub, otherwise skip it gracefully
-col1, col2, col3 = st.columns([1, 1, 1])
+# Render Logo if it exists in GitHub, safely squeezing it into a smaller centered column
+col1, col2, col3 = st.columns([4, 1.5, 4])
 with col2:
     if os.path.exists("logo.png"):
-        st.image("logo.png", use_column_width=True)
+        st.image("logo.png", use_container_width=True)
 
 # Premium Centered Title
 st.markdown("""
