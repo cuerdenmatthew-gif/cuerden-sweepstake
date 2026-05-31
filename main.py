@@ -5,9 +5,10 @@ import math
 import requests
 import pandas as pd
 import json
+import os
 
 # --- 1. CONFIGURATION ---
-st.set_page_config(page_title="Cuerden & Co Sweepstake", page_icon="🏆", layout="wide")
+st.set_page_config(page_title="Cuerden & Co WC26", page_icon="🏆", layout="wide")
 ADMIN_PASSWORD = "Cuerden2026"
 
 # BALLDONTLIE API Setup
@@ -24,30 +25,60 @@ ALL_TEAMS = [
     "Sweden", "Türkiye", "Czechia", "Bosnia and Herzegovina", "DR Congo", "Iraq"
 ]
 
-# --- 1.5 OFFICIAL 2026 BRAND THEME ---
+# --- 1.5 PREMIUM WC26 UI THEME ---
 page_bg = """
 <style>
-/* Animated Gradient using the official 2026 colors */
+/* Import premium modern fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
+
+/* Deep, rich animated gradient background */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #5200FF, #8E001C, #E61D25, #C6FF00);
-    background-size: 300% 300%;
-    animation: WorldCupGradient 18s ease infinite;
+    background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
 }
 
-@keyframes WorldCupGradient {
+@keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* 92% opaque white overlay so the app remains clean and readable */
+/* Glassmorphism blur overlay for the main app */
 [data-testid="stAppViewContainer"] > .main {
-    background-color: rgba(255, 255, 255, 0.92);
+    background: rgba(15, 10, 20, 0.70);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
-/* Hide the default header background */
+/* Make header transparent */
 [data-testid="stHeader"] {
-    background: rgba(0,0,0,0);
+    background: transparent;
+}
+
+/* Premium Typography for Title */
+.premium-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-align: center;
+    background: linear-gradient(to right, #FFFFFF, #C6FF00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.premium-subtitle {
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    color: #E61D25;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin-bottom: 40px;
 }
 </style>
 """
@@ -151,11 +182,18 @@ def fetch_live_points_and_activity(_key):
     return team_points, activity_logs
 
 # --- 4. DISPLAY LAYOUT ---
-# Centered Logo and Title
+
+# Render Logo if it exists in GitHub, otherwise skip it gracefully
+col1, col2, col3 = st.columns([1, 1, 1])
+with col2:
+    if os.path.exists("logo.png"):
+        st.image("logo.png", use_column_width=True)
+
+# Premium Centered Title
 st.markdown("""
-<div style='text-align: center; padding-bottom: 20px;'>
-    <img src='https://upload.wikimedia.org/wikipedia/en/thumb/f/fa/2026_FIFA_World_Cup_logo.svg/800px-2026_FIFA_World_Cup_logo.svg.png' width='160' style='margin-bottom: 15px;'>
-    <h1 style='color: #111111; font-weight: 800; font-size: 2.5rem; margin: 0;'>Cuerden and Co World Cup Sweepstake</h1>
+<div style='text-align: center; padding-bottom: 10px;'>
+    <div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div>
+    <div class='premium-subtitle'>Official Match Tracker</div>
 </div>
 """, unsafe_allow_html=True)
 
