@@ -57,24 +57,22 @@ def save_db_to_sheets(db_data):
 
 db = load_db_from_sheets()
 
-# --- 3. LIVE API CALCULATION (BALLDONTLIE VERSION) ---
+# --- 3. LIVE API & AUDIT CALCULATION ---
 @st.cache_data(ttl=900) 
-def fetch_live_points(_key):
+def fetch_live_points_and_audit(_key):
     team_points = {team: 0 for team in ALL_TEAMS}
-    if not _key: return team_points
+    audit_logs = []
+    if not _key: return team_points, audit_logs
     
-    # BALLDONTLIE uses standard 'Authorization' headers
     headers = {'Authorization': _key}
     try:
         response = requests.get(API_URL, headers=headers)
         if response.status_code == 200:
-            # BALLDONTLIE returns arrays inside a 'data' object
             matches = response.json().get('data', [])
             for m in matches:
-                # BALLDONTLIE statuses usually read as "Final" or "In Progress"
+                # Track games that are active or completed
                 if m['status'] not in ['Final', 'In Progress', 'Halftime']: continue
                 
-                # Fetching teams and scores from BALLDONTLIE's structure
                 home_name = m['home_team']['name']
                 away_name = m['visitor_team']['name']
                 
@@ -86,23 +84,47 @@ def fetch_live_points(_key):
                 
                 if hg is None or ag is None: continue
                 
-                # Apply Points Math
-                if home in team_points:
-                    team_points[home] += hg
-                    if hg > ag: team_points[home] += 3
-                    elif hg == ag: team_points[home] += 1
-                    if ag == 0: team_points[home] += 1
-                    if ag >= 3: team_points[home] -= 1
-                    
-                if away in team_points:
-                    team_points[away] += ag
-                    if ag > hg: team_points[away] += 3
-                    elif ag == hg: team_points[away] += 1
-                    if hg == 0: team_points[away] += 1
-                    if hg >= 3: team_points[away] -= 1
+                # --- Home Team Audit ---
+                hp = 0
+                home_breakdown = []
+                if hg > ag: hp += 3; home_breakdown.append("Win (+3)")
+                elif hg == ag: hp += 1; home_breakdown.append("Draw (+1)")
+                if hg > 0: hp += hg; home_breakdown.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg})")
+                if ag == 0: hp += 1; home_breakdown.append("Clean Sheet (+1)")
+                if ag >= 3: hp -= 1; home_breakdown.append("Conceded 3+ (-1)")
+                
+                # --- Away Team Audit ---
+                ap = 0
+                away_breakdown = []
+                if ag > hg: ap += 3; away_breakdown.append("Win (+3)")
+                elif ag == hg: ap += 1; away_breakdown.append("Draw (+1)")
+                if ag > 0: ap += ag; away_breakdown.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag})")
+                if hg == 0: ap += 1; away_breakdown.append("Clean Sheet (+1)")
+                if hg >= 3: ap -= 1; away_breakdown.append("Conceded 3+ (-1)")
+                
+                # Save totals
+                if home in team_points: team_points[home] += hp
+                if away in team_points: team_points[away] += ap
+                
+                # Append to aesthetic audit trail records
+                status_emoji = "🟢 Live" if m['status'] != 'Final' else "⏱️ FT"
+                audit_logs.append({
+                    "Status": status_emoji,
+                    "Match": f"{home} {hg} - {ag} {away}",
+                    "Team": home,
+                    "Points Earned": hp,
+                    "Breakdown": " | ".join(home_breakdown) if home_breakdown else "0 pts"
+                })
+                audit_logs.append({
+                    "Status": status_emoji,
+                    "Match": f"{home} {hg} - {ag} {away}",
+                    "Team": away,
+                    "Points Earned": ap,
+                    "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
+                })
     except:
         pass
-    return team_points
+    return team_points, audit_logs
 
 # --- 4. DISPLAY LAYOUT ---
 st.title("🏆 Cuerden and Co World Cup Sweepstake")
@@ -144,18 +166,67 @@ if not db["locked"]:
             save_db_to_sheets(db)
             st.rerun()
 else:
-    st.header("Step 2: Live Leaderboard")
-    c1, c2 = st.columns([1, 2])
-    with c1:
-        st.subheader("📋 Your Teams")
-        for p, teams in db["assignments"].items():
-            with st.expander(f"{p}'s Teams"):
-                st.write(", ".join(teams))
-    with c2:
-        st.subheader("📊 Standing")
-        scores = fetch_live_points(API_KEY)
-        table = []
-        for p, teams in db["assignments"].items():
-            pts = sum([scores.get(t, 0) for t in teams])
-            table.append({"Player": p, "Total Points": pts})
-        st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
+    # Create the beautiful two-tab interface
+    tab1, tab2 = st.tabs(["🏆 Standings & Teams", "🔍 Live Match Audit Trail"])
+    
+    # Fetch live points AND the audit trail logs from BALDONTLIE
+    team_scores, raw_audit_logs = fetch_live_points_and_audit(API_KEY)
+    
+    # Map teams to players for filtering
+    team_to_player = {}
+    for player, teams in db["assignments"].items():
+        for t in teams:
+            team_to_player[t] = player
+            
+    with tab1:
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            st.subheader("📋 Your Teams")
+            for p, teams in db["assignments"].items():
+                with st.expander(f"{p}'s Teams"):
+                    st.write(", ".join(teams))
+        with c2:
+            st.subheader("📊 Leaderboard")
+            table = []
+            for p, teams in db["assignments"].items():
+                pts = sum([team_scores.get(t, 0) for t in teams])
+                table.append({"Player": p, "Total Points": pts})
+            st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
+            st.caption("Scores update automatically every 15 minutes during live matches.")
+
+    with tab2:
+        st.subheader("⚽ Match-by-Match Points Breakdown")
+        
+        # Build complete audit data frame with assigned players attached
+        processed_logs = []
+        for log in raw_audit_logs:
+            log_copy = log.copy()
+            log_copy["Player"] = team_to_player.get(log["Team"], "🍿 Unassigned Team")
+            processed_logs.append(log_copy)
+            
+        audit_df = pd.DataFrame(processed_logs)
+        
+        if not audit_df.empty:
+            # Interactive Filter Dropdown
+            filter_option = st.selectbox("Filter Audit Trail by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
+            
+            if filter_option != "All Players":
+                filtered_df = audit_df[audit_df["Player"] == filter_option]
+            else:
+                filtered_df = audit_df
+                
+            # Re-order columns to look ultra-clean
+            display_df = filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]]
+            
+            # Display interactive aesthetic data grid
+            st.dataframe(
+                display_df, 
+                use_container_width=True, 
+                hide_index=True,
+                column_config={
+                    "Points Earned": st.column_config.NumberColumn(format="%+d"),
+                    "Status": st.column_config.TextColumn(width="small")
+                }
+            )
+        else:
+            st.info("The tournament hasn't started yet! Once games kick off, a complete point breakdown will appear here.")
