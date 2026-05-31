@@ -12,7 +12,6 @@ ADMIN_PASSWORD = "Cuerden2026"
 
 # BALLDONTLIE API Setup
 API_KEY = st.secrets.get("FOOTBALL_API_KEY", "")
-# BALLDONTLIE's specific endpoint for the World Cup
 API_URL = "https://api.balldontlie.io/worldcup/v1/matches" 
 
 ALL_TEAMS = [
@@ -25,8 +24,36 @@ ALL_TEAMS = [
     "Sweden", "Türkiye", "Czechia", "Bosnia and Herzegovina", "DR Congo", "Iraq"
 ]
 
+# --- 1.5 OFFICIAL 2026 BRAND THEME ---
+page_bg = """
+<style>
+/* Animated Gradient using the official 2026 colors */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #5200FF, #8E001C, #E61D25, #C6FF00);
+    background-size: 300% 300%;
+    animation: WorldCupGradient 18s ease infinite;
+}
+
+@keyframes WorldCupGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 92% opaque white overlay so the app remains clean and readable */
+[data-testid="stAppViewContainer"] > .main {
+    background-color: rgba(255, 255, 255, 0.92);
+}
+
+/* Hide the default header background */
+[data-testid="stHeader"] {
+    background: rgba(0,0,0,0);
+}
+</style>
+"""
+st.markdown(page_bg, unsafe_allow_html=True)
+
 # --- 2. CONNECT TO GOOGLE SHEETS ---
-# (Keep your existing Google Sheets functions here: conn, load_db_from_sheets, save_db_to_sheets, db)
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_db_from_sheets():
@@ -124,7 +151,13 @@ def fetch_live_points_and_activity(_key):
     return team_points, activity_logs
 
 # --- 4. DISPLAY LAYOUT ---
-st.title("🏆 Cuerden and Co World Cup Sweepstake")
+# Centered Logo and Title
+st.markdown("""
+<div style='text-align: center; padding-bottom: 20px;'>
+    <img src='https://upload.wikimedia.org/wikipedia/en/thumb/f/fa/2026_FIFA_World_Cup_logo.svg/800px-2026_FIFA_World_Cup_logo.svg.png' width='160' style='margin-bottom: 15px;'>
+    <h1 style='color: #111111; font-weight: 800; font-size: 2.5rem; margin: 0;'>Cuerden and Co World Cup Sweepstake</h1>
+</div>
+""", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
 ### 📜 Point System
@@ -163,7 +196,7 @@ if not db["locked"]:
             save_db_to_sheets(db)
             st.rerun()
 else:
-    # Beautiful two-tab interface using the new name
+    # Beautiful two-tab interface
     tab1, tab2 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity"])
     
     team_scores, raw_activity_logs = fetch_live_points_and_activity(API_KEY)
