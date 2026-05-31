@@ -225,11 +225,33 @@ if not db["locked"]:
     if len(db["participants"]) > 0:
         per_person = math.floor(48 / len(db["participants"]))
         st.info(f"Each person will receive **{per_person} teams** randomly.")
-        if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
-            random.shuffle(ALL_TEAMS)
-            for i, person in enumerate(db["participants"]):
-                start, end = i * per_person, (i * per_person) + per_person
-                db["assignments"][person] = ALL_TEAMS[start:end]
+if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
+            TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
+            
+            # 1. Shuffle the heavy hitters
+            shuffled_top = TOP_13.copy()
+            random.shuffle(shuffled_top)
+            
+            # 2. Isolate the rest of the teams
+            regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
+            
+            # 3. Give exactly 1 Top Team to each player
+            for person in db["participants"]:
+                db["assignments"][person] = []
+                if shuffled_top:
+                    db["assignments"][person].append(shuffled_top.pop(0))
+            
+            # 4. Dump any unassigned Top Teams back into the regular pool and shuffle
+            regular_teams.extend(shuffled_top)
+            random.shuffle(regular_teams)
+            
+            # 5. Fill up the rest of their slots
+            for person in db["participants"]:
+                needed = per_person - len(db["assignments"][person])
+                for _ in range(needed):
+                    if regular_teams:
+                        db["assignments"][person].append(regular_teams.pop(0))
+                        
             db["locked"] = True
             save_db_to_sheets(db)
             st.rerun()
