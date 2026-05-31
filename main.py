@@ -10,11 +10,11 @@ import json
 st.set_page_config(page_title="Cuerden & Co Sweepstake", page_icon="🏆", layout="wide")
 ADMIN_PASSWORD = "Cuerden2026"
 
-# API Setup
+# BALLDONTLIE API Setup
 API_KEY = st.secrets.get("FOOTBALL_API_KEY", "")
-API_URL = "https://api.football-data.org/v4/competitions/WC/matches"
+# BALLDONTLIE's specific endpoint for the World Cup
+API_URL = "https://api.balldontlie.io/worldcup/v1/matches" 
 
-# Official 48 Teams
 ALL_TEAMS = [
     "USA", "Mexico", "Canada", "Japan", "New Zealand", "Iran", "Argentina", "Uzbekistan", 
     "South Korea", "Jordan", "Australia", "Brazil", "Ecuador", "Uruguay", "Colombia", 
@@ -26,6 +26,7 @@ ALL_TEAMS = [
 ]
 
 # --- 2. CONNECT TO GOOGLE SHEETS ---
+# (Keep your existing Google Sheets functions here: conn, load_db_from_sheets, save_db_to_sheets, db)
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_db_from_sheets():
@@ -33,15 +34,12 @@ def load_db_from_sheets():
         df = conn.read(ttl=0) 
         if df.empty:
             return {"participants": [], "assignments": {}, "locked": False}
-        
         participants = df[df["Type"] == "Player"]["Name"].tolist()
         locked = not df[df["Type"] == "Status"].empty
-        
         assignments = {}
         assign_rows = df[df["Type"] == "Assignment"]
         for _, row in assign_rows.iterrows():
             assignments[row["Name"]] = json.loads(row["Teams"])
-            
         return {"participants": participants, "assignments": assignments, "locked": locked}
     except:
         return {"participants": [], "assignments": {}, "locked": False}
@@ -54,36 +52,48 @@ def save_db_to_sheets(db_data):
         rows.append({"Type": "Assignment", "Name": name, "Teams": json.dumps(teams)})
     if db_data["locked"]:
         rows.append({"Type": "Status", "Name": "Locked", "Teams": ""})
-        
     new_df = pd.DataFrame(rows)
     conn.update(data=new_df)
 
 db = load_db_from_sheets()
 
-# --- 3. LIVE API CALCULATION ---
+# --- 3. LIVE API CALCULATION (BALLDONTLIE VERSION) ---
 @st.cache_data(ttl=900) 
 def fetch_live_points(_key):
     team_points = {team: 0 for team in ALL_TEAMS}
     if not _key: return team_points
     
-    headers = {'X-Auth-Token': _key}
+    # BALLDONTLIE uses standard 'Authorization' headers
+    headers = {'Authorization': _key}
     try:
         response = requests.get(API_URL, headers=headers)
         if response.status_code == 200:
-            matches = response.json().get('matches', [])
+            # BALLDONTLIE returns arrays inside a 'data' object
+            matches = response.json().get('data', [])
             for m in matches:
-                if m['status'] not in ['FINISHED', 'IN_PLAY', 'PAUSED']: continue
-                home = next((t for t in ALL_TEAMS if t in m['homeTeam']['name']), m['homeTeam']['name'])
-                away = next((t for t in ALL_TEAMS if t in m['awayTeam']['name']), m['awayTeam']['name'])
-                hg, ag = m['score']['fullTime']['home'], m['score']['fullTime']['away']
+                # BALLDONTLIE statuses usually read as "Final" or "In Progress"
+                if m['status'] not in ['Final', 'In Progress', 'Halftime']: continue
+                
+                # Fetching teams and scores from BALLDONTLIE's structure
+                home_name = m['home_team']['name']
+                away_name = m['visitor_team']['name']
+                
+                home = next((t for t in ALL_TEAMS if t in home_name), home_name)
+                away = next((t for t in ALL_TEAMS if t in away_name), away_name)
+                
+                hg = m.get('home_team_score')
+                ag = m.get('visitor_team_score')
+                
                 if hg is None or ag is None: continue
                 
+                # Apply Points Math
                 if home in team_points:
                     team_points[home] += hg
                     if hg > ag: team_points[home] += 3
                     elif hg == ag: team_points[home] += 1
                     if ag == 0: team_points[home] += 1
                     if ag >= 3: team_points[home] -= 1
+                    
                 if away in team_points:
                     team_points[away] += ag
                     if ag > hg: team_points[away] += 3
