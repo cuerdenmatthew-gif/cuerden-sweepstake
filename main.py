@@ -211,7 +211,7 @@ if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
     st.rerun()
 
 if not db["locked"]:
-    st.header("Step 1: Registration Phase")
+    st.header("Step 1: Registration Phase (Closes June 10th!)")
     player_name = st.text_input("Enter name to join:")
     if st.button("Register"):
         if player_name and player_name not in db["participants"]:
@@ -224,8 +224,8 @@ if not db["locked"]:
     
     if len(db["participants"]) > 0:
         per_person = math.floor(48 / len(db["participants"]))
-        st.info(f"Each person will receive **{per_person} teams** randomly.")
-if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
+        st.info(f"Each person will receive **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
+        if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
             TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
             
             # 1. Shuffle the heavy hitters
@@ -279,8 +279,10 @@ else:
             for p, teams in db["assignments"].items():
                 pts = sum([team_scores.get(t, 0) for t in teams])
                 table.append({"Player": p, "Total Points": pts})
-            st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
-            st.caption("Scores update automatically every 15 minutes during live matches.")
+            
+            if table:
+                st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
+            st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
 
     with tab2:
         st.subheader("⚽ Match Activity Points Breakdown")
