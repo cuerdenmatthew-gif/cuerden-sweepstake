@@ -211,7 +211,7 @@ if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
     st.rerun()
 
 if not db["locked"]:
-    st.header("Step 1: Registration Phase (Closes June 10th!)")
+    st.header("Step 1: Registration Phase (Closes June 9th!)")
     player_name = st.text_input("Enter name to join:")
     if st.button("Register"):
         if player_name and player_name not in db["participants"]:
