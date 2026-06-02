@@ -193,7 +193,7 @@ with col2:
 st.markdown("""
 <div style='text-align: center; padding-bottom: 10px;'>
     <div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div>
-    <div class='premium-subtitle'>Official Match Tracker</div>
+    <div class='premium-subtitle'>World Cup Match Tracker</div>
 </div>
 """, unsafe_allow_html=True)
 
