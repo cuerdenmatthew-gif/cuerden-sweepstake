@@ -87,22 +87,26 @@ page_bg = """
     letter-spacing: 3px;
     text-transform: uppercase;
     font-size: 0.9rem;
-    margin-bottom: 25px;
+    margin-bottom: 40px;
 }
 
-/* Glowing Top Instruction Alert Panel style */
-.sidebar-hint-banner {
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #0A0012;
-    background: #C6FF00;
-    padding: 10px 16px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(198, 255, 0, 0.6);
-    max-width: 500px;
-    margin: 0 auto 30px auto;
+/* ABSOLUTELY PINNED TOP LEFT COMPACT GUIDE LABEL */
+.sidebar-hint-text {
+    position: fixed !important;
+    top: 15px !important;
+    left: 55px !important;
+    z-index: 9999999 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #C6FF00 !important;
+    background: rgba(10, 0, 18, 0.85) !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(198, 255, 0, 0.3) !important;
+    white-space: nowrap !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+    text-shadow: 0 0 8px rgba(198, 255, 0, 0.5) !important;
 }
 </style>
 """
@@ -347,12 +351,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Bulletproof Navigation Notice Panel
-st.markdown("""
-<div class='sidebar-hint-banner'>
-    👈 Click the <b>&gt;&gt; arrow</b> in the very top-left corner to view Point Rules & Live Active Teams!
-</div>
-""", unsafe_allow_html=True)
+# PINNED ARROW PROMPT ON TOP LEFT NEXT TO ICON STATE
+st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
 ### 📜 Point System
