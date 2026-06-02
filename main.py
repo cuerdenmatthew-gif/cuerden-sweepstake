@@ -25,6 +25,19 @@ ALL_TEAMS = [
     "Sweden", "Türkiye", "Czechia", "Bosnia and Herzegovina", "DR Congo", "Iraq"
 ]
 
+TEAM_FLAGS = {
+    "USA": "🇺🇸", "Mexico": "🇲🇽", "Canada": "🇨🇦", "Japan": "🇯🇵", "New Zealand": "🇳🇿",
+    "Iran": "🇮🇷", "Argentina": "🇦🇷", "Uzbekistan": "🇺🇿", "South Korea": "🇰🇷", "Jordan": "🇯🇴",
+    "Australia": "🇦🇺", "Brazil": "🇧🇷", "Ecuador": "🇪🇨", "Uruguay": "🇺🇾", "Colombia": "🇨🇴",
+    "Paraguay": "🇵🇾", "Morocco": "🇲🇦", "Tunisia": "🇹🇳", "Egypt": "🇪🇬", "Algeria": "🇩🇿",
+    "Ghana": "🇬🇭", "Cabo Verde": "🇨🇻", "Saudi Arabia": "🇸🇦", "Qatar": "🇶🇦", "England": "🏴 \ \ \ \ \ \ \ 󠁢󠁥󠁮󠁧󠁿",
+    "Ivory Coast": "🇨🇮", "South Africa": "🇿🇦", "Senegal": "🇸🇳", "France": "🇫🇷", "Croatia": "🇭🇷",
+    "Portugal": "🇵🇹", "Norway": "🇳🇴", "Germany": "🇩🇪", "Netherlands": "🇳🇱", "Belgium": "🇧🇪",
+    "Switzerland": "🇨🇭", "Spain": "🇪🇸", "Austria": "🇦🇹", "Scotland": "🏴 \ \ \ \ \ \ \ 󠁢󠁳󠁣󠁴󠁿", "Curaçao": "🇨🇼",
+    "Haiti": "🇭🇹", "Panama": "🇵🇦", "Sweden": "🇸🇪", "Türkiye": "🇹🇷", "Czechia": "🇨🇿",
+    "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
+}
+
 # --- 1.5 PREMIUM WC26 UI THEME ---
 page_bg = """
 <style>
@@ -76,12 +89,16 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-/* FORCES THE LOGO TO STAY SMALL AND CENTERED ON PHONES */
+[data-testid="stImage"] {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
 [data-testid="stImage"] img {
-    max-width: 140px !important;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    max-width: 130px !important;
+    height: auto !important;
 }
 </style>
 """
@@ -123,13 +140,41 @@ db = load_db_from_sheets()
 def fetch_live_points_and_activity(_key):
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
-    if not _key: return team_points, activity_logs
+    eliminated_teams = set()
+    if not _key: return team_points, activity_logs, eliminated_teams
     
+    # Official 2026 FIFA World Cup Group Mapping
+    TEAM_GROUPS = {
+        "Mexico": "A", "South Africa": "A", "South Korea": "A", "Czechia": "A",
+        "Canada": "B", "Switzerland": "B", "Qatar": "B", "Bosnia and Herzegovina": "B",
+        "Brazil": "C", "Morocco": "C", "Haiti": "C", "Scotland": "C",
+        "USA": "D", "Paraguay": "D", "Australia": "D", "Türkiye": "D",
+        "Germany": "E", "Curaçao": "E", "Ivory Coast": "E", "Ecuador": "E",
+        "Netherlands": "F", "Japan": "F", "Tunisia": "F", "Sweden": "F",
+        "Belgium": "G", "Egypt": "G", "Iran": "G", "New Zealand": "G",
+        "Spain": "H", "Cabo Verde": "H", "Saudi Arabia": "H", "Uruguay": "H",
+        "France": "I", "Senegal": "I", "Norway": "I", "Iraq": "I",
+        "Argentina": "J", "Algeria": "J", "Austria": "J", "Jordan": "J",
+        "Portugal": "K", "Uzbekistan": "K", "Colombia": "K", "DR Congo": "K",
+        "England": "L", "Croatia": "L", "Ghana": "L", "Panama": "L"
+    }
+    
+    group_teams = {}
+    for t, g in TEAM_GROUPS.items():
+        if g not in group_teams: group_teams[g] = []
+        group_teams[g].append(t)
+        
+    group_stats = {t: {"pts": 0, "gd": 0, "gf": 0, "mp": 0} for t in ALL_TEAMS}
     headers = {'Authorization': _key}
+    
     try:
         response = requests.get(API_URL, headers=headers)
         if response.status_code == 200:
             matches = response.json().get('data', [])
+            
+            has_knockouts_started = False
+            knockout_participants = set()
+            
             for m in matches:
                 if m['status'] not in ['Final', 'In Progress', 'Halftime']: continue
                 
@@ -148,6 +193,33 @@ def fetch_live_points_and_activity(_key):
                 match_date = str(raw_date)[:10] if raw_date else '2026-01-01'
                 
                 multiplier = 2 if match_date >= '2026-06-28' else 1
+                
+                # Standings builder (Calculates only from finished group games)
+                if match_date < '2026-06-28' and m['status'] == 'Final':
+                    if home in group_stats:
+                        group_stats[home]["mp"] += 1
+                        group_stats[home]["gf"] += hg
+                        group_stats[home]["gd"] += (hg - ag)
+                    if away in group_stats:
+                        group_stats[away]["mp"] += 1
+                        group_stats[away]["gf"] += ag
+                        group_stats[away]["gd"] += (ag - hg)
+                    
+                    if hg > ag:
+                        if home in group_stats: group_stats[home]["pts"] += 3
+                    elif ag > hg:
+                        if away in group_stats: group_stats[away]["pts"] += 3
+                    else:
+                        if home in group_stats: group_stats[home]["pts"] += 1
+                        if away in group_stats: group_stats[away]["pts"] += 1
+                
+                if match_date >= '2026-06-28':
+                    has_knockouts_started = True
+                    knockout_participants.add(home)
+                    knockout_participants.add(away)
+                    if m['status'] == 'Final':
+                        if hg > ag: eliminated_teams.add(away)
+                        elif ag > hg: eliminated_teams.add(home)
                 
                 hp = 0
                 home_breakdown = []
@@ -211,16 +283,48 @@ def fetch_live_points_and_activity(_key):
                     "Points Earned": ap,
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
+                
+            # Process Final Group Stage Standings Position Bonuses
+            for g, teams in group_teams.items():
+                if all(group_stats[t]["mp"] == 3 for t in teams):
+                    sorted_teams = sorted(teams, key=lambda x: (group_stats[x]["pts"], group_stats[x]["gd"], group_stats[x]["gf"]), reverse=True)
+                    top_team = sorted_teams[0]
+                    second_team = sorted_teams[1]
+                    
+                    team_points[top_team] += 2
+                    team_points[second_team] += 1
+                    
+                    activity_logs.append({
+                        "Status": "⏱️ Finished",
+                        "Match": f"Group {g} Final Placement",
+                        "Team": top_team,
+                        "Points Earned": 2,
+                        "Breakdown": "Group Stage Winner Bonus (+2)"
+                    })
+                    activity_logs.append({
+                        "Status": "⏱️ Finished",
+                        "Match": f"Group {g} Final Placement",
+                        "Team": second_team,
+                        "Points Earned": 1,
+                        "Breakdown": "Group Stage 2nd Place Bonus (+1)"
+                    })
+
+            if has_knockouts_started:
+                for team in ALL_TEAMS:
+                    if team not in knockout_participants:
+                        eliminated_teams.add(team)
+                        
     except:
         pass
-    return team_points, activity_logs
+    return team_points, activity_logs, eliminated_teams
+
+# Load active matrix parameters globally
+team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activity(API_KEY)
 
 # --- 4. DISPLAY LAYOUT ---
 
-col1, col2, col3 = st.columns([1, 1, 1])
-with col2:
-    if os.path.exists("logo.png"):
-        st.image("logo.png")
+if os.path.exists("logo.png"):
+    st.image("logo.png")
 
 st.markdown("""
 <div style='text-align: center; padding-bottom: 10px;'>
@@ -235,9 +339,23 @@ st.sidebar.markdown("""
 * **Goal Scored:** 1 pt
 * **Clean Sheet:** 1 pt
 * **3+ Goals Conceded:** -1 pt
-* 🏆 **KNOCKOUTS:** All points are doubled (2x) from the Round of 32 onwards!
+* 🥇 **Group Winner:** +2 pts
+* 🥈 **Group 2nd Place:** +1 pt
+* 🏆 **KNOCKOUTS:** All match metrics double (2x) from Round of 32 onwards!
 """)
 
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🏳️ Active Nations")
+active_count = 0
+for team in ALL_TEAMS:
+    if team not in eliminated_nations:
+        flag = TEAM_FLAGS.get(team, "🏳️")
+        st.sidebar.markdown(f"{flag} {team}")
+        active_count += 1
+if active_count == 0:
+    st.sidebar.caption("All team data sync tracking is pending kickoff.")
+
+st.sidebar.markdown("---")
 admin_input = st.sidebar.text_input("Admin Password", type="password")
 if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
     save_db_to_sheets({"participants": [], "assignments": {}, "locked": False})
@@ -260,7 +378,18 @@ if not db["locked"]:
     if len(db["participants"]) > 0:
         per_person = math.floor(48 / len(db["participants"]))
         prize_pot = len(db["participants"]) * 20
-        st.success(f"**Current Prize Pot: £{prize_pot}**")
+        st.success(f"**Current Total Prize Pot: £{prize_pot}**")
+        
+        if len(db["participants"]) >= 3:
+            st.markdown(f"""
+            💰 **Prize Money Breakdown:**
+            * 🥇 **1st Place:** £{prize_pot - 60}
+            * 🥈 **2nd Place:** £40 *(Double money)*
+            * 🥾 **Last Place:** £20 *(Money back)*
+            """)
+        else:
+            st.caption("A minimum of 3 registered players is required to activate the layered payout tier display.")
+            
         st.info(f"Each person will receive **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
         
         if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
@@ -268,7 +397,6 @@ if not db["locked"]:
             
             shuffled_top = TOP_13.copy()
             random.shuffle(shuffled_top)
-            
             regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
             
             for person in db["participants"]:
@@ -291,8 +419,6 @@ if not db["locked"]:
 else:
     tab1, tab2 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity"])
     
-    team_scores, raw_activity_logs = fetch_live_points_and_activity(API_KEY)
-    
     team_to_player = {}
     for player, teams in db["assignments"].items():
         for t in teams:
@@ -304,7 +430,8 @@ else:
             st.subheader("📋 Your Teams")
             for p, teams in db["assignments"].items():
                 with st.expander(f"{p}'s Teams"):
-                    st.write(", ".join(teams))
+                    team_list_with_flags = [f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]
+                    st.write(", ".join(team_list_with_flags))
         with c2:
             st.subheader("📊 Leaderboard")
             table = []
@@ -316,7 +443,14 @@ else:
                 st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
             
             prize_pot = len(db["participants"]) * 20
-            st.success(f"**Final Prize Pot: £{prize_pot}**")
+            st.success(f"**Final Tournament Prize Pot: £{prize_pot}**")
+            if len(db["participants"]) >= 3:
+                st.markdown(f"""
+                💰 **Official Cash Split Structure:**
+                * 🥇 **1st Place:** £{prize_pot - 60}
+                * 🥈 **2nd Place:** £40 *(Double money)*
+                * 🥾 **Last Place:** £20 *(Money back)*
+                """)
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
 
     with tab2:
