@@ -90,34 +90,47 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-/* 1. WHEN SIDEBAR IS CLOSED: Style the floating tab on the main page view */
-[data-testid="collapsedControl"] {
-    background-color: #C6FF00 !important;
-    border-radius: 0 8px 8px 0 !important;
-    box-shadow: 0 0 15px rgba(198, 255, 0, 0.8) !important;
-    position: fixed !important;
-    top: 15px !important;
-    left: 0px !important;
-    z-index: 999999 !important;
-    padding: 6px 10px !important;
-}
-
-[data-testid="collapsedControl"] svg {
-    color: #0A0012 !important;
-    fill: #0A0012 !important;
-    transform: scale(1.3) !important;
-}
-
-/* 2. WHEN SIDEBAR IS OPEN: Style the button inside the side panel */
-[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
+/* 1. BULLETPROOF SIDEBAR ICON STYLE WHEN SIDEBAR IS CLOSED */
+button[aria-label="Open sidebar"] {
     background-color: #C6FF00 !important;
     border-radius: 8px !important;
-    box-shadow: 0 0 15px rgba(198, 255, 0, 0.6) !important;
+    box-shadow: 0 0 20px rgba(198, 255, 0, 0.9) !important;
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 9999999 !important;
+    width: 45px !important;
+    height: 45px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
-[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
+button[aria-label="Open sidebar"] svg {
     color: #0A0012 !important;
     fill: #0A0012 !important;
+    stroke: #0A0012 !important;
+    transform: scale(1.4) !important;
+}
+
+button[aria-label="Open sidebar"]:hover {
+    background-color: #FFFFFF !important;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 1) !important;
+    transform: scale(1.08) !important;
+}
+
+/* 2. SIDEBAR ICON STYLE WHEN SIDEBAR IS ALREADY OPENED */
+[data-testid="stSidebar"] button[aria-label="Close sidebar"],
+[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease !important;
+}
+
+[data-testid="stSidebar"] button[aria-label="Close sidebar"] svg,
+[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
+    color: #FFFFFF !important;
 }
 </style>
 """
