@@ -90,42 +90,48 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-/* 1. BULLETPROOF SIDEBAR ICON STYLE WHEN SIDEBAR IS CLOSED */
-button[aria-label="Open sidebar"] {
+/* SIDEBAR NOTIFICATION TARGETING WHEN CLOSED */
+div[data-testid="collapsedControl"] {
     background-color: #C6FF00 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 0 20px rgba(198, 255, 0, 0.9) !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 0 20px rgba(198, 255, 0, 0.8) !important;
     position: fixed !important;
     top: 15px !important;
-    left: 15px !important;
+    left: 0px !important;
     z-index: 9999999 !important;
-    width: 45px !important;
-    height: 45px !important;
+    padding: 4px 8px !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    transition: all 0.2s ease-in-out !important;
 }
 
-button[aria-label="Open sidebar"] svg {
+div[data-testid="collapsedControl"] svg {
     color: #0A0012 !important;
     fill: #0A0012 !important;
-    stroke: #0A0012 !important;
-    transform: scale(1.4) !important;
+    transform: scale(1.2) !important;
 }
 
-button[aria-label="Open sidebar"]:hover {
-    background-color: #FFFFFF !important;
-    box-shadow: 0 0 25px rgba(255, 255, 255, 1) !important;
-    transform: scale(1.08) !important;
+/* GLOWING DIRECTIONAL TEXT VALUE PROMPT */
+div[data-testid="collapsedControl"]::after {
+    content: "👈 View Rules & Active Teams";
+    color: #C6FF00;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    position: absolute;
+    left: 55px;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(198, 255, 0, 0.6);
+    background: rgba(10, 0, 18, 0.6);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(198, 255, 0, 0.3);
 }
 
-/* 2. SIDEBAR ICON STYLE WHEN SIDEBAR IS ALREADY OPENED */
+/* PANEL OPEN RE-STYLING PRESETS */
 [data-testid="stSidebar"] button[aria-label="Close sidebar"],
 [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
     background-color: rgba(255, 255, 255, 0.1) !important;
     border-radius: 6px !important;
-    transition: background-color 0.2s ease !important;
 }
 
 [data-testid="stSidebar"] button[aria-label="Close sidebar"] svg,
@@ -352,7 +358,6 @@ team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activ
 
 # --- 4. DISPLAY LAYOUT ---
 
-# Centered Logo Wrapper
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
