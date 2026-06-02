@@ -42,7 +42,7 @@ TEAM_FLAGS = {
 # --- 1.5 PREMIUM WC26 UI THEME ---
 page_bg = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght=800&family=Inter:wght=400;600&display=swap');
 
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100);
@@ -66,6 +66,38 @@ page_bg = """
     background: transparent;
 }
 
+/* ANTI-LIGHT MODE GLOBAL TEXT & CONTROLS LOCKS */
+h1, h2, h3, h4, h5, h6, p, span, label, li, small {
+    color: #FFFFFF !important;
+}
+
+/* Force standard text descriptions, registered user strings, and subtitles to remain white */
+[data-testid="stMarkdownContainer"] p, .stText, div {
+    color: #FFFFFF !important;
+}
+
+/* Force text inputs, text area borders, and background containers to remain highly legible */
+input[type="text"], [data-testid="stTextInput"] input {
+    color: #FFFFFF !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* High contrast premium buttons setup override */
+button, [data-testid="stBaseButton-secondary"] {
+    color: #0A0012 !important;
+    background-color: #C6FF00 !important;
+    border: none !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 10px rgba(198, 255, 0, 0.3) !important;
+}
+
+button:hover, [data-testid="stBaseButton-secondary"]:hover {
+    background-color: #FFFFFF !important;
+    color: #0A0012 !important;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.5) !important;
+}
+
 .premium-title {
     font-family: 'Montserrat', sans-serif;
     font-size: 3.5rem;
@@ -82,7 +114,7 @@ page_bg = """
 .premium-subtitle {
     font-family: 'Inter', sans-serif;
     text-align: center;
-    color: #E61D25;
+    color: #E61D25 !important;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -90,7 +122,6 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-/* ABSOLUTELY PINNED TOP LEFT COMPACT GUIDE LABEL */
 .sidebar-hint-text {
     position: fixed !important;
     top: 15px !important;
@@ -99,14 +130,12 @@ page_bg = """
     font-family: 'Inter', sans-serif !important;
     font-size: 0.8rem !important;
     font-weight: 600 !important;
-    color: #C6FF00 !important;
-    background: rgba(10, 0, 18, 0.85) !important;
+    color: #0A0012 !important;
+    background: #C6FF00 !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    border: 1px solid rgba(198, 255, 0, 0.3) !important;
     white-space: nowrap !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
-    text-shadow: 0 0 8px rgba(198, 255, 0, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(198, 255, 0, 0.4) !important;
 }
 </style>
 """
@@ -351,7 +380,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# PINNED ARROW PROMPT ON TOP LEFT NEXT TO ICON STATE
+# PINNED ARROW PROMPT ON TOP LEFT
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
