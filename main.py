@@ -64,7 +64,6 @@ page_bg = """
 
 [data-testid="stHeader"] {
     background: transparent;
-    overflow: visible !important;
 }
 
 .premium-title {
@@ -88,66 +87,22 @@ page_bg = """
     letter-spacing: 3px;
     text-transform: uppercase;
     font-size: 0.9rem;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
-/* HIGH-VISIBILITY SIDEBAR TOGGLE WHEN CLOSED (FORCES OVERFLOW VISIBILITY) */
-div[data-testid="collapsedControl"], [data-testid="collapsedControl"] {
-    background-color: #C6FF00 !important;
-    border-radius: 0 8px 8px 0 !important;
-    box-shadow: 0 0 20px rgba(198, 255, 0, 0.8) !important;
-    position: fixed !important;
-    top: 15px !important;
-    left: 0px !important;
-    z-index: 9999999 !important;
-    padding: 4px 8px !important;
-    display: flex !important;
-    align-items: center !important;
-    overflow: visible !important;
-}
-
-div[data-testid="collapsedControl"] button, button[aria-label="Open sidebar"] {
-    background-color: transparent !important;
-    border: none !important;
-    color: #0A0012 !important;
-}
-
-div[data-testid="collapsedControl"] svg, button[aria-label="Open sidebar"] svg {
-    color: #0A0012 !important;
-    fill: #0A0012 !important;
-    stroke: #0A0012 !important;
-    transform: scale(1.25) !important;
-}
-
-/* FLOATING GLOWING USER GUIDE INSTRUCTION BOX */
-div[data-testid="collapsedControl"]::after {
-    content: "👈 View Rules & Active Teams";
-    color: #C6FF00 !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 0.85rem !important;
-    font-weight: 600 !important;
-    position: absolute !important;
-    left: 65px !important;
-    white-space: nowrap !important;
-    text-shadow: 0 0 10px rgba(198, 255, 0, 0.6) !important;
-    background: rgba(10, 0, 18, 0.9) !important;
-    padding: 6px 12px !important;
-    border-radius: 6px !important;
-    border: 1px solid rgba(198, 255, 0, 0.4) !important;
-    pointer-events: none !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
-}
-
-/* SIDEBAR RE-STYLING WHEN OPENED */
-[data-testid="stSidebar"] button[aria-label="Close sidebar"],
-[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border-radius: 6px !important;
-}
-
-[data-testid="stSidebar"] button[aria-label="Close sidebar"] svg,
-[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
-    color: #FFFFFF !important;
+/* Glowing Top Instruction Alert Panel style */
+.sidebar-hint-banner {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0A0012;
+    background: #C6FF00;
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(198, 255, 0, 0.6);
+    max-width: 500px;
+    margin: 0 auto 30px auto;
 }
 </style>
 """
@@ -364,7 +319,7 @@ def fetch_live_points_and_activity(_key):
         pass
     return team_points, activity_logs, eliminated_teams
 
-# Load active parameters
+# Load core metrics
 team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activity(API_KEY)
 
 # --- 4. DISPLAY LAYOUT ---
@@ -389,6 +344,13 @@ st.markdown("""
 <div style='text-align: center; padding-bottom: 10px;'>
     <div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div>
     <div class='premium-subtitle'>Official Match Tracker</div>
+</div>
+""", unsafe_allow_html=True)
+
+# Bulletproof Navigation Notice Panel
+st.markdown("""
+<div class='sidebar-hint-banner'>
+    👈 Click the <b>&gt;&gt; arrow</b> in the very top-left corner to view Point Rules & Live Active Teams!
 </div>
 """, unsafe_allow_html=True)
 
