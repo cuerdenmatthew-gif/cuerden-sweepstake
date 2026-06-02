@@ -64,6 +64,7 @@ page_bg = """
 
 [data-testid="stHeader"] {
     background: transparent;
+    overflow: visible !important;
 }
 
 .premium-title {
@@ -90,8 +91,8 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-/* SIDEBAR NOTIFICATION TARGETING WHEN CLOSED */
-div[data-testid="collapsedControl"] {
+/* HIGH-VISIBILITY SIDEBAR TOGGLE WHEN CLOSED (FORCES OVERFLOW VISIBILITY) */
+div[data-testid="collapsedControl"], [data-testid="collapsedControl"] {
     background-color: #C6FF00 !important;
     border-radius: 0 8px 8px 0 !important;
     box-shadow: 0 0 20px rgba(198, 255, 0, 0.8) !important;
@@ -102,32 +103,42 @@ div[data-testid="collapsedControl"] {
     padding: 4px 8px !important;
     display: flex !important;
     align-items: center !important;
+    overflow: visible !important;
 }
 
-div[data-testid="collapsedControl"] svg {
+div[data-testid="collapsedControl"] button, button[aria-label="Open sidebar"] {
+    background-color: transparent !important;
+    border: none !important;
+    color: #0A0012 !important;
+}
+
+div[data-testid="collapsedControl"] svg, button[aria-label="Open sidebar"] svg {
     color: #0A0012 !important;
     fill: #0A0012 !important;
-    transform: scale(1.2) !important;
+    stroke: #0A0012 !important;
+    transform: scale(1.25) !important;
 }
 
-/* GLOWING DIRECTIONAL TEXT VALUE PROMPT */
+/* FLOATING GLOWING USER GUIDE INSTRUCTION BOX */
 div[data-testid="collapsedControl"]::after {
     content: "👈 View Rules & Active Teams";
-    color: #C6FF00;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    position: absolute;
-    left: 55px;
-    white-space: nowrap;
-    text-shadow: 0 0 10px rgba(198, 255, 0, 0.6);
-    background: rgba(10, 0, 18, 0.6);
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid rgba(198, 255, 0, 0.3);
+    color: #C6FF00 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    position: absolute !important;
+    left: 65px !important;
+    white-space: nowrap !important;
+    text-shadow: 0 0 10px rgba(198, 255, 0, 0.6) !important;
+    background: rgba(10, 0, 18, 0.9) !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(198, 255, 0, 0.4) !important;
+    pointer-events: none !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
 }
 
-/* PANEL OPEN RE-STYLING PRESETS */
+/* SIDEBAR RE-STYLING WHEN OPENED */
 [data-testid="stSidebar"] button[aria-label="Close sidebar"],
 [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
     background-color: rgba(255, 255, 255, 0.1) !important;
@@ -358,6 +369,7 @@ team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activ
 
 # --- 4. DISPLAY LAYOUT ---
 
+# Centered Logo Wrapper
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
