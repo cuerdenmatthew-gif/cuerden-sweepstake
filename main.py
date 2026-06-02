@@ -45,7 +45,7 @@ page_bg = """
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght=800&family=Inter:wght=400;600&display=swap');
 
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100);
+    background: linear-gradient(-45deg, #0A0012, #1B003A, #4D0011, #09001F);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
 }
@@ -57,7 +57,7 @@ page_bg = """
 }
 
 [data-testid="stAppViewContainer"] > .main {
-    background: rgba(15, 10, 20, 0.70);
+    background: rgba(15, 10, 25, 0.75);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
@@ -66,36 +66,36 @@ page_bg = """
     background: transparent;
 }
 
-/* ANTI-LIGHT MODE GLOBAL TEXT & CONTROLS LOCKS */
+/* ANTI-LIGHT MODE GLOBAL TEXT LOCKS - Force text to remain bright white against background */
 h1, h2, h3, h4, h5, h6, p, span, label, li, small {
     color: #FFFFFF !important;
 }
 
-/* Force standard text descriptions, registered user strings, and subtitles to remain white */
 [data-testid="stMarkdownContainer"] p, .stText, div {
     color: #FFFFFF !important;
 }
 
-/* Force text inputs, text area borders, and background containers to remain highly legible */
+/* Input boxes locked to a clean World Cup dark purple tint with white text */
 input[type="text"], [data-testid="stTextInput"] input {
     color: #FFFFFF !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: rgba(74, 0, 224, 0.15) !important;
+    border: 1px solid rgba(138, 79, 255, 0.4) !important;
 }
 
-/* High contrast premium buttons setup override */
+/* Premium solid World Cup Purple buttons with crisp white typography */
 button, [data-testid="stBaseButton-secondary"] {
-    color: #0A0012 !important;
-    background-color: #C6FF00 !important;
-    border: none !important;
+    color: #FFFFFF !important;
+    background-color: #5A00CD !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 10px rgba(198, 255, 0, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(90, 0, 205, 0.4) !important;
 }
 
 button:hover, [data-testid="stBaseButton-secondary"]:hover {
-    background-color: #FFFFFF !important;
-    color: #0A0012 !important;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.5) !important;
+    background-color: #7200ED !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 4px 18px rgba(114, 0, 237, 0.6) !important;
 }
 
 .premium-title {
@@ -103,7 +103,7 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
     font-size: 3.5rem;
     font-weight: 800;
     text-align: center;
-    background: linear-gradient(to right, #FFFFFF, #C6FF00);
+    background: linear-gradient(to right, #FFFFFF, #E61D25);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 5px;
@@ -114,7 +114,7 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
 .premium-subtitle {
     font-family: 'Inter', sans-serif;
     text-align: center;
-    color: #E61D25 !important;
+    color: #C6FF00 !important;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -122,6 +122,7 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
     margin-bottom: 40px;
 }
 
+/* COMPACT TOP LEFT PROMPT WITH THE NEW PREMIUM PURPLE PALETTE */
 .sidebar-hint-text {
     position: fixed !important;
     top: 15px !important;
@@ -130,12 +131,13 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
     font-family: 'Inter', sans-serif !important;
     font-size: 0.8rem !important;
     font-weight: 600 !important;
-    color: #0A0012 !important;
-    background: #C6FF00 !important;
+    color: #FFFFFF !important;
+    background: #5A00CD !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
     white-space: nowrap !important;
-    box-shadow: 0 4px 15px rgba(198, 255, 0, 0.4) !important;
+    box-shadow: 0 4px 15px rgba(90, 0, 205, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 </style>
 """
@@ -380,7 +382,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# PINNED ARROW PROMPT ON TOP LEFT
+# Pinned Navigation Prompt
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
