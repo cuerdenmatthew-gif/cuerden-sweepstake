@@ -89,16 +89,20 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-[data-testid="stImage"] {
+.stImage, [data-testid="stImage"] {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    text-align: center !important;
     width: 100% !important;
 }
 
 [data-testid="stImage"] img {
+    width: 130px !important;
     max-width: 130px !important;
     height: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 </style>
 """
