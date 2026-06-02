@@ -6,6 +6,7 @@ import requests
 import pandas as pd
 import json
 import os
+import base64
 
 # --- 1. CONFIGURATION ---
 st.set_page_config(page_title="Cuerden & Co WC26", page_icon="🏆", layout="wide")
@@ -87,22 +88,6 @@ page_bg = """
     text-transform: uppercase;
     font-size: 0.9rem;
     margin-bottom: 40px;
-}
-
-.stImage, [data-testid="stImage"] {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    width: 100% !important;
-}
-
-[data-testid="stImage"] img {
-    width: 130px !important;
-    max-width: 130px !important;
-    height: auto !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
 }
 </style>
 """
@@ -324,8 +309,21 @@ team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activ
 
 # --- 4. DISPLAY LAYOUT ---
 
+# Bulletproof Absolute Centering via HTML & Base64
 if os.path.exists("logo.png"):
-    st.image("logo.png")
+    try:
+        with open("logo.png", "rb") as f:
+            img_encoded = base64.b64encode(f.read()).decode()
+        st.markdown(
+            f"""
+            <div style='display: flex; justify-content: center; align-items: center; width: 100%; padding-top: 10px; margin-bottom: -10px;'>
+                <img src='data:image/png;base64,{img_encoded}' style='width: 130px; height: auto;'>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    except:
+        pass
 
 st.markdown("""
 <div style='text-align: center; padding-bottom: 10px;'>
