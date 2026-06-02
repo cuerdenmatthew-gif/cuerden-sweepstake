@@ -42,7 +42,7 @@ TEAM_FLAGS = {
 # --- 1.5 PREMIUM WC26 UI THEME ---
 page_bg = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght=800&family=Inter:wght=400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
 
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(-45deg, #0A0012, #1B003A, #4D0011, #09001F);
@@ -66,7 +66,7 @@ page_bg = """
     background: transparent;
 }
 
-/* ANTI-LIGHT MODE GLOBAL TEXT LOCKS - Force text to remain bright white against background */
+/* ANTI-LIGHT MODE GLOBAL TEXT LOCKS */
 h1, h2, h3, h4, h5, h6, p, span, label, li, small {
     color: #FFFFFF !important;
 }
@@ -75,14 +75,28 @@ h1, h2, h3, h4, h5, h6, p, span, label, li, small {
     color: #FFFFFF !important;
 }
 
-/* Input boxes locked to a clean World Cup dark purple tint with white text */
+/* SIDEBAR LIGHT MODE CONTRAST FIXES */
+[data-testid="stSidebar"] {
+    background-color: #110022 !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h1,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h2,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h3,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span {
+    color: #FFFFFF !important;
+}
+
+/* Input boxes styling */
 input[type="text"], [data-testid="stTextInput"] input {
     color: #FFFFFF !important;
     background-color: rgba(74, 0, 224, 0.15) !important;
     border: 1px solid rgba(138, 79, 255, 0.4) !important;
 }
 
-/* Premium solid World Cup Purple buttons with crisp white typography */
+/* Premium solid World Cup Purple buttons */
 button, [data-testid="stBaseButton-secondary"] {
     color: #FFFFFF !important;
     background-color: #5A00CD !important;
