@@ -140,39 +140,71 @@ def fetch_live_points_and_activity(_key):
                 ag = m.get('visitor_team_score')
                 
                 if hg is None or ag is None: continue
+
+                # Automatic Knockout Detection (Matches from June 28th onwards)
+                match_date = m.get('date', '2026-01-01')[:10]
+                multiplier = 2 if match_date >= '2026-06-28' else 1
                 
                 # --- Home Team Points ---
                 hp = 0
                 home_breakdown = []
-                if hg > ag: hp += 3; home_breakdown.append("Win (+3)")
-                elif hg == ag: hp += 1; home_breakdown.append("Draw (+1)")
-                if hg > 0: hp += hg; home_breakdown.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg})")
-                if ag == 0: hp += 1; home_breakdown.append("Clean Sheet (+1)")
-                if ag >= 3: hp -= 1; home_breakdown.append("Conceded 3+ (-1)")
+                if hg > ag: 
+                    hp += (3 * multiplier)
+                    home_breakdown.append(f"Win (+{3 * multiplier})")
+                elif hg == ag: 
+                    hp += (1 * multiplier)
+                    home_breakdown.append(f"Draw (+{1 * multiplier})")
+                    
+                if hg > 0: 
+                    hp += (hg * multiplier)
+                    home_breakdown.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
+                    
+                if ag == 0: 
+                    hp += (1 * multiplier)
+                    home_breakdown.append(f"Clean Sheet (+{1 * multiplier})")
+                    
+                if ag >= 3: 
+                    hp -= (1 * multiplier)
+                    home_breakdown.append(f"Conceded 3+ (-{1 * multiplier})")
                 
                 # --- Away Team Points ---
                 ap = 0
                 away_breakdown = []
-                if ag > hg: ap += 3; away_breakdown.append("Win (+3)")
-                elif ag == hg: ap += 1; away_breakdown.append("Draw (+1)")
-                if ag > 0: ap += ag; away_breakdown.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag})")
-                if hg == 0: ap += 1; away_breakdown.append("Clean Sheet (+1)")
-                if hg >= 3: ap -= 1; away_breakdown.append("Conceded 3+ (-1)")
+                if ag > hg: 
+                    ap += (3 * multiplier)
+                    away_breakdown.append(f"Win (+{3 * multiplier})")
+                elif ag == hg: 
+                    ap += (1 * multiplier)
+                    away_breakdown.append(f"Draw (+{1 * multiplier})")
+                    
+                if ag > 0: 
+                    ap += (ag * multiplier)
+                    away_breakdown.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
+                    
+                if hg == 0: 
+                    ap += (1 * multiplier)
+                    away_breakdown.append(f"Clean Sheet (+{1 * multiplier})")
+                    
+                if hg >= 3: 
+                    ap -= (1 * multiplier)
+                    away_breakdown.append(f"Conceded 3+ (-{1 * multiplier})")
                 
                 if home in team_points: team_points[home] += hp
                 if away in team_points: team_points[away] += ap
                 
                 status_emoji = "🟢 Live" if m['status'] != 'Final' else "⏱️ FT"
+                knockout_tag = " 🏆 (2x Pts)" if multiplier == 2 else ""
+                
                 activity_logs.append({
                     "Status": status_emoji,
-                    "Match": f"{home} {hg} - {ag} {away}",
+                    "Match": f"{home} {hg} - {ag} {away}{knockout_tag}",
                     "Team": home,
                     "Points Earned": hp,
                     "Breakdown": " | ".join(home_breakdown) if home_breakdown else "0 pts"
                 })
                 activity_logs.append({
                     "Status": status_emoji,
-                    "Match": f"{home} {hg} - {ag} {away}",
+                    "Match": f"{home} {hg} - {ag} {away}{knockout_tag}",
                     "Team": away,
                     "Points Earned": ap,
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
@@ -180,139 +212,3 @@ def fetch_live_points_and_activity(_key):
     except:
         pass
     return team_points, activity_logs
-
-# --- 4. DISPLAY LAYOUT ---
-
-# Render Logo if it exists in GitHub, safely squeezing it into a smaller centered column
-col1, col2, col3 = st.columns([4, 1.5, 4])
-with col2:
-    if os.path.exists("logo.png"):
-        st.image("logo.png", use_container_width=True)
-
-# Premium Centered Title
-st.markdown("""
-<div style='text-align: center; padding-bottom: 10px;'>
-    <div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div>
-    <div class='premium-subtitle'>World Cup Match Tracker</div>
-</div>
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown("""
-### 📜 Point System
-* **Win:** 3 pts | **Draw:** 1 pt
-* **Goal Scored:** 1 pt
-* **Clean Sheet:** 1 pt
-* **3+ Goals Conceded:** -1 pt
-""")
-
-admin_input = st.sidebar.text_input("Admin Password", type="password")
-if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
-    save_db_to_sheets({"participants": [], "assignments": {}, "locked": False})
-    st.rerun()
-
-if not db["locked"]:
-    st.header("Step 1: Registration Phase (Closes June 9th!) £20 Entry Fee (Send to Matt)")
-    player_name = st.text_input("Enter name to join:")
-    if st.button("Register"):
-        if player_name and player_name not in db["participants"]:
-            db["participants"].append(player_name)
-            save_db_to_sheets(db)
-            st.success(f"{player_name} added!")
-            st.rerun()
-            
-    st.write(f"**Registered Players ({len(db['participants'])}):** " + ", ".join(db["participants"]))
-    
-    if len(db["participants"]) > 0:
-        per_person = math.floor(48 / len(db["participants"]))
-        st.info(f"Each person will receive **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
-        if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
-            TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
-            
-            # 1. Shuffle the heavy hitters
-            shuffled_top = TOP_13.copy()
-            random.shuffle(shuffled_top)
-            
-            # 2. Isolate the rest of the teams
-            regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
-            
-            # 3. Give exactly 1 Top Team to each player
-            for person in db["participants"]:
-                db["assignments"][person] = []
-                if shuffled_top:
-                    db["assignments"][person].append(shuffled_top.pop(0))
-            
-            # 4. Dump any unassigned Top Teams back into the regular pool and shuffle
-            regular_teams.extend(shuffled_top)
-            random.shuffle(regular_teams)
-            
-            # 5. Fill up the rest of their slots
-            for person in db["participants"]:
-                needed = per_person - len(db["assignments"][person])
-                for _ in range(needed):
-                    if regular_teams:
-                        db["assignments"][person].append(regular_teams.pop(0))
-                        
-            db["locked"] = True
-            save_db_to_sheets(db)
-            st.rerun()
-else:
-    # Beautiful two-tab interface
-    tab1, tab2 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity"])
-    
-    team_scores, raw_activity_logs = fetch_live_points_and_activity(API_KEY)
-    
-    team_to_player = {}
-    for player, teams in db["assignments"].items():
-        for t in teams:
-            team_to_player[t] = player
-            
-    with tab1:
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            st.subheader("📋 Your Teams")
-            for p, teams in db["assignments"].items():
-                with st.expander(f"{p}'s Teams"):
-                    st.write(", ".join(teams))
-        with c2:
-            st.subheader("📊 Leaderboard")
-            table = []
-            for p, teams in db["assignments"].items():
-                pts = sum([team_scores.get(t, 0) for t in teams])
-                table.append({"Player": p, "Total Points": pts})
-            
-            if table:
-                st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
-            st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
-
-    with tab2:
-        st.subheader("⚽ Match Activity Points Breakdown")
-        
-        processed_logs = []
-        for log in raw_activity_logs:
-            log_copy = log.copy()
-            log_copy["Player"] = team_to_player.get(log["Team"], "🍿 Unassigned Team")
-            processed_logs.append(log_copy)
-            
-        activity_df = pd.DataFrame(processed_logs)
-        
-        if not activity_df.empty:
-            filter_option = st.selectbox("Filter Match Activity by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
-            
-            if filter_option != "All Players":
-                filtered_df = activity_df[activity_df["Player"] == filter_option]
-            else:
-                filtered_df = activity_df
-                
-            display_df = filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]]
-            
-            st.dataframe(
-                display_df, 
-                use_container_width=True, 
-                hide_index=True,
-                column_config={
-                    "Points Earned": st.column_config.NumberColumn(format="%+d"),
-                    "Status": st.column_config.TextColumn(width="small")
-                }
-            )
-        else:
-            st.info("The tournament hasn't started yet! Once games kick off, live match updates and breakdowns will appear right here.")
