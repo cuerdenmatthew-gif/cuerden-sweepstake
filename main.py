@@ -28,10 +28,8 @@ ALL_TEAMS = [
 # --- 1.5 PREMIUM WC26 UI THEME ---
 page_bg = """
 <style>
-/* Import premium modern fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
 
-/* Deep, rich animated gradient background */
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100);
     background-size: 400% 400%;
@@ -44,19 +42,16 @@ page_bg = """
     100% { background-position: 0% 50%; }
 }
 
-/* Glassmorphism blur overlay for the main app */
 [data-testid="stAppViewContainer"] > .main {
     background: rgba(15, 10, 20, 0.70);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
 
-/* Make header transparent */
 [data-testid="stHeader"] {
     background: transparent;
 }
 
-/* Premium Typography for Title */
 .premium-title {
     font-family: 'Montserrat', sans-serif;
     font-size: 3.5rem;
@@ -79,6 +74,14 @@ page_bg = """
     text-transform: uppercase;
     font-size: 0.9rem;
     margin-bottom: 40px;
+}
+
+/* FORCES THE LOGO TO STAY SMALL AND CENTERED ON PHONES */
+[data-testid="stImage"] img {
+    max-width: 140px !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 </style>
 """
@@ -141,14 +144,11 @@ def fetch_live_points_and_activity(_key):
                 
                 if hg is None or ag is None: continue
 
-                # Safe Date Fetching (Prevents crashes if the API sends a blank date)
                 raw_date = m.get('date')
                 match_date = str(raw_date)[:10] if raw_date else '2026-01-01'
                 
-                # Activate 2x Multiplier for Knockouts
                 multiplier = 2 if match_date >= '2026-06-28' else 1
                 
-                # --- Home Team Points ---
                 hp = 0
                 home_breakdown = []
                 if hg > ag: 
@@ -170,7 +170,6 @@ def fetch_live_points_and_activity(_key):
                     hp -= (1 * multiplier)
                     home_breakdown.append(f"Conceded 3+ (-{1 * multiplier})")
                 
-                # --- Away Team Points ---
                 ap = 0
                 away_breakdown = []
                 if ag > hg: 
@@ -218,13 +217,11 @@ def fetch_live_points_and_activity(_key):
 
 # --- 4. DISPLAY LAYOUT ---
 
-# Render Logo if it exists in GitHub, safely squeezing it into a smaller centered column
-col1, col2, col3 = st.columns([4, 1.5, 4])
+col1, col2, col3 = st.columns([1, 1, 1])
 with col2:
     if os.path.exists("logo.png"):
-        st.image("logo.png", use_container_width=True)
+        st.image("logo.png")
 
-# Premium Centered Title
 st.markdown("""
 <div style='text-align: center; padding-bottom: 10px;'>
     <div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div>
@@ -247,7 +244,9 @@ if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
     st.rerun()
 
 if not db["locked"]:
-    st.header("Step 1: Registration Phase (Closes June 10th!)")
+    st.header("Step 1: Registration Phase (Closes June 9th!)")
+    st.markdown("### 💷 Entry Fee: £20 per person")
+    
     player_name = st.text_input("Enter name to join:")
     if st.button("Register"):
         if player_name and player_name not in db["participants"]:
@@ -260,28 +259,26 @@ if not db["locked"]:
     
     if len(db["participants"]) > 0:
         per_person = math.floor(48 / len(db["participants"]))
+        prize_pot = len(db["participants"]) * 20
+        st.success(f"**Current Prize Pot: £{prize_pot}**")
         st.info(f"Each person will receive **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
+        
         if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
             TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
             
-            # 1. Shuffle the heavy hitters
             shuffled_top = TOP_13.copy()
             random.shuffle(shuffled_top)
             
-            # 2. Isolate the rest of the teams
             regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
             
-            # 3. Give exactly 1 Top Team to each player
             for person in db["participants"]:
                 db["assignments"][person] = []
                 if shuffled_top:
                     db["assignments"][person].append(shuffled_top.pop(0))
             
-            # 4. Dump any unassigned Top Teams back into the regular pool and shuffle
             regular_teams.extend(shuffled_top)
             random.shuffle(regular_teams)
             
-            # 5. Fill up the rest of their slots
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
@@ -292,7 +289,6 @@ if not db["locked"]:
             save_db_to_sheets(db)
             st.rerun()
 else:
-    # Beautiful two-tab interface
     tab1, tab2 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity"])
     
     team_scores, raw_activity_logs = fetch_live_points_and_activity(API_KEY)
@@ -318,6 +314,9 @@ else:
             
             if table:
                 st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
+            
+            prize_pot = len(db["participants"]) * 20
+            st.success(f"**Final Prize Pot: £{prize_pot}**")
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
 
     with tab2:
