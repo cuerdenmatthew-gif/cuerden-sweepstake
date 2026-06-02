@@ -143,7 +143,6 @@ def fetch_live_points_and_activity(_key):
     eliminated_teams = set()
     if not _key: return team_points, activity_logs, eliminated_teams
     
-    # Official 2026 FIFA World Cup Group Mapping
     TEAM_GROUPS = {
         "Mexico": "A", "South Africa": "A", "South Korea": "A", "Czechia": "A",
         "Canada": "B", "Switzerland": "B", "Qatar": "B", "Bosnia and Herzegovina": "B",
@@ -194,7 +193,6 @@ def fetch_live_points_and_activity(_key):
                 
                 multiplier = 2 if match_date >= '2026-06-28' else 1
                 
-                # Standings builder (Calculates only from finished group games)
                 if match_date < '2026-06-28' and m['status'] == 'Final':
                     if home in group_stats:
                         group_stats[home]["mp"] += 1
@@ -284,7 +282,6 @@ def fetch_live_points_and_activity(_key):
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
                 
-            # Process Final Group Stage Standings Position Bonuses
             for g, teams in group_teams.items():
                 if all(group_stats[t]["mp"] == 3 for t in teams):
                     sorted_teams = sorted(teams, key=lambda x: (group_stats[x]["pts"], group_stats[x]["gd"], group_stats[x]["gf"]), reverse=True)
@@ -318,7 +315,7 @@ def fetch_live_points_and_activity(_key):
         pass
     return team_points, activity_logs, eliminated_teams
 
-# Load active matrix parameters globally
+# Load active parameters
 team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activity(API_KEY)
 
 # --- 4. DISPLAY LAYOUT ---
@@ -383,8 +380,8 @@ if not db["locked"]:
         if len(db["participants"]) >= 3:
             st.markdown(f"""
             💰 **Prize Money Breakdown:**
-            * 🥇 **1st Place:** £{prize_pot - 60}
-            * 🥈 **2nd Place:** £40 *(Double money)*
+            * 🥇 **1st Place:** £{prize_pot - 40}
+            * 🥈 **2nd Place:** £20 *(Money back)*
             * 🥾 **Last Place:** £20 *(Money back)*
             """)
         else:
@@ -447,8 +444,8 @@ else:
             if len(db["participants"]) >= 3:
                 st.markdown(f"""
                 💰 **Official Cash Split Structure:**
-                * 🥇 **1st Place:** £{prize_pot - 60}
-                * 🥈 **2nd Place:** £40 *(Double money)*
+                * 🥇 **1st Place:** £{prize_pot - 40}
+                * 🥈 **2nd Place:** £20 *(Money back)*
                 * 🥾 **Last Place:** £20 *(Money back)*
                 """)
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
