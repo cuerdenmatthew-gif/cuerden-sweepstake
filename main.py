@@ -90,30 +90,34 @@ page_bg = """
     margin-bottom: 40px;
 }
 
-/* HIGH VISIBILITY SIDEBAR TOGGLE OVERRIDES */
-[data-testid="stSidebarCollapseButton"] {
+/* 1. WHEN SIDEBAR IS CLOSED: Style the floating tab on the main page view */
+[data-testid="collapsedControl"] {
     background-color: #C6FF00 !important;
-    border-radius: 8px !important;
-    padding: 6px 10px !important;
-    box-shadow: 0 0 15px rgba(198, 255, 0, 0.7) !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 0 15px rgba(198, 255, 0, 0.8) !important;
     position: fixed !important;
     top: 15px !important;
-    left: 15px !important;
+    left: 0px !important;
     z-index: 999999 !important;
-    transition: transform 0.2s ease, background-color 0.2s ease !important;
+    padding: 6px 10px !important;
 }
 
-[data-testid="stSidebarCollapseButton"] svg {
+[data-testid="collapsedControl"] svg {
     color: #0A0012 !important;
     fill: #0A0012 !important;
-    stroke: #0A0012 !important;
-    transform: scale(1.25) !important;
+    transform: scale(1.3) !important;
 }
 
-[data-testid="stSidebarCollapseButton"]:hover {
-    background-color: #FFFFFF !important;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9) !important;
-    transform: scale(1.05);
+/* 2. WHEN SIDEBAR IS OPEN: Style the button inside the side panel */
+[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
+    background-color: #C6FF00 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 15px rgba(198, 255, 0, 0.6) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
+    color: #0A0012 !important;
+    fill: #0A0012 !important;
 }
 </style>
 """
@@ -330,11 +334,12 @@ def fetch_live_points_and_activity(_key):
         pass
     return team_points, activity_logs, eliminated_teams
 
-# Load parameters
+# Load active parameters
 team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activity(API_KEY)
 
 # --- 4. DISPLAY LAYOUT ---
 
+# Centered Logo Wrapper
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
