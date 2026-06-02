@@ -89,6 +89,32 @@ page_bg = """
     font-size: 0.9rem;
     margin-bottom: 40px;
 }
+
+/* HIGH VISIBILITY SIDEBAR TOGGLE OVERRIDES */
+[data-testid="stSidebarCollapseButton"] {
+    background-color: #C6FF00 !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    box-shadow: 0 0 15px rgba(198, 255, 0, 0.7) !important;
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 999999 !important;
+    transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+[data-testid="stSidebarCollapseButton"] svg {
+    color: #0A0012 !important;
+    fill: #0A0012 !important;
+    stroke: #0A0012 !important;
+    transform: scale(1.25) !important;
+}
+
+[data-testid="stSidebarCollapseButton"]:hover {
+    background-color: #FFFFFF !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9) !important;
+    transform: scale(1.05);
+}
 </style>
 """
 st.markdown(page_bg, unsafe_allow_html=True)
@@ -304,12 +330,11 @@ def fetch_live_points_and_activity(_key):
         pass
     return team_points, activity_logs, eliminated_teams
 
-# Load active parameters
+# Load parameters
 team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activity(API_KEY)
 
 # --- 4. DISPLAY LAYOUT ---
 
-# Bulletproof Absolute Centering via HTML & Base64
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
