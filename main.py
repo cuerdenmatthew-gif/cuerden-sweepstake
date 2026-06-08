@@ -181,7 +181,6 @@ def fetch_live_points_and_activity(_key):
             has_knockouts_started = False
             knockout_participants = set()
             
-            # Sort matches by date/ID to process them chronologically
             for m in matches:
                 if m['status'] not in ['Final', 'In Progress', 'Halftime']: continue
                 
@@ -198,10 +197,6 @@ def fetch_live_points_and_activity(_key):
 
                 raw_date = m.get('date')
                 match_date = str(raw_date)[:10] if raw_date else '2026-01-01'
-                
-                # Determine match type / number of remaining teams to find the final
-                # World Cup Final is scheduled for July 19, 2026
-                is_world_cup_final = (match_date == '2026-07-19')
                 
                 multiplier = 2 if match_date >= '2026-06-28' else 1
                 
@@ -293,18 +288,6 @@ def fetch_live_points_and_activity(_key):
                     "Points Earned": ap,
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
-
-                # FLAT TOURNAMENT WINNER BONUS (+10 points flat - unaffected by 2x multiplier)
-                if is_world_cup_final and m['status'] == 'Final':
-                    winner = home if hg > ag else away
-                    team_points[winner] += 10
-                    activity_logs.append({
-                        "Status": "⏱️ Finished",
-                        "Match": "World Cup Final - Tournament Champion",
-                        "Team": winner,
-                        "Points Earned": 10,
-                        "Breakdown": "World Cup Winner Bonus (+10 Flat)"
-                    })
                 
             for g, teams in group_teams.items():
                 if all(group_stats[t]["mp"] == 3 for t in teams):
@@ -377,8 +360,7 @@ st.sidebar.markdown("""
 * **3+ Goals Conceded:** -1 pt
 * 🥇 **Group Winner:** +2 pts
 * 🥈 **Group 2nd Place:** +1 pt
-* 🏆 **World Cup Champion:** +10 pts *(Flat)*
-* 💥 **KNOCKOUTS:** Match performance metrics double (2x) from Round of 32 onwards!
+* 🏆 **KNOCKOUTS:** All match metrics double (2x) from Round of 32 onwards!
 """)
 
 st.sidebar.markdown("---")
@@ -421,8 +403,8 @@ if not db["locked"]:
         if len(db["participants"]) >= 3:
             st.markdown(f"""
             💰 **Prize Money Breakdown:**
-            * 🥇 **1st Place:** £{prize_pot - 60}
-            * 🥈 **2nd Place:** £40 *(Double your money!)*
+            * 🥇 **1st Place:** £{prize_pot - 40}
+            * 🥈 **2nd Place:** £20 *(Money back)*
             * 🥾 **Last Place:** £20 *(Money back)*
             """)
         else:
@@ -448,12 +430,14 @@ if not db["locked"]:
             regular_teams.extend(shuffled_top)
             random.shuffle(regular_teams)
             
+            # 1. Distribute base baseline allocations
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
                     if regular_teams:
                         db["assignments"][person].append(regular_teams.pop(0))
             
+            # 2. DYNAMICALLY ALLOCATE LEFTOVERS RANDOMLY
             if regular_teams:
                 lucky_players = db["participants"].copy()
                 random.shuffle(lucky_players)
@@ -495,8 +479,8 @@ else:
             if len(db["participants"]) >= 3:
                 st.markdown(f"""
                 💰 **Official Cash Split Structure:**
-                * 🥇 **1st Place:** £{prize_pot - 60}
-                * 🥈 **2nd Place:** £40 *(Double your money!)*
+                * 🥇 **1st Place:** £{prize_pot - 40}
+                * 🥈 **2nd Place:** £20 *(Money back)*
                 * 🥾 **Last Place:** £20 *(Money back)*
                 """)
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
