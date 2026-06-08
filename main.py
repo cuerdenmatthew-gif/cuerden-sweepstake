@@ -45,7 +45,7 @@ page_bg = """
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
 
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(-45deg, #0A0012, #1B003A, #4D0011, #09001F);
+    background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
 }
@@ -57,7 +57,7 @@ page_bg = """
 }
 
 [data-testid="stAppViewContainer"] > .main {
-    background: rgba(15, 10, 25, 0.75);
+    background: rgba(15, 10, 20, 0.70);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
@@ -66,58 +66,12 @@ page_bg = """
     background: transparent;
 }
 
-/* ANTI-LIGHT MODE GLOBAL TEXT LOCKS */
-h1, h2, h3, h4, h5, h6, p, span, label, li, small {
-    color: #FFFFFF !important;
-}
-
-[data-testid="stMarkdownContainer"] p, .stText, div {
-    color: #FFFFFF !important;
-}
-
-/* SIDEBAR LIGHT MODE CONTRAST FIXES */
-[data-testid="stSidebar"] {
-    background-color: #110022 !important;
-}
-
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h1,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h2,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h3,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span {
-    color: #FFFFFF !important;
-}
-
-/* Input boxes styling */
-input[type="text"], [data-testid="stTextInput"] input {
-    color: #FFFFFF !important;
-    background-color: rgba(74, 0, 224, 0.15) !important;
-    border: 1px solid rgba(138, 79, 255, 0.4) !important;
-}
-
-/* Premium solid World Cup Purple buttons */
-button, [data-testid="stBaseButton-secondary"] {
-    color: #FFFFFF !important;
-    background-color: #5A00CD !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 12px rgba(90, 0, 205, 0.4) !important;
-}
-
-button:hover, [data-testid="stBaseButton-secondary"]:hover {
-    background-color: #7200ED !important;
-    color: #FFFFFF !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important;
-    box-shadow: 0 4px 18px rgba(114, 0, 237, 0.6) !important;
-}
-
 .premium-title {
     font-family: 'Montserrat', sans-serif;
     font-size: 3.5rem;
     font-weight: 800;
     text-align: center;
-    background: linear-gradient(to right, #FFFFFF, #E61D25);
+    background: linear-gradient(to right, #FFFFFF, #C6FF00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 5px;
@@ -128,7 +82,7 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
 .premium-subtitle {
     font-family: 'Inter', sans-serif;
     text-align: center;
-    color: #C6FF00 !important;
+    color: #E61D25;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -136,7 +90,6 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
     margin-bottom: 40px;
 }
 
-/* COMPACT TOP LEFT PROMPT WITH THE NEW PREMIUM PURPLE PALETTE */
 .sidebar-hint-text {
     position: fixed !important;
     top: 15px !important;
@@ -145,13 +98,14 @@ button:hover, [data-testid="stBaseButton-secondary"]:hover {
     font-family: 'Inter', sans-serif !important;
     font-size: 0.8rem !important;
     font-weight: 600 !important;
-    color: #FFFFFF !important;
-    background: #5A00CD !important;
+    color: #C6FF00 !important;
+    background: rgba(10, 0, 18, 0.85) !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
+    border: 1px solid rgba(198, 255, 0, 0.3) !important;
     white-space: nowrap !important;
-    box-shadow: 0 4px 15px rgba(90, 0, 205, 0.5) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+    text-shadow: 0 0 8px rgba(198, 255, 0, 0.5) !important;
 }
 </style>
 """
@@ -227,6 +181,7 @@ def fetch_live_points_and_activity(_key):
             has_knockouts_started = False
             knockout_participants = set()
             
+            # Sort matches by date/ID to process them chronologically
             for m in matches:
                 if m['status'] not in ['Final', 'In Progress', 'Halftime']: continue
                 
@@ -243,6 +198,10 @@ def fetch_live_points_and_activity(_key):
 
                 raw_date = m.get('date')
                 match_date = str(raw_date)[:10] if raw_date else '2026-01-01'
+                
+                # Determine match type / number of remaining teams to find the final
+                # World Cup Final is scheduled for July 19, 2026
+                is_world_cup_final = (match_date == '2026-07-19')
                 
                 multiplier = 2 if match_date >= '2026-06-28' else 1
                 
@@ -334,6 +293,18 @@ def fetch_live_points_and_activity(_key):
                     "Points Earned": ap,
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
+
+                # FLAT TOURNAMENT WINNER BONUS (+10 points flat - unaffected by 2x multiplier)
+                if is_world_cup_final and m['status'] == 'Final':
+                    winner = home if hg > ag else away
+                    team_points[winner] += 10
+                    activity_logs.append({
+                        "Status": "⏱️ Finished",
+                        "Match": "World Cup Final - Tournament Champion",
+                        "Team": winner,
+                        "Points Earned": 10,
+                        "Breakdown": "World Cup Winner Bonus (+10 Flat)"
+                    })
                 
             for g, teams in group_teams.items():
                 if all(group_stats[t]["mp"] == 3 for t in teams):
@@ -396,7 +367,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Pinned Navigation Prompt
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
@@ -407,7 +377,8 @@ st.sidebar.markdown("""
 * **3+ Goals Conceded:** -1 pt
 * 🥇 **Group Winner:** +2 pts
 * 🥈 **Group 2nd Place:** +1 pt
-* 🏆 **KNOCKOUTS:** All match metrics double (2x) from Round of 32 onwards!
+* 🏆 **World Cup Champion:** +10 pts *(Flat)*
+* 💥 **KNOCKOUTS:** Match performance metrics double (2x) from Round of 32 onwards!
 """)
 
 st.sidebar.markdown("---")
@@ -443,6 +414,7 @@ if not db["locked"]:
     
     if len(db["participants"]) > 0:
         per_person = math.floor(48 / len(db["participants"]))
+        leftovers = 48 % len(db["participants"])
         prize_pot = len(db["participants"]) * 20
         st.success(f"**Current Total Prize Pot: £{prize_pot}**")
         
@@ -450,13 +422,16 @@ if not db["locked"]:
             st.markdown(f"""
             💰 **Prize Money Breakdown:**
             * 🥇 **1st Place:** £{prize_pot - 60}
-            * 🥈 **2nd Place:** £40 *(Double your money)*
+            * 🥈 **2nd Place:** £40 *(Double your money!)*
             * 🥾 **Last Place:** £20 *(Money back)*
             """)
         else:
             st.caption("A minimum of 3 registered players is required to activate the layered payout tier display.")
             
-        st.info(f"Each person will receive **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
+        if leftovers > 0:
+            st.info(f"Each person gets **{per_person} teams** baseline. The remaining **{leftovers} teams** will be randomly distributed out so that {leftovers} lucky players get 1 extra team! (Guaranteed at least 1 Top 13 Nation).")
+        else:
+            st.info(f"Each person will receive exactly **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
         
         if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
             TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
@@ -478,6 +453,13 @@ if not db["locked"]:
                 for _ in range(needed):
                     if regular_teams:
                         db["assignments"][person].append(regular_teams.pop(0))
+            
+            if regular_teams:
+                lucky_players = db["participants"].copy()
+                random.shuffle(lucky_players)
+                while regular_teams and lucky_players:
+                    recipient = lucky_players.pop(0)
+                    db["assignments"][recipient].append(regular_teams.pop(0))
                         
             db["locked"] = True
             save_db_to_sheets(db)
@@ -495,7 +477,7 @@ else:
         with c1:
             st.subheader("📋 Your Teams")
             for p, teams in db["assignments"].items():
-                with st.expander(f"{p}'s Teams"):
+                with st.expander(f"{p}'s Teams ({len(teams)} teams)"):
                     team_list_with_flags = [f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]
                     st.write(", ".join(team_list_with_flags))
         with c2:
@@ -514,7 +496,7 @@ else:
                 st.markdown(f"""
                 💰 **Official Cash Split Structure:**
                 * 🥇 **1st Place:** £{prize_pot - 60}
-                * 🥈 **2nd Place:** £40 *(Double your money)*
+                * 🥈 **2nd Place:** £40 *(Double your money!)*
                 * 🥾 **Last Place:** £20 *(Money back)*
                 """)
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
