@@ -39,14 +39,14 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-# --- 1.5 PREMIUM WC26 UI THEME (LIGHT/DARK MODE IMMUNE) ---
+# --- 1.5 PREMIUM WC26 UI THEME (VIBRANT PURPLE & SECURE CONTRAST) ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
 
-/* Force deep dark mode baseline across the app */
+/* Dynamic gradient utilizing the vibrant purple tone from the logo image */
 html, body, [data-testid="stAppViewContainer"] {
-    background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100) !important;
+    background: linear-gradient(-45deg, #1A0033, #5F00A8, #8000FF, #3A0066) !important;
     background-size: 400% 400% !important;
     animation: gradientBG 15s ease infinite !important;
     color: #FFFFFF !important;
@@ -59,7 +59,7 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 [data-testid="stAppViewContainer"] > .main {
-    background: rgba(15, 10, 20, 0.70) !important;
+    background: rgba(15, 5, 25, 0.65) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
@@ -68,48 +68,59 @@ html, body, [data-testid="stAppViewContainer"] {
     background: transparent !important;
 }
 
-/* Hard-lock Sidebar to Premium Dark Mode to completely override Light Mode */
+/* Force Sidebar to remain deep dark purple with bright text elements */
 [data-testid="stSidebar"] {
-    background-color: #0F0A14 !important;
-    background-image: linear-gradient(180deg, #150022 0%, #0A0012 100%) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background-color: #120024 !important;
+    background-image: linear-gradient(180deg, #1C0038 0%, #0A0014 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Force all text in sidebar to remain crisp and bright */
+/* Secure explicit white fallback text rules for all sidebar typography components */
 [data-testid="stSidebar"] p, 
 [data-testid="stSidebar"] span, 
 [data-testid="stSidebar"] h1, 
 [data-testid="stSidebar"] h2, 
-[data-testid="stSidebar"] h3 {
-    color: #F3EAFB !important;
-}
-
-/* Force Main Body Headings & Labels to be perfectly visible */
-h1, h2, h3, p, span, label, [data-testid="stMarkdownContainer"] p {
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] li,
+[data-testid="stSidebar"] div {
     color: #FFFFFF !important;
 }
 
-/* Custom text field container wrap adjustments */
+/* Force absolute white visibility across all global markdown text/headers */
+h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p {
+    color: #FFFFFF !important;
+}
+
+/* Override light-mode text fields so inputs aren't invisible */
 div[data-baseweb="input"] {
-    background-color: rgba(255, 255, 255, 0.07) !important;
-    border: 1px solid rgba(198, 255, 0, 0.2) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(198, 255, 0, 0.4) !important;
     border-radius: 6px !important;
 }
 div[data-baseweb="input"] input {
     color: #FFFFFF !important;
 }
 
-/* Custom Registration / Admin Purple Accent Buttons */
+/* Style the expanding cards containing user teams to remain readable and dark */
+div[data-testid="stExpander"] {
+    background-color: rgba(30, 5, 45, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+div[data-testid="stExpander"] p, div[data-testid="stExpander"] span {
+    color: #FFFFFF !important;
+}
+
+/* Custom Purple Accent Buttons */
 div.stButton > button {
-    background-color: #290038 !important;
+    background-color: #4C0099 !important;
     color: #C6FF00 !important;
-    border: 1px solid #4D0011 !important;
+    border: 1px solid rgba(198, 255, 0, 0.3) !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 10px rgba(77, 0, 17, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(128, 0, 255, 0.3) !important;
     transition: all 0.2s ease-in-out !important;
 }
 div.stButton > button:hover {
-    background-color: #4D0011 !important;
+    background-color: #8000FF !important;
     color: #FFFFFF !important;
     border-color: #C6FF00 !important;
 }
@@ -148,13 +159,13 @@ div.stButton > button:hover {
     font-size: 0.8rem !important;
     font-weight: 600 !important;
     color: #C6FF00 !important;
-    background: rgba(41, 0, 56, 0.9) !important;
+    background: rgba(40, 0, 80, 0.95) !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    border: 1px solid rgba(198, 255, 0, 0.4) !important;
+    border: 1px solid rgba(198, 255, 0, 0.5) !important;
     white-space: nowrap !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
-    text-shadow: 0 0 8px rgba(198, 255, 0, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6) !important;
+    text-shadow: 0 0 8px rgba(198, 255, 0, 0.6) !important;
 }
 </style>
 """
@@ -389,6 +400,7 @@ team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activ
 
 # --- 4. DISPLAY LAYOUT ---
 
+# Centered Logo Wrapper
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
@@ -411,7 +423,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Compact, clear indicator layout position
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
