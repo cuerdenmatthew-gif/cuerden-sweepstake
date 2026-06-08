@@ -449,8 +449,8 @@ if not db["locked"]:
         if len(db["participants"]) >= 3:
             st.markdown(f"""
             💰 **Prize Money Breakdown:**
-            * 🥇 **1st Place:** £{prize_pot - 40}
-            * 🥈 **2nd Place:** £20 *(Money back)*
+            * 🥇 **1st Place:** £{prize_pot - 60}
+            * 🥈 **2nd Place:** £40 *(Double your money)*
             * 🥾 **Last Place:** £20 *(Money back)*
             """)
         else:
@@ -513,8 +513,8 @@ else:
             if len(db["participants"]) >= 3:
                 st.markdown(f"""
                 💰 **Official Cash Split Structure:**
-                * 🥇 **1st Place:** £{prize_pot - 40}
-                * 🥈 **2nd Place:** £20 *(Money back)*
+                * 🥇 **1st Place:** £{prize_pot - 60}
+                * 🥈 **2nd Place:** £40 *(Double your money)*
                 * 🥾 **Last Place:** £20 *(Money back)*
                 """)
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
