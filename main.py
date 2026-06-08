@@ -90,6 +90,7 @@ page_bg = """
     margin-bottom: 40px;
 }
 
+/* ABSOLUTELY PINNED TOP LEFT COMPACT GUIDE LABEL */
 .sidebar-hint-text {
     position: fixed !important;
     top: 15px !important;
@@ -350,6 +351,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# PINNED ARROW PROMPT ON TOP LEFT NEXT TO ICON STATE
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
@@ -396,7 +398,6 @@ if not db["locked"]:
     
     if len(db["participants"]) > 0:
         per_person = math.floor(48 / len(db["participants"]))
-        leftovers = 48 % len(db["participants"])
         prize_pot = len(db["participants"]) * 20
         st.success(f"**Current Total Prize Pot: £{prize_pot}**")
         
@@ -410,10 +411,7 @@ if not db["locked"]:
         else:
             st.caption("A minimum of 3 registered players is required to activate the layered payout tier display.")
             
-        if leftovers > 0:
-            st.info(f"Each person gets **{per_person} teams** baseline. The remaining **{leftovers} teams** will be randomly distributed out so that {leftovers} lucky players get 1 extra team! (Guaranteed at least 1 Top 13 Nation).")
-        else:
-            st.info(f"Each person will receive exactly **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
+        st.info(f"Each person will receive **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
         
         if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
             TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
@@ -430,20 +428,11 @@ if not db["locked"]:
             regular_teams.extend(shuffled_top)
             random.shuffle(regular_teams)
             
-            # 1. Distribute base baseline allocations
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
                     if regular_teams:
                         db["assignments"][person].append(regular_teams.pop(0))
-            
-            # 2. DYNAMICALLY ALLOCATE LEFTOVERS RANDOMLY
-            if regular_teams:
-                lucky_players = db["participants"].copy()
-                random.shuffle(lucky_players)
-                while regular_teams and lucky_players:
-                    recipient = lucky_players.pop(0)
-                    db["assignments"][recipient].append(regular_teams.pop(0))
                         
             db["locked"] = True
             save_db_to_sheets(db)
@@ -461,7 +450,7 @@ else:
         with c1:
             st.subheader("📋 Your Teams")
             for p, teams in db["assignments"].items():
-                with st.expander(f"{p}'s Teams ({len(teams)} teams)"):
+                with st.expander(f"{p}'s Teams"):
                     team_list_with_flags = [f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]
                     st.write(", ".join(team_list_with_flags))
         with c2:
