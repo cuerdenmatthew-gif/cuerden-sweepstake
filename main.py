@@ -39,15 +39,17 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-# --- 1.5 PREMIUM WC26 UI THEME ---
+# --- 1.5 PREMIUM WC26 UI THEME (LIGHT/DARK MODE IMMUNE) ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
 
-[data-testid="stAppViewContainer"] {
-    background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
+/* Force deep dark mode baseline across the app */
+html, body, [data-testid="stAppViewContainer"] {
+    background: linear-gradient(-45deg, #0A0012, #290038, #4D0011, #081100) !important;
+    background-size: 400% 400% !important;
+    animation: gradientBG 15s ease infinite !important;
+    color: #FFFFFF !important;
 }
 
 @keyframes gradientBG {
@@ -57,13 +59,59 @@ page_bg = """
 }
 
 [data-testid="stAppViewContainer"] > .main {
-    background: rgba(15, 10, 20, 0.70);
+    background: rgba(15, 10, 20, 0.70) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
 
 [data-testid="stHeader"] {
-    background: transparent;
+    background: transparent !important;
+}
+
+/* Hard-lock Sidebar to Premium Dark Mode to completely override Light Mode */
+[data-testid="stSidebar"] {
+    background-color: #0F0A14 !important;
+    background-image: linear-gradient(180deg, #150022 0%, #0A0012 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Force all text in sidebar to remain crisp and bright */
+[data-testid="stSidebar"] p, 
+[data-testid="stSidebar"] span, 
+[data-testid="stSidebar"] h1, 
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3 {
+    color: #F3EAFB !important;
+}
+
+/* Force Main Body Headings & Labels to be perfectly visible */
+h1, h2, h3, p, span, label, [data-testid="stMarkdownContainer"] p {
+    color: #FFFFFF !important;
+}
+
+/* Custom text field container wrap adjustments */
+div[data-baseweb="input"] {
+    background-color: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(198, 255, 0, 0.2) !important;
+    border-radius: 6px !important;
+}
+div[data-baseweb="input"] input {
+    color: #FFFFFF !important;
+}
+
+/* Custom Registration / Admin Purple Accent Buttons */
+div.stButton > button {
+    background-color: #290038 !important;
+    color: #C6FF00 !important;
+    border: 1px solid #4D0011 !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 10px rgba(77, 0, 17, 0.3) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+div.stButton > button:hover {
+    background-color: #4D0011 !important;
+    color: #FFFFFF !important;
+    border-color: #C6FF00 !important;
 }
 
 .premium-title {
@@ -90,6 +138,7 @@ page_bg = """
     margin-bottom: 40px;
 }
 
+/* ABSOLUTELY PINNED TOP LEFT COMPACT GUIDE LABEL */
 .sidebar-hint-text {
     position: fixed !important;
     top: 15px !important;
@@ -99,12 +148,12 @@ page_bg = """
     font-size: 0.8rem !important;
     font-weight: 600 !important;
     color: #C6FF00 !important;
-    background: rgba(10, 0, 18, 0.85) !important;
+    background: rgba(41, 0, 56, 0.9) !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
-    border: 1px solid rgba(198, 255, 0, 0.3) !important;
+    border: 1px solid rgba(198, 255, 0, 0.4) !important;
     white-space: nowrap !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
     text-shadow: 0 0 8px rgba(198, 255, 0, 0.5) !important;
 }
 </style>
@@ -198,6 +247,8 @@ def fetch_live_points_and_activity(_key):
                 raw_date = m.get('date')
                 match_date = str(raw_date)[:10] if raw_date else '2026-01-01'
                 
+                is_world_cup_final = (match_date == '2026-07-19')
+                
                 multiplier = 2 if match_date >= '2026-06-28' else 1
                 
                 if match_date < '2026-06-28' and m['status'] == 'Final':
@@ -288,6 +339,17 @@ def fetch_live_points_and_activity(_key):
                     "Points Earned": ap,
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
+
+                if is_world_cup_final and m['status'] == 'Final':
+                    winner = home if hg > ag else away
+                    team_points[winner] += 10
+                    activity_logs.append({
+                        "Status": "⏱️ Finished",
+                        "Match": "World Cup Final - Tournament Champion",
+                        "Team": winner,
+                        "Points Earned": 10,
+                        "Breakdown": "World Cup Winner Bonus (+10 Flat)"
+                    })
                 
             for g, teams in group_teams.items():
                 if all(group_stats[t]["mp"] == 3 for t in teams):
@@ -327,7 +389,6 @@ team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activ
 
 # --- 4. DISPLAY LAYOUT ---
 
-# Centered Logo Wrapper
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
@@ -350,6 +411,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Compact, clear indicator layout position
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
 st.sidebar.markdown("""
@@ -360,7 +422,8 @@ st.sidebar.markdown("""
 * **3+ Goals Conceded:** -1 pt
 * 🥇 **Group Winner:** +2 pts
 * 🥈 **Group 2nd Place:** +1 pt
-* 🏆 **KNOCKOUTS:** All match metrics double (2x) from Round of 32 onwards!
+* 🏆 **World Cup Champion:** +10 pts *(Flat)*
+* 💥 **KNOCKOUTS:** Match performance metrics double (2x) from Round of 32 onwards!
 """)
 
 st.sidebar.markdown("---")
@@ -403,8 +466,8 @@ if not db["locked"]:
         if len(db["participants"]) >= 3:
             st.markdown(f"""
             💰 **Prize Money Breakdown:**
-            * 🥇 **1st Place:** £{prize_pot - 40}
-            * 🥈 **2nd Place:** £20 *(Money back)*
+            * 🥇 **1st Place:** £{prize_pot - 60}
+            * 🥈 **2nd Place:** £40 *(Double your money!)*
             * 🥾 **Last Place:** £20 *(Money back)*
             """)
         else:
@@ -430,14 +493,12 @@ if not db["locked"]:
             regular_teams.extend(shuffled_top)
             random.shuffle(regular_teams)
             
-            # 1. Distribute base baseline allocations
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
                     if regular_teams:
                         db["assignments"][person].append(regular_teams.pop(0))
             
-            # 2. DYNAMICALLY ALLOCATE LEFTOVERS RANDOMLY
             if regular_teams:
                 lucky_players = db["participants"].copy()
                 random.shuffle(lucky_players)
@@ -479,8 +540,8 @@ else:
             if len(db["participants"]) >= 3:
                 st.markdown(f"""
                 💰 **Official Cash Split Structure:**
-                * 🥇 **1st Place:** £{prize_pot - 40}
-                * 🥈 **2nd Place:** £20 *(Money back)*
+                * 🥇 **1st Place:** £{prize_pot - 60}
+                * 🥈 **2nd Place:** £40 *(Double your money!)*
                 * 🥾 **Last Place:** £20 *(Money back)*
                 """)
             st.caption("Scores update automatically every 15 minutes during live matches. Penalty shootouts do not count towards goals.")
