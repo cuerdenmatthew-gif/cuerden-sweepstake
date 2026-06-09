@@ -96,30 +96,12 @@ div[data-baseweb="input"] input {
     color: #FFFFFF !important;
 }
 
-/* HARD-LOCK EXPANDER STYLING FOR LIGHT MODE IMMUNITY */
 div[data-testid="stExpander"] {
-    background-color: #1E052D !important;
+    background-color: rgba(30, 5, 45, 0.8) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
-
-/* Force expander closed text summary container color and header styles */
-div[data-testid="stExpander"] summary {
-    background-color: #1E052D !important;
+div[data-testid="stExpander"] p, div[data-testid="stExpander"] span {
     color: #FFFFFF !important;
-}
-
-/* Override Streamlit inner container text changes inside expanders */
-div[data-testid="stExpander"] p, 
-div[data-testid="stExpander"] span,
-div[data-testid="stExpander"] label,
-div[data-testid="stExpander"] summary text,
-.st-emotion-cache-pbl972 {
-    color: #FFFFFF !important;
-}
-
-/* Override light mode toggle text inside tables and dataframes */
-div[data-testid="stDataFrame"] {
-    background-color: rgba(15, 5, 25, 0.8) !important;
 }
 
 div.stButton > button {
@@ -504,33 +486,33 @@ if not db["locked"]:
             
             shuffled_top = TOP_13.copy()
             random.shuffle(shuffled_top)
-            regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
             
+            # Reset assignments dictionary
+            db["assignments"] = {person: [] for person in db["participants"]}
+            
+            # Phase 1: Give everyone exactly 1 guaranteed top-tier nation
             for person in db["participants"]:
-                db["assignments"][person] = []
                 if shuffled_top:
                     db["assignments"][person].append(shuffled_top.pop(0))
             
-            regular_teams.extend(shuffled_top)
-            leftover_elites = [t for t in regular_teams if t in TOP_13]
-            regular_teams = [t for t in regular_teams if t not in TOP_13]
-            random.shuffle(regular_teams)
-            random.shuffle(leftover_elites)
+            # Combine ALL remaining leftover unassigned nations together cleanly
+            remaining_pool = shuffled_top + [t for t in ALL_TEAMS if t not in TOP_13]
+            random.shuffle(remaining_pool)
             
+            # Phase 2: Top up allocations sequentially until everyone is perfectly filled
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
-                    if regular_teams:
-                        db["assignments"][person].append(regular_teams.pop(0))
+                    if remaining_pool:
+                        db["assignments"][person].append(remaining_pool.pop(0))
             
-            if regular_teams or leftover_elites:
-                full_leftover_pool = leftover_elites + regular_teams
+            # Phase 3: Hand out the final remaining odd teams to random distinct players if leftovers exist
+            if remaining_pool:
                 lucky_players = db["participants"].copy()
                 random.shuffle(lucky_players)
-                
-                while full_leftover_pool and lucky_players:
+                while remaining_pool and lucky_players:
                     recipient = lucky_players.pop(0)
-                    db["assignments"][recipient].append(full_leftover_pool.pop(0))
+                    db["assignments"][recipient].append(remaining_pool.pop(0))
                         
             db["locked"] = True
             save_db_to_sheets(db)
