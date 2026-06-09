@@ -96,12 +96,30 @@ div[data-baseweb="input"] input {
     color: #FFFFFF !important;
 }
 
+/* HARD-LOCK EXPANDER STYLING FOR LIGHT MODE IMMUNITY */
 div[data-testid="stExpander"] {
-    background-color: rgba(30, 5, 45, 0.8) !important;
+    background-color: #1E052D !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
-div[data-testid="stExpander"] p, div[data-testid="stExpander"] span {
+
+/* Force expander closed text summary container color and header styles */
+div[data-testid="stExpander"] summary {
+    background-color: #1E052D !important;
     color: #FFFFFF !important;
+}
+
+/* Override Streamlit inner container text changes inside expanders */
+div[data-testid="stExpander"] p, 
+div[data-testid="stExpander"] span,
+div[data-testid="stExpander"] label,
+div[data-testid="stExpander"] summary text,
+.st-emotion-cache-pbl972 {
+    color: #FFFFFF !important;
+}
+
+/* Override light mode toggle text inside tables and dataframes */
+div[data-testid="stDataFrame"] {
+    background-color: rgba(15, 5, 25, 0.8) !important;
 }
 
 div.stButton > button {
@@ -488,31 +506,25 @@ if not db["locked"]:
             random.shuffle(shuffled_top)
             regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
             
-            # Phase 1: Give everyone 1 guaranteed elite top nation
             for person in db["participants"]:
                 db["assignments"][person] = []
                 if shuffled_top:
                     db["assignments"][person].append(shuffled_top.pop(0))
             
-            # Gather the leftover elite top 13 seeds
             regular_teams.extend(shuffled_top)
-            # Pull elite seeds out to keep separate for fairness priority handing
             leftover_elites = [t for t in regular_teams if t in TOP_13]
             regular_teams = [t for t in regular_teams if t not in TOP_13]
             random.shuffle(regular_teams)
             random.shuffle(leftover_elites)
             
-            # Phase 2: Build baseline rosters
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
                     if regular_teams:
                         db["assignments"][person].append(regular_teams.pop(0))
             
-            # Phase 3: Identify disadvantaged slots and feed them leftover elite seeds first
             if regular_teams or leftover_elites:
                 full_leftover_pool = leftover_elites + regular_teams
-                
                 lucky_players = db["participants"].copy()
                 random.shuffle(lucky_players)
                 
