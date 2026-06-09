@@ -44,7 +44,6 @@ page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
 
-/* Dynamic gradient utilizing the vibrant purple tone from the logo image */
 html, body, [data-testid="stAppViewContainer"] {
     background: linear-gradient(-45deg, #1A0033, #5F00A8, #8000FF, #3A0066) !important;
     background-size: 400% 400% !important;
@@ -68,14 +67,12 @@ html, body, [data-testid="stAppViewContainer"] {
     background: transparent !important;
 }
 
-/* Force Sidebar to remain deep dark purple with bright text elements */
 [data-testid="stSidebar"] {
     background-color: #120024 !important;
     background-image: linear-gradient(180deg, #1C0038 0%, #0A0014 100%) !important;
     border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Secure explicit white fallback text rules for all sidebar typography components */
 [data-testid="stSidebar"] p, 
 [data-testid="stSidebar"] span, 
 [data-testid="stSidebar"] h1, 
@@ -86,12 +83,10 @@ html, body, [data-testid="stAppViewContainer"] {
     color: #FFFFFF !important;
 }
 
-/* Force absolute white visibility across all global markdown text/headers */
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p {
     color: #FFFFFF !important;
 }
 
-/* Override light-mode text fields so inputs aren't invisible */
 div[data-baseweb="input"] {
     background-color: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
@@ -101,7 +96,6 @@ div[data-baseweb="input"] input {
     color: #FFFFFF !important;
 }
 
-/* Style the expanding cards containing user teams to remain readable and dark */
 div[data-testid="stExpander"] {
     background-color: rgba(30, 5, 45, 0.8) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -110,7 +104,6 @@ div[data-testid="stExpander"] p, div[data-testid="stExpander"] span {
     color: #FFFFFF !important;
 }
 
-/* Custom Purple Accent Buttons */
 div.stButton > button {
     background-color: #4C0099 !important;
     color: #C6FF00 !important;
@@ -149,7 +142,6 @@ div.stButton > button:hover {
     margin-bottom: 40px;
 }
 
-/* ABSOLUTELY PINNED TOP LEFT COMPACT GUIDE LABEL */
 .sidebar-hint-text {
     position: fixed !important;
     top: 15px !important;
@@ -400,7 +392,6 @@ team_scores, raw_activity_logs, eliminated_nations = fetch_live_points_and_activ
 
 # --- 4. DISPLAY LAYOUT ---
 
-# Centered Logo Wrapper
 if os.path.exists("logo.png"):
     try:
         with open("logo.png", "rb") as f:
@@ -486,6 +477,7 @@ if not db["locked"]:
             
         if leftovers > 0:
             st.info(f"Each person gets **{per_person} teams** baseline. The remaining **{leftovers} teams** will be randomly distributed out so that {leftovers} lucky players get 1 extra team! (Guaranteed at least 1 Top 13 Nation).")
+            st.caption("🛡️ Fairness Buff Active: Any players who end up receiving fewer teams total will get first priority over the leftover elite Top 13 seeds!")
         else:
             st.info(f"Each person will receive exactly **{per_person} teams** randomly. (Guaranteed at least 1 Top 13 Nation).")
         
@@ -496,26 +488,37 @@ if not db["locked"]:
             random.shuffle(shuffled_top)
             regular_teams = [t for t in ALL_TEAMS if t not in TOP_13]
             
+            # Phase 1: Give everyone 1 guaranteed elite top nation
             for person in db["participants"]:
                 db["assignments"][person] = []
                 if shuffled_top:
                     db["assignments"][person].append(shuffled_top.pop(0))
             
+            # Gather the leftover elite top 13 seeds
             regular_teams.extend(shuffled_top)
+            # Pull elite seeds out to keep separate for fairness priority handing
+            leftover_elites = [t for t in regular_teams if t in TOP_13]
+            regular_teams = [t for t in regular_teams if t not in TOP_13]
             random.shuffle(regular_teams)
+            random.shuffle(leftover_elites)
             
+            # Phase 2: Build baseline rosters
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
                     if regular_teams:
                         db["assignments"][person].append(regular_teams.pop(0))
             
-            if regular_teams:
+            # Phase 3: Identify disadvantaged slots and feed them leftover elite seeds first
+            if regular_teams or leftover_elites:
+                full_leftover_pool = leftover_elites + regular_teams
+                
                 lucky_players = db["participants"].copy()
                 random.shuffle(lucky_players)
-                while regular_teams and lucky_players:
+                
+                while full_leftover_pool and lucky_players:
                     recipient = lucky_players.pop(0)
-                    db["assignments"][recipient].append(regular_teams.pop(0))
+                    db["assignments"][recipient].append(full_leftover_pool.pop(0))
                         
             db["locked"] = True
             save_db_to_sheets(db)
