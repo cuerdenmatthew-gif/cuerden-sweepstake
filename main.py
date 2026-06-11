@@ -34,7 +34,6 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-# Corrected Real-Time 72 Group Match Calendar Schedule Matrix
 FIXED_FIXTURES = [
     {"Date": "June 11", "Home": "Mexico", "Away": "South Africa"},
     {"Date": "June 12", "Home": "South Korea", "Away": "Czechia"},
@@ -110,7 +109,7 @@ FIXED_FIXTURES = [
     {"Date": "June 28", "Home": "Jordan", "Away": "Argentina"}
 ]
 
-# --- 1.5 DUAL LIGHT/DARK THEME CSS STABILITY PATCH ---
+# --- 1.5 SHARP STYLING & CELL PROTECTION CONTRAST PATCH ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght=800&family=Inter:wght@400;600&display=swap');
@@ -145,7 +144,7 @@ html, body, [data-testid="stAppViewContainer"] {
 
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
 
-/* HARD COMPONENT COLOR LOCKDOWN (IMMUNE TO DEVICE CHASSIS TOGGLES) */
+/* DROPDOWN & INPUT ELEMENT OVERRIDES */
 div[data-baseweb="select"] > div {
     background-color: #1E052D !important;
     color: #FFFFFF !important;
@@ -212,12 +211,12 @@ div.stButton > button {
     border-radius: 6px !important;
 }
 
-/* CUSTOM HIGH-CONTRAST DATAFRAME OVERRIDES FOR LIGHT MODE */
-div[data-testid="stDataFrame"] div, div[data-testid="stDataFrame"] span {
-    color: #FFFFFF !important;
-}
-div[data-testid="stDataFrame"] [role="grid"] {
+/* PREMIUM FORCE DATAFRAME TEXT STYLING FOR SHARP GRID VIEWING */
+div[data-testid="stDataFrame"] {
     background-color: #12051C !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 4px;
 }
 </style>
 """
@@ -325,8 +324,8 @@ def process_match_calculations():
         team_points[home] += hp
         team_points[away] += ap
         
-        activity_logs.append({"Status": "⏱️ FT" if is_finished else "🟢 Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Points Earned": hp, "Breakdown": " | ".join(h_break)})
-        activity_logs.append({"Status": "⏱️ FT" if is_finished else "🟢 Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Points Earned": ap, "Breakdown": " | ".join(a_break)})
+        activity_logs.append({"Status": "⏱️ FT" if is_finished else "🟢 Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
+        activity_logs.append({"Status": "⏱️ FT" if is_finished else "🟢 Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Player": "", "Points Earned": ap, "Breakdown": " | ".join(a_break)})
 
     return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
 
@@ -403,7 +402,9 @@ else:
         with c2:
             st.subheader("📊 Leaderboard")
             table = [{"Player": p, "Total Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
-            if table: st.write(pd.DataFrame(table).sort_values("Total Points", ascending=False).to_html(index=False, escape=False), unsafe_allow_html=True)
+            if table: 
+                df_leaderboard = pd.DataFrame(table).sort_values("Total Points", ascending=False)
+                st.dataframe(df_leaderboard, use_container_width=True, hide_index=True)
             
             prize_pot = len(db["participants"]) * 20
             st.success(f"**Final Tournament Prize Pot: £{prize_pot}**")
@@ -421,7 +422,7 @@ else:
         if not activity_df.empty:
             filter_option = st.selectbox("Filter Match Activity by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
             filtered_df = activity_df if filter_option == "All Players" else activity_df[activity_df["Player"] == filter_option]
-            st.write(filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]].to_html(index=False, escape=False), unsafe_allow_html=True)
+            st.dataframe(filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]], use_container_width=True, hide_index=True)
         else:
             st.info("Log final scores in your Google Sheet spreadsheet under the 'Scores' tab to populate updates!")
 
@@ -430,4 +431,4 @@ else:
         cal_df = pd.DataFrame(full_calendar_schedule)
         filter_date = st.selectbox("Filter Calendar by Date:", ["All Dates"] + sorted(list(set(cal_df["Date"].tolist()))))
         display_cal = cal_df if filter_date == "All Dates" else cal_df[cal_df["Date"] == filter_date]
-        st.write(display_cal[["Date", "Match", "Result", "Status"]].to_html(index=False, escape=False), unsafe_allow_html=True)
+        st.dataframe(display_cal[["Date", "Match", "Result", "Status"]], use_container_width=True, hide_index=True)
