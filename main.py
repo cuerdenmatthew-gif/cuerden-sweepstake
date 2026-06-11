@@ -234,28 +234,40 @@ def fetch_live_points_and_activity(_key):
             knockout_participants = set()
             
             for m in matches:
-                home_name = m['home_team']['name']
-                away_name = m['visitor_team']['name']
+                # Extract dictionary values safely regardless of API format nesting structures
+                home_team_obj = m.get('home_team', {})
+                away_team_obj = m.get('visitor_team', {})
                 
-                home = next((t for t in ALL_TEAMS if t in home_name), home_name)
-                away = next((t for t in ALL_TEAMS if t in away_name), away_name)
+                raw_home_name = home_team_obj.get('name', '') if isinstance(home_team_obj, dict) else str(home_team_obj)
+                raw_away_name = away_team_obj.get('name', '') if isinstance(away_team_obj, dict) else str(away_team_obj)
                 
+                if not raw_home_name or not raw_away_name: continue
+                
+                # Loose wildcard scanner matching check to map 'South Africa' or similar API variations flawlessly
+                home = next((t for t in ALL_TEAMS if t.lower() in raw_home_name.lower() or raw_home_name.lower() in t.lower()), raw_home_name)
+                away = next((t for t in ALL_TEAMS if t.lower() in raw_away_name.lower() or raw_away_name.lower() in t.lower()), raw_away_name)
+                
+                # Multi-tier safety structure fallback lookups for goal metrics 
                 hg = m.get('home_team_score')
-                ag = m.get('visitor_team_score')
+                if hg is None: hg = m.get('scores', {}).get('home')
+                if hg is None: hg = home_team_obj.get('score')
                 
-                # Check that scores exist to ensure it is a running/finished match
+                ag = m.get('visitor_team_score')
+                if ag is None: ag = m.get('scores', {}).get('away')
+                if ag is None: ag = away_team_obj.get('score')
+                
+                # Treat missing records as an un-kicked match cleanly
                 if hg is None or ag is None: continue
 
                 raw_date = m.get('date', '')
                 date_str = str(raw_date)
                 
-                # Loose matching structure definition
                 is_knockout = ('2026-06-28' in date_str or '2026-07' in date_str) or (m.get('stage') not in [None, 'group', 'Group Stage'])
                 is_world_cup_final = ('2026-07-19' in date_str)
                 
                 multiplier = 2 if is_knockout else 1
-                status_label = str(m.get('status', '')).strip()
-                is_finished = status_label in ['Final', 'FT', 'final', 'ft', 'Finished', 'ended']
+                status_label = str(m.get('status', '')).strip().lower()
+                is_finished = any(w in status_label for w in ['final', 'ft', 'end', 'finish'])
                 
                 if not is_knockout and is_finished:
                     if home in group_stats:
