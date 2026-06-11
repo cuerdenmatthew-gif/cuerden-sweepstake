@@ -234,7 +234,8 @@ def fetch_live_points_and_activity(_key):
             knockout_participants = set()
             
             for m in matches:
-                if m['status'] not in ['Final', 'In Progress', 'Halftime']: continue
+                # Catch active, running, or finished matches securely
+                if m.get('status') not in ['Final', 'In Progress', 'Halftime', 'Live', 'break']: continue
                 
                 home_name = m['home_team']['name']
                 away_name = m['visitor_team']['name']
@@ -247,14 +248,18 @@ def fetch_live_points_and_activity(_key):
                 
                 if hg is None or ag is None: continue
 
-                raw_date = m.get('date')
-                match_date = str(raw_date)[:10] if raw_date else '2026-01-01'
+                # Clean date formatting protection fallback line
+                raw_date = m.get('date', '')
+                date_str = str(raw_date)
                 
-                is_world_cup_final = (match_date == '2026-07-19')
+                # Dynamic matching switch: Is it a knockout phase game? (June 28th onwards)
+                is_knockout = ('2026-06-28' in date_str or '2026-07' in date_str) or (m.get('stage') not in [None, 'group', 'Group Stage'])
+                is_world_cup_final = ('2026-07-19' in date_str)
                 
-                multiplier = 2 if match_date >= '2026-06-28' else 1
+                multiplier = 2 if is_knockout else 1
                 
-                if match_date < '2026-06-28' and m['status'] == 'Final':
+                # Group stage point logic updates
+                if not is_knockout and m['status'] in ['Final', 'FT']:
                     if home in group_stats:
                         group_stats[home]["mp"] += 1
                         group_stats[home]["gf"] += hg
@@ -272,11 +277,11 @@ def fetch_live_points_and_activity(_key):
                         if home in group_stats: group_stats[home]["pts"] += 1
                         if away in group_stats: group_stats[away]["pts"] += 1
                 
-                if match_date >= '2026-06-28':
+                if is_knockout:
                     has_knockouts_started = True
                     knockout_participants.add(home)
                     knockout_participants.add(away)
-                    if m['status'] == 'Final':
+                    if m['status'] in ['Final', 'FT']:
                         if hg > ag: eliminated_teams.add(away)
                         elif ag > hg: eliminated_teams.add(home)
                 
@@ -325,7 +330,7 @@ def fetch_live_points_and_activity(_key):
                 if home in team_points: team_points[home] += hp
                 if away in team_points: team_points[away] += ap
                 
-                status_emoji = "🟢 Live" if m['status'] != 'Final' else "⏱️ FT"
+                status_emoji = "🟢 Live" if m['status'] not in ['Final', 'FT'] else "⏱️ FT"
                 knockout_tag = " 🏆 (2x Pts)" if multiplier == 2 else ""
                 
                 activity_logs.append({
@@ -343,7 +348,7 @@ def fetch_live_points_and_activity(_key):
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
 
-                if is_world_cup_final and m['status'] == 'Final':
+                if is_world_cup_final and m['status'] in ['Final', 'FT']:
                     winner = home if hg > ag else away
                     team_points[winner] += 10
                     activity_logs.append({
@@ -487,26 +492,21 @@ if not db["locked"]:
             shuffled_top = TOP_13.copy()
             random.shuffle(shuffled_top)
             
-            # Reset assignments dictionary
             db["assignments"] = {person: [] for person in db["participants"]}
             
-            # Phase 1: Give everyone exactly 1 guaranteed top-tier nation
             for person in db["participants"]:
                 if shuffled_top:
                     db["assignments"][person].append(shuffled_top.pop(0))
             
-            # Combine ALL remaining leftover unassigned nations together cleanly
             remaining_pool = shuffled_top + [t for t in ALL_TEAMS if t not in TOP_13]
             random.shuffle(remaining_pool)
             
-            # Phase 2: Top up allocations sequentially until everyone is perfectly filled
             for person in db["participants"]:
                 needed = per_person - len(db["assignments"][person])
                 for _ in range(needed):
                     if remaining_pool:
                         db["assignments"][person].append(remaining_pool.pop(0))
             
-            # Phase 3: Hand out the final remaining odd teams to random distinct players if leftovers exist
             if remaining_pool:
                 lucky_players = db["participants"].copy()
                 random.shuffle(lucky_players)
