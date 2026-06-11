@@ -34,85 +34,86 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
+# Corrected Real-Time 72 Group Match Calendar Schedule Matrix
 FIXED_FIXTURES = [
     {"Date": "June 11", "Home": "Mexico", "Away": "South Africa"},
-    {"Date": "June 11", "Home": "Canada", "Away": "Switzerland"},
-    {"Date": "June 12", "Home": "USA", "Away": "Paraguay"},
-    {"Date": "June 12", "Home": "Brazil", "Away": "Morocco"},
-    {"Date": "June 13", "Home": "Germany", "Away": "Curaçao"},
-    {"Date": "June 13", "Home": "Spain", "Away": "Cabo Verde"},
-    {"Date": "June 13", "Home": "Argentina", "Away": "Algeria"},
+    {"Date": "June 12", "Home": "South Korea", "Away": "Czechia"},
+    {"Date": "June 12", "Home": "Canada", "Away": "Bosnia and Herzegovina"},
+    {"Date": "June 13", "Home": "USA", "Away": "Paraguay"},
+    {"Date": "June 13", "Home": "Qatar", "Away": "Switzerland"},
+    {"Date": "June 13", "Home": "Brazil", "Away": "Morocco"},
+    {"Date": "June 14", "Home": "Haiti", "Away": "Scotland"},
+    {"Date": "June 14", "Home": "Australia", "Away": "Türkiye"},
+    {"Date": "June 14", "Home": "Germany", "Away": "Curaçao"},
     {"Date": "June 14", "Home": "Netherlands", "Away": "Japan"},
-    {"Date": "June 14", "Home": "Belgium", "Away": "Egypt"},
-    {"Date": "June 14", "Home": "France", "Away": "Senegal"},
-    {"Date": "June 14", "Home": "Portugal", "Away": "Uzbekistan"},
-    {"Date": "June 15", "Home": "England", "Away": "Croatia"},
-    {"Date": "June 15", "Home": "South Korea", "Away": "Czechia"},
-    {"Date": "June 15", "Home": "Qatar", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 16", "Home": "Haiti", "Away": "Scotland"},
-    {"Date": "June 16", "Home": "Australia", "Away": "Türkiye"},
-    {"Date": "June 16", "Home": "Ivory Coast", "Away": "Ecuador"},
-    {"Date": "June 17", "Home": "Tunisia", "Away": "Sweden"},
-    {"Date": "June 17", "Home": "Iran", "Away": "New Zealand"},
-    {"Date": "June 17", "Home": "Saudi Arabia", "Away": "Uruguay"},
-    {"Date": "June 17", "Home": "Norway", "Away": "Iraq"},
-    {"Date": "June 18", "Home": "Austria", "Away": "Jordan"},
-    {"Date": "June 18", "Home": "Colombia", "Away": "DR Congo"},
+    {"Date": "June 15", "Home": "Ivory Coast", "Away": "Ecuador"},
+    {"Date": "June 15", "Home": "Sweden", "Away": "Tunisia"},
+    {"Date": "June 15", "Home": "Spain", "Away": "Cabo Verde"},
+    {"Date": "June 15", "Home": "Belgium", "Away": "Egypt"},
+    {"Date": "June 15", "Home": "Saudi Arabia", "Away": "Uruguay"},
+    {"Date": "June 16", "Home": "Iran", "Away": "New Zealand"},
+    {"Date": "June 16", "Home": "France", "Away": "Senegal"},
+    {"Date": "June 16", "Home": "Iraq", "Away": "Norway"},
+    {"Date": "June 17", "Home": "Argentina", "Away": "Algeria"},
+    {"Date": "June 17", "Home": "Austria", "Away": "Jordan"},
+    {"Date": "June 17", "Home": "Portugal", "Away": "DR Congo"},
+    {"Date": "June 17", "Home": "England", "Away": "Croatia"},
     {"Date": "June 18", "Home": "Ghana", "Away": "Panama"},
-    {"Date": "June 19", "Home": "Canada", "Away": "Qatar"},
+    {"Date": "June 18", "Home": "Uzbekistan", "Away": "Colombia"},
+    {"Date": "June 18", "Home": "Czechia", "Away": "South Africa"},
+    {"Date": "June 18", "Home": "Switzerland", "Away": "Bosnia and Herzegovina"},
+    {"Date": "June 18", "Home": "Canada", "Away": "Qatar"},
     {"Date": "June 19", "Home": "Mexico", "Away": "South Korea"},
-    {"Date": "June 20", "Home": "Switzerland", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 20", "Home": "USA", "Away": "Australia"},
+    {"Date": "June 19", "Home": "USA", "Away": "Australia"},
+    {"Date": "June 19", "Home": "Scotland", "Away": "Morocco"},
     {"Date": "June 20", "Home": "Brazil", "Away": "Haiti"},
-    {"Date": "June 21", "Home": "South Africa", "Away": "Czechia"},
-    {"Date": "June 21", "Home": "Paraguay", "Away": "Türkiye"},
-    {"Date": "June 21", "Home": "Morocco", "Away": "Scotland"},
-    {"Date": "June 22", "Home": "Germany", "Away": "Ivory Coast"},
-    {"Date": "June 22", "Home": "Netherlands", "Away": "Tunisia"},
-    {"Date": "June 22", "Home": "Belgium", "Away": "Iran"},
-    {"Date": "June 23", "Home": "Curaçao", "Away": "Ecuador"},
-    {"Date": "June 23", "Home": "Japan", "Away": "Sweden"},
-    {"Date": "June 23", "Home": "Egypt", "Away": "New Zealand"},
-    {"Date": "June 24", "Home": "Spain", "Away": "Saudi Arabia"},
-    {"Date": "June 24", "Home": "France", "Away": "Norway"},
-    {"Date": "June 24", "Home": "Argentina", "Away": "Austria"},
-    {"Date": "June 25", "Home": "Cabo Verde", "Away": "Uruguay"},
-    {"Date": "June 25", "Home": "Senegal", "Away": "Iraq"},
-    {"Date": "June 25", "Home": "Algeria", "Away": "Jordan"},
-    {"Date": "June 26", "Home": "Portugal", "Away": "Colombia"},
-    {"Date": "June 26", "Home": "England", "Away": "Ghana"},
-    {"Date": "June 26", "Home": "Uzbekistan", "Away": "DR Congo"},
-    {"Date": "June 27", "Home": "Croatia", "Away": "Panama"},
-    {"Date": "June 27", "Home": "Mexico", "Away": "Czechia"},
-    {"Date": "June 27", "Home": "South Africa", "Away": "South Korea"},
-    {"Date": "June 28", "Home": "Canada", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 28", "Home": "Switzerland", "Away": "Qatar"},
-    {"Date": "June 28", "Home": "Brazil", "Away": "Scotland"},
-    {"Date": "June 29", "Home": "Morocco", "Away": "Haiti"},
-    {"Date": "June 29", "Home": "USA", "Away": "Türkiye"},
-    {"Date": "June 29", "Home": "Paraguay", "Away": "Australia"},
-    {"Date": "June 30", "Home": "Germany", "Away": "Ecuador"},
-    {"Date": "June 30", "Home": "Curaçao", "Away": "Ivory Coast"},
-    {"Date": "July 01", "Home": "Netherlands", "Away": "Sweden"},
-    {"Date": "July 01", "Home": "Japan", "Away": "Tunisia"},
-    {"Date": "July 01", "Home": "Belgium", "Away": "New Zealand"},
-    {"Date": "July 02", "Home": "Egypt", "Away": "Iran"},
-    {"Date": "July 02", "Home": "Spain", "Away": "Uruguay"},
-    {"Date": "July 02", "Home": "Cabo Verde", "Away": "Saudi Arabia"},
-    {"Date": "July 03", "Home": "France", "Away": "Iraq"},
-    {"Date": "July 03", "Home": "Senegal", "Away": "Norway"},
-    {"Date": "July 03", "Home": "Argentina", "Away": "Jordan"},
-    {"Date": "July 04", "Home": "Algeria", "Away": "Austria"},
-    {"Date": "July 04", "Home": "Portugal", "Away": "DR Congo"},
-    {"Date": "July 04", "Home": "Uzbekistan", "Away": "Colombia"},
-    {"Date": "July 05", "Home": "England", "Away": "Panama"},
-    {"Date": "July 05", "Home": "Croatia", "Away": "Ghana"}
+    {"Date": "June 20", "Home": "Türkiye", "Away": "Paraguay"},
+    {"Date": "June 20", "Home": "Netherlands", "Away": "Sweden"},
+    {"Date": "June 20", "Home": "Germany", "Away": "Ivory Coast"},
+    {"Date": "June 21", "Home": "Ecuador", "Away": "Curaçao"},
+    {"Date": "June 21", "Home": "Tunisia", "Away": "Japan"},
+    {"Date": "June 21", "Home": "Spain", "Away": "Saudi Arabia"},
+    {"Date": "June 21", "Home": "Belgium", "Away": "Iran"},
+    {"Date": "June 21", "Home": "Uruguay", "Away": "Cabo Verde"},
+    {"Date": "June 22", "Home": "New Zealand", "Away": "Egypt"},
+    {"Date": "June 22", "Home": "Argentina", "Away": "Austria"},
+    {"Date": "June 22", "Home": "France", "Away": "Iraq"},
+    {"Date": "June 23", "Home": "Norway", "Away": "Senegal"},
+    {"Date": "June 23", "Home": "Jordan", "Away": "Algeria"},
+    {"Date": "June 23", "Home": "Portugal", "Away": "Uzbekistan"},
+    {"Date": "June 23", "Home": "England", "Away": "Ghana"},
+    {"Date": "June 24", "Home": "Panama", "Away": "Croatia"},
+    {"Date": "June 24", "Home": "Colombia", "Away": "DR Congo"},
+    {"Date": "June 24", "Home": "Switzerland", "Away": "Canada"},
+    {"Date": "June 24", "Home": "Bosnia and Herzegovina", "Away": "Qatar"},
+    {"Date": "June 24", "Home": "Morocco", "Away": "Haiti"},
+    {"Date": "June 24", "Home": "Scotland", "Away": "Brazil"},
+    {"Date": "June 25", "Home": "South Africa", "Away": "South Korea"},
+    {"Date": "June 25", "Home": "Czechia", "Away": "Mexico"},
+    {"Date": "June 25", "Home": "Curaçao", "Away": "Ivory Coast"},
+    {"Date": "June 25", "Home": "Ecuador", "Away": "Germany"},
+    {"Date": "June 26", "Home": "Tunisia", "Away": "Netherlands"},
+    {"Date": "June 26", "Home": "Japan", "Away": "Sweden"},
+    {"Date": "June 26", "Home": "Türkiye", "Away": "USA"},
+    {"Date": "June 26", "Home": "Paraguay", "Away": "Australia"},
+    {"Date": "June 26", "Home": "Norway", "Away": "France"},
+    {"Date": "June 26", "Home": "Senegal", "Away": "Iraq"},
+    {"Date": "June 27", "Home": "Cabo Verde", "Away": "Saudi Arabia"},
+    {"Date": "June 27", "Home": "Uruguay", "Away": "Spain"},
+    {"Date": "June 27", "Home": "New Zealand", "Away": "Belgium"},
+    {"Date": "June 27", "Home": "Egypt", "Away": "Iran"},
+    {"Date": "June 27", "Home": "Panama", "Away": "England"},
+    {"Date": "June 27", "Home": "Croatia", "Away": "Ghana"},
+    {"Date": "June 28", "Home": "Colombia", "Away": "Portugal"},
+    {"Date": "June 28", "Home": "DR Congo", "Away": "Uzbekistan"},
+    {"Date": "June 28", "Home": "Algeria", "Away": "Austria"},
+    {"Date": "June 28", "Home": "Jordan", "Away": "Argentina"}
 ]
 
 # --- 1.5 DUAL LIGHT/DARK THEME CSS STABILITY PATCH ---
 page_bg = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght=800&family=Inter:wght@400;600&display=swap');
 
 html, body, [data-testid="stAppViewContainer"] {
     background: linear-gradient(-45deg, #1A0033, #5F00A8, #8000FF, #3A0066) !important;
@@ -144,7 +145,7 @@ html, body, [data-testid="stAppViewContainer"] {
 
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
 
-/* DUAL MODE SELECT ELEMENT OVERRIDES */
+/* HARD COMPONENT COLOR LOCKDOWN (IMMUNE TO DEVICE CHASSIS TOGGLES) */
 div[data-baseweb="select"] > div {
     background-color: #1E052D !important;
     color: #FFFFFF !important;
@@ -209,6 +210,14 @@ div.stButton > button {
     background: rgba(40, 0, 80, 0.95) !important;
     padding: 4px 10px !important;
     border-radius: 6px !important;
+}
+
+/* CUSTOM HIGH-CONTRAST DATAFRAME OVERRIDES FOR LIGHT MODE */
+div[data-testid="stDataFrame"] div, div[data-testid="stDataFrame"] span {
+    color: #FFFFFF !important;
+}
+div[data-testid="stDataFrame"] [role="grid"] {
+    background-color: #12051C !important;
 }
 </style>
 """
@@ -394,7 +403,7 @@ else:
         with c2:
             st.subheader("📊 Leaderboard")
             table = [{"Player": p, "Total Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
-            if table: st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
+            if table: st.write(pd.DataFrame(table).sort_values("Total Points", ascending=False).to_html(index=False, escape=False), unsafe_allow_html=True)
             
             prize_pot = len(db["participants"]) * 20
             st.success(f"**Final Tournament Prize Pot: £{prize_pot}**")
@@ -412,7 +421,7 @@ else:
         if not activity_df.empty:
             filter_option = st.selectbox("Filter Match Activity by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
             filtered_df = activity_df if filter_option == "All Players" else activity_df[activity_df["Player"] == filter_option]
-            st.dataframe(filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]], use_container_width=True, hide_index=True)
+            st.write(filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]].to_html(index=False, escape=False), unsafe_allow_html=True)
         else:
             st.info("Log final scores in your Google Sheet spreadsheet under the 'Scores' tab to populate updates!")
 
@@ -421,4 +430,4 @@ else:
         cal_df = pd.DataFrame(full_calendar_schedule)
         filter_date = st.selectbox("Filter Calendar by Date:", ["All Dates"] + sorted(list(set(cal_df["Date"].tolist()))))
         display_cal = cal_df if filter_date == "All Dates" else cal_df[cal_df["Date"] == filter_date]
-        st.dataframe(display_cal[["Date", "Match", "Result", "Status"]], use_container_width=True, hide_index=True)
+        st.write(display_cal[["Date", "Match", "Result", "Status"]].to_html(index=False, escape=False), unsafe_allow_html=True)
