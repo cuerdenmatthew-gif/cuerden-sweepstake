@@ -234,9 +234,6 @@ def fetch_live_points_and_activity(_key):
             knockout_participants = set()
             
             for m in matches:
-                # Catch active, running, or finished matches securely
-                if m.get('status') not in ['Final', 'In Progress', 'Halftime', 'Live', 'break']: continue
-                
                 home_name = m['home_team']['name']
                 away_name = m['visitor_team']['name']
                 
@@ -246,20 +243,21 @@ def fetch_live_points_and_activity(_key):
                 hg = m.get('home_team_score')
                 ag = m.get('visitor_team_score')
                 
+                # Check that scores exist to ensure it is a running/finished match
                 if hg is None or ag is None: continue
 
-                # Clean date formatting protection fallback line
                 raw_date = m.get('date', '')
                 date_str = str(raw_date)
                 
-                # Dynamic matching switch: Is it a knockout phase game? (June 28th onwards)
+                # Loose matching structure definition
                 is_knockout = ('2026-06-28' in date_str or '2026-07' in date_str) or (m.get('stage') not in [None, 'group', 'Group Stage'])
                 is_world_cup_final = ('2026-07-19' in date_str)
                 
                 multiplier = 2 if is_knockout else 1
+                status_label = str(m.get('status', '')).strip()
+                is_finished = status_label in ['Final', 'FT', 'final', 'ft', 'Finished', 'ended']
                 
-                # Group stage point logic updates
-                if not is_knockout and m['status'] in ['Final', 'FT']:
+                if not is_knockout and is_finished:
                     if home in group_stats:
                         group_stats[home]["mp"] += 1
                         group_stats[home]["gf"] += hg
@@ -281,7 +279,7 @@ def fetch_live_points_and_activity(_key):
                     has_knockouts_started = True
                     knockout_participants.add(home)
                     knockout_participants.add(away)
-                    if m['status'] in ['Final', 'FT']:
+                    if is_finished:
                         if hg > ag: eliminated_teams.add(away)
                         elif ag > hg: eliminated_teams.add(home)
                 
@@ -330,7 +328,7 @@ def fetch_live_points_and_activity(_key):
                 if home in team_points: team_points[home] += hp
                 if away in team_points: team_points[away] += ap
                 
-                status_emoji = "🟢 Live" if m['status'] not in ['Final', 'FT'] else "⏱️ FT"
+                status_emoji = "⏱️ FT" if is_finished else "🟢 Live"
                 knockout_tag = " 🏆 (2x Pts)" if multiplier == 2 else ""
                 
                 activity_logs.append({
@@ -348,7 +346,7 @@ def fetch_live_points_and_activity(_key):
                     "Breakdown": " | ".join(away_breakdown) if away_breakdown else "0 pts"
                 })
 
-                if is_world_cup_final and m['status'] in ['Final', 'FT']:
+                if is_world_cup_final and is_finished:
                     winner = home if hg > ag else away
                     team_points[winner] += 10
                     activity_logs.append({
