@@ -34,7 +34,6 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-# 72 Pre-Baked Official Group Stage Fixtures
 FIXED_FIXTURES = [
     {"Date": "June 11", "Home": "Mexico", "Away": "South Africa"},
     {"Date": "June 11", "Home": "Canada", "Away": "Switzerland"},
@@ -110,7 +109,7 @@ FIXED_FIXTURES = [
     {"Date": "July 05", "Home": "Croatia", "Away": "Ghana"}
 ]
 
-# --- 1.5 PREMIUM WC26 UI THEME ---
+# --- 1.5 ANTI-LIGHT-MODE CSS OVERRIDES ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600&display=swap');
@@ -132,6 +131,7 @@ html, body, [data-testid="stAppViewContainer"] {
     -webkit-backdrop-filter: blur(16px);
 }
 [data-testid="stHeader"] { background: transparent !important; }
+
 [data-testid="stSidebar"] {
     background-color: #120024 !important;
     background-image: linear-gradient(180deg, #1C0038 0%, #0A0014 100%) !important;
@@ -141,20 +141,51 @@ html, body, [data-testid="stAppViewContainer"] {
 [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] li, [data-testid="stSidebar"] div {
     color: #FFFFFF !important;
 }
+
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
-div[data-baseweb="input"] {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+
+/* HARD COMPONENT COLOR LOCKDOWN (IMMUNE TO DEVICE CHASSIS TOGGLES) */
+div[data-baseweb="select"] > div {
+    background-color: #1E052D !important;
+    color: #FFFFFF !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
-    border-radius: 6px !important;
+}
+div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+    color: #FFFFFF !important;
+}
+div[data-baseweb="popover"] ul, ul[role="listbox"] {
+    background-color: #1E052D !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(198, 255, 0, 0.4) !important;
+}
+li[role="option"], li[role="option"] span, li[role="option"] div {
+    background-color: #1E052D !important;
+    color: #FFFFFF !important;
+}
+li[role="option"]:hover {
+    background-color: #4C0099 !important;
+    color: #C6FF00 !important;
+}
+
+div[data-baseweb="input"] {
+    background-color: #1E052D !important;
+    border: 1px solid rgba(198, 255, 0, 0.4) !important;
 }
 div[data-baseweb="input"] input { color: #FFFFFF !important; }
+
 div[data-testid="stExpander"] {
     background-color: #1E052D !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 div[data-testid="stExpander"] summary { background-color: #1E052D !important; color: #FFFFFF !important; }
 div[data-testid="stExpander"] p, div[data-testid="stExpander"] span, div[data-testid="stExpander"] label { color: #FFFFFF !important; }
-div[data-testid="stDataFrame"] { background-color: rgba(15, 5, 25, 0.8) !important; }
+
+/* STATIC TABLE DATA OVERRIDES */
+div[data-testid="stDataFrame"], div[data-testid="stDataFrame"] * {
+    background-color: #12051C !important;
+    color: #FFFFFF !important;
+}
+
 div.stButton > button {
     background-color: #4C0099 !important;
     color: #C6FF00 !important;
@@ -233,7 +264,7 @@ def save_db_to_sheets(db_data):
 
 db = load_db_from_sheets()
 
-# --- 3. PROCESSING MATCH SCORES & CALENDAR ---
+# --- 3. MATCH CALCULATIONS ENGINE ---
 def process_match_calculations():
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
@@ -242,7 +273,6 @@ def process_match_calculations():
     
     group_stats = {t: {"pts": 0, "gd": 0, "gf": 0, "mp": 0} for t in ALL_TEAMS}
     
-    # Read user-submitted final scores from the Google Sheet
     scores_dict = {}
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
@@ -259,7 +289,6 @@ def process_match_calculations():
                     }
     except: pass
 
-    # Combine static pre-baked fixture array calendar with live sheet scores updates
     for f in FIXED_FIXTURES:
         home, away, match_date = f["Home"], f["Away"], f["Date"]
         key = f"{home} vs {away}"
@@ -276,18 +305,16 @@ def process_match_calculations():
         is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
         multiplier = 2 if is_knockout else 1
         
-        # Append to the layout display calendar structure array
         processed_fixtures_list.append({
             "Date": match_date,
             "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
             "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
-            "Status": "⏱️ FT" if is_finished else ("🟢 Live/Pending" if hg is not None else "Upcoming")
+            "Status": "⏱️ FT" if is_finished else ("🟢 Live" if hg is not None else "Upcoming")
         })
 
         if hg is None or ag is None:
             continue
 
-        # Process Points System Math Logic
         if not is_knockout and is_finished:
             group_stats[home]["mp"] += 1; group_stats[home]["gf"] += hg; group_stats[home]["gd"] += (hg - ag)
             group_stats[away]["mp"] += 1; group_stats[away]["gf"] += ag; group_stats[away]["gd"] += (ag - hg)
@@ -317,105 +344,3 @@ def process_match_calculations():
         activity_logs.append({"Status": "⏱️ FT" if is_finished else "🟢 Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Points Earned": ap, "Breakdown": " | ".join(a_break)})
 
     return team_points, activity_logs, eliminated_teams, processed_fixtures_list
-
-team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = process_match_calculations()
-
-# --- 4. DISPLAY LAYOUT ---
-if os.path.exists("logo.png"):
-    try:
-        with open("logo.png", "rb") as f:
-            img_encoded = base64.b64encode(f.read()).decode()
-        st.markdown(f"<div style='display: flex; justify-content: center; width: 100%; padding-top: 10px;'><img src='data:image/png;base64,{img_encoded}' style='width: 130px;'></div>", unsafe_allow_html=True)
-    except: pass
-
-st.markdown("<div style='text-align: center;'><div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div><div class='premium-subtitle'>Official Match Tracker</div></div>", unsafe_allow_html=True)
-st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
-
-st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n* **Goal Scored:** 1 pt\n* **Clean Sheet:** 1 pt\n* **3+ Goals Conceded:** -1 pt\n* 🥇 **Group Winner:** +2 pts\n* 🥈 **Group 2nd Place:** +1 pt\n* 🏆 **World Cup Champion:** +10 pts")
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 🏳️ Active Nations")
-for team in ALL_TEAMS:
-    if team not in eliminated_nations: st.sidebar.markdown(f"{TEAM_FLAGS.get(team, '🏳️')} {team}")
-
-st.sidebar.markdown("---")
-admin_input = st.sidebar.text_input("Admin Password", type="password")
-if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
-    save_db_to_sheets({"participants": [], "assignments": {}, "locked": False})
-    st.rerun()
-
-if not db["locked"]:
-    st.header("Step 1: Registration Phase")
-    player_name = st.text_input("Enter name to join:")
-    if st.button("Register") and player_name and player_name not in db["participants"]:
-        db["participants"].append(player_name)
-        save_db_to_sheets(db)
-        st.rerun()
-    st.write(f"**Registered Players ({len(db['participants'])}):** " + ", ".join(db["participants"]))
-    
-    if len(db["participants"]) > 0:
-        per_person = math.floor(48 / len(db["participants"]))
-        prize_pot = len(db["participants"]) * 20
-        st.success(f"**Current Prize Pot: £{prize_pot}**")
-        
-        if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
-            TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
-            shuffled_top = TOP_13.copy(); random.shuffle(shuffled_top)
-            
-            db["assignments"] = {person: [] for person in db["participants"]}
-            for person in db["participants"]:
-                if shuffled_top: db["assignments"][person].append(shuffled_top.pop(0))
-            
-            remaining_pool = shuffled_top + [t for t in ALL_TEAMS if t not in TOP_13]; random.shuffle(remaining_pool)
-            for person in db["participants"]:
-                needed = per_person - len(db["assignments"][person])
-                for _ in range(needed):
-                    if remaining_pool: db["assignments"][person].append(remaining_pool.pop(0))
-            
-            if remaining_pool:
-                lucky_players = db["participants"].copy(); random.shuffle(lucky_players)
-                while remaining_pool and lucky_players: db["assignments"][lucky_players.pop(0)].append(remaining_pool.pop(0))
-                        
-            db["locked"] = True; save_db_to_sheets(db); st.rerun()
-else:
-    tab1, tab2, tab3 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity", "📅 Fixtures Calendar"])
-    team_to_player = {t: p for p, teams in db["assignments"].items() for t in teams}
-            
-    with tab1:
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            st.subheader("📋 Your Teams")
-            for p, teams in db["assignments"].items():
-                with st.expander(f"{p}'s Teams ({len(teams)})"):
-                    st.write(", ".join([f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]))
-        with c2:
-            st.subheader("📊 Leaderboard")
-            table = [{"Player": p, "Total Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
-            if table: st.dataframe(pd.DataFrame(table).sort_values("Total Points", ascending=False), use_container_width=True, hide_index=True)
-            
-            prize_pot = len(db["participants"]) * 20
-            st.success(f"**Final Tournament Prize Pot: £{prize_pot}**")
-            st.markdown(f"💰 **Official Cash Split Structure:**\n* 🥇 **1st Place:** £{prize_pot - 60}\n* 🥈 **2nd Place:** £40 *(Double your money!)*\n* 🥾 **Last Place:** £20 *(Money back)*")
-
-    with tab2:
-        st.subheader("⚽ Match Activity Points Breakdown")
-        processed_logs = []
-        for log in raw_activity_logs:
-            log_copy = log.copy()
-            log_copy["Player"] = team_to_player.get(log["Team"], "🍿 Unassigned")
-            processed_logs.append(log_copy)
-            
-        activity_df = pd.DataFrame(processed_logs)
-        if not activity_df.empty:
-            filter_option = st.selectbox("Filter Match Activity by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
-            filtered_df = activity_df if filter_option == "All Players" else activity_df[activity_df["Player"] == filter_option]
-            st.dataframe(filtered_df[["Status", "Match", "Team", "Player", "Points Earned", "Breakdown"]], use_container_width=True, hide_index=True)
-        else:
-            st.info("Log final scores in your Google Sheet spreadsheet under the 'Scores' tab to populate updates!")
-
-    with tab3:
-        st.subheader("📅 Group Stage Tournament Calendar")
-        cal_df = pd.DataFrame(full_calendar_schedule)
-        filter_date = st.selectbox("Filter Calendar by Date:", ["All Dates"] + sorted(list(set(cal_df["Date"].tolist()))))
-        display_cal = cal_df if filter_date == "All Dates" else cal_df[cal_df["Date"] == filter_date]
-        st.dataframe(display_cal[["Date", "Match", "Result", "Status"]], use_container_width=True, hide_index=True)
