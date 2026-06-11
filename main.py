@@ -110,7 +110,7 @@ FIXED_FIXTURES = [
     {"Date": "June 28", "Time": "03:00", "Home": "Jordan", "Away": "Argentina"}
 ]
 
-# --- 1.5 PREMIUM THEME CSS ---
+# --- 1.5 PREMIUM THEME CSS WITH INPUT KEYBOARD DISABLER ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap');
@@ -145,11 +145,19 @@ html, body, [data-testid="stAppViewContainer"] {
 
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
 
+/* DROPDOWN COLOR CONFIGURATION */
 div[data-baseweb="select"] > div {
     background-color: #1E052D !important;
     color: #FFFFFF !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
 }
+
+/* ANTI-KEYBOARD MOBILE FIX: Block direct pointer focus to internal select box input */
+div[data-baseweb="select"] input {
+    pointer-events: none !important;
+    caret-color: transparent !important;
+}
+
 div[data-baseweb="select"] span, div[data-baseweb="select"] div { color: #FFFFFF !important; }
 ul[role="listbox"], li[role="option"] { background-color: #1E052D !important; color: #FFFFFF !important; }
 
@@ -157,7 +165,7 @@ div[data-baseweb="input"] {
     background-color: #1E052D !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
 }
-div[data-baseweb="input"] input { color: #FFFFFF !important; }
+div[data-baseweb="input"] input { color: #FFFFFF !important; pointer-events: auto !important; }
 
 div[data-testid="stExpander"] {
     background-color: #1E052D !important;
