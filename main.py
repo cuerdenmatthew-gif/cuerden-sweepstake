@@ -34,82 +34,83 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
+# 72 Group Match Calendar Schedule Matrix with Official Kickoff Times Included
 FIXED_FIXTURES = [
-    {"Date": "June 11", "Home": "Mexico", "Away": "South Africa"},
-    {"Date": "June 12", "Home": "South Korea", "Away": "Czechia"},
-    {"Date": "June 12", "Home": "Canada", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 13", "Home": "USA", "Away": "Paraguay"},
-    {"Date": "June 13", "Home": "Qatar", "Away": "Switzerland"},
-    {"Date": "June 13", "Home": "Brazil", "Away": "Morocco"},
-    {"Date": "June 14", "Home": "Haiti", "Away": "Scotland"},
-    {"Date": "June 14", "Home": "Australia", "Away": "Türkiye"},
-    {"Date": "June 14", "Home": "Germany", "Away": "Curaçao"},
-    {"Date": "June 14", "Home": "Netherlands", "Away": "Japan"},
-    {"Date": "June 15", "Home": "Ivory Coast", "Away": "Ecuador"},
-    {"Date": "June 15", "Home": "Sweden", "Away": "Tunisia"},
-    {"Date": "June 15", "Home": "Spain", "Away": "Cabo Verde"},
-    {"Date": "June 15", "Home": "Belgium", "Away": "Egypt"},
-    {"Date": "June 15", "Home": "Saudi Arabia", "Away": "Uruguay"},
-    {"Date": "June 16", "Home": "Iran", "Away": "New Zealand"},
-    {"Date": "June 16", "Home": "France", "Away": "Senegal"},
-    {"Date": "June 16", "Home": "Iraq", "Away": "Norway"},
-    {"Date": "June 17", "Home": "Argentina", "Away": "Algeria"},
-    {"Date": "June 17", "Home": "Austria", "Away": "Jordan"},
-    {"Date": "June 17", "Home": "Portugal", "Away": "DR Congo"},
-    {"Date": "June 17", "Home": "England", "Away": "Croatia"},
-    {"Date": "June 18", "Home": "Ghana", "Away": "Panama"},
-    {"Date": "June 18", "Home": "Uzbekistan", "Away": "Colombia"},
-    {"Date": "June 18", "Home": "Czechia", "Away": "South Africa"},
-    {"Date": "June 18", "Home": "Switzerland", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 18", "Home": "Canada", "Away": "Qatar"},
-    {"Date": "June 19", "Home": "Mexico", "Away": "South Korea"},
-    {"Date": "June 19", "Home": "USA", "Away": "Australia"},
-    {"Date": "June 19", "Home": "Scotland", "Away": "Morocco"},
-    {"Date": "June 20", "Home": "Brazil", "Away": "Haiti"},
-    {"Date": "June 20", "Home": "Türkiye", "Away": "Paraguay"},
-    {"Date": "June 20", "Home": "Netherlands", "Away": "Sweden"},
-    {"Date": "June 20", "Home": "Germany", "Away": "Ivory Coast"},
-    {"Date": "June 21", "Home": "Ecuador", "Away": "Curaçao"},
-    {"Date": "June 21", "Home": "Tunisia", "Away": "Japan"},
-    {"Date": "June 21", "Home": "Spain", "Away": "Saudi Arabia"},
-    {"Date": "June 21", "Home": "Belgium", "Away": "Iran"},
-    {"Date": "June 21", "Home": "Uruguay", "Away": "Cabo Verde"},
-    {"Date": "June 22", "Home": "New Zealand", "Away": "Egypt"},
-    {"Date": "June 22", "Home": "Argentina", "Away": "Austria"},
-    {"Date": "June 22", "Home": "France", "Away": "Iraq"},
-    {"Date": "June 23", "Home": "Norway", "Away": "Senegal"},
-    {"Date": "June 23", "Home": "Jordan", "Away": "Algeria"},
-    {"Date": "June 23", "Home": "Portugal", "Away": "Uzbekistan"},
-    {"Date": "June 23", "Home": "England", "Away": "Ghana"},
-    {"Date": "June 24", "Home": "Panama", "Away": "Croatia"},
-    {"Date": "June 24", "Home": "Colombia", "Away": "DR Congo"},
-    {"Date": "June 24", "Home": "Switzerland", "Away": "Canada"},
-    {"Date": "June 24", "Home": "Bosnia and Herzegovina", "Away": "Qatar"},
-    {"Date": "June 24", "Home": "Morocco", "Away": "Haiti"},
-    {"Date": "June 24", "Home": "Scotland", "Away": "Brazil"},
-    {"Date": "June 25", "Home": "South Africa", "Away": "South Korea"},
-    {"Date": "June 25", "Home": "Czechia", "Away": "Mexico"},
-    {"Date": "June 25", "Home": "Curaçao", "Away": "Ivory Coast"},
-    {"Date": "June 25", "Home": "Ecuador", "Away": "Germany"},
-    {"Date": "June 26", "Home": "Tunisia", "Away": "Netherlands"},
-    {"Date": "June 26", "Home": "Japan", "Away": "Sweden"},
-    {"Date": "June 26", "Home": "Türkiye", "Away": "USA"},
-    {"Date": "June 26", "Home": "Paraguay", "Away": "Australia"},
-    {"Date": "June 26", "Home": "Norway", "Away": "France"},
-    {"Date": "June 26", "Home": "Senegal", "Away": "Iraq"},
-    {"Date": "June 27", "Home": "Cabo Verde", "Away": "Saudi Arabia"},
-    {"Date": "June 27", "Home": "Uruguay", "Away": "Spain"},
-    {"Date": "June 27", "Home": "New Zealand", "Away": "Belgium"},
-    {"Date": "June 27", "Home": "Egypt", "Away": "Iran"},
-    {"Date": "June 27", "Home": "Panama", "Away": "England"},
-    {"Date": "June 27", "Home": "Croatia", "Away": "Ghana"},
-    {"Date": "June 28", "Home": "Colombia", "Away": "Portugal"},
-    {"Date": "June 28", "Home": "DR Congo", "Away": "Uzbekistan"},
-    {"Date": "June 28", "Home": "Algeria", "Away": "Austria"},
-    {"Date": "June 28", "Home": "Jordan", "Away": "Argentina"}
+    {"Date": "June 11", "Time": "Finished", "Home": "Mexico", "Away": "South Africa"},
+    {"Date": "June 12", "Time": "03:00", "Home": "South Korea", "Away": "Czechia"},
+    {"Date": "June 12", "Time": "20:00", "Home": "Canada", "Away": "Bosnia and Herzegovina"},
+    {"Date": "June 13", "Time": "02:00", "Home": "USA", "Away": "Paraguay"},
+    {"Date": "June 13", "Time": "20:00", "Home": "Qatar", "Away": "Switzerland"},
+    {"Date": "June 13", "Time": "23:00", "Home": "Brazil", "Away": "Morocco"},
+    {"Date": "June 14", "Time": "02:00", "Home": "Haiti", "Away": "Scotland"},
+    {"Date": "June 14", "Time": "05:00", "Home": "Australia", "Away": "Türkiye"},
+    {"Date": "June 14", "Time": "18:00", "Home": "Germany", "Away": "Curaçao"},
+    {"Date": "June 14", "Time": "21:00", "Home": "Netherlands", "Away": "Japan"},
+    {"Date": "June 15", "Time": "00:00", "Home": "Ivory Coast", "Away": "Ecuador"},
+    {"Date": "June 15", "Time": "03:00", "Home": "Sweden", "Away": "Tunisia"},
+    {"Date": "June 15", "Time": "17:00", "Home": "Spain", "Away": "Cabo Verde"},
+    {"Date": "June 15", "Time": "20:00", "Home": "Belgium", "Away": "Egypt"},
+    {"Date": "June 15", "Time": "23:00", "Home": "Saudi Arabia", "Away": "Uruguay"},
+    {"Date": "June 16", "Time": "02:00", "Home": "Iran", "Away": "New Zealand"},
+    {"Date": "June 16", "Time": "20:00", "Home": "France", "Away": "Senegal"},
+    {"Date": "June 16", "Time": "23:00", "Home": "Iraq", "Away": "Norway"},
+    {"Date": "June 17", "Time": "02:00", "Home": "Argentina", "Away": "Algeria"},
+    {"Date": "June 17", "Time": "05:00", "Home": "Austria", "Away": "Jordan"},
+    {"Date": "June 17", "Time": "18:00", "Home": "Portugal", "Away": "DR Congo"},
+    {"Date": "June 17", "Time": "21:00", "Home": "England", "Away": "Croatia"},
+    {"Date": "June 18", "Time": "00:00", "Home": "Ghana", "Away": "Panama"},
+    {"Date": "June 18", "Time": "03:00", "Home": "Uzbekistan", "Away": "Colombia"},
+    {"Date": "June 18", "Time": "17:00", "Home": "Czechia", "Away": "South Africa"},
+    {"Date": "June 18", "Time": "20:00", "Home": "Switzerland", "Away": "Bosnia and Herzegovina"},
+    {"Date": "June 18", "Time": "23:00", "Home": "Canada", "Away": "Qatar"},
+    {"Date": "June 19", "Time": "02:00", "Home": "Mexico", "Away": "South Korea"},
+    {"Date": "June 19", "Time": "20:00", "Home": "USA", "Away": "Australia"},
+    {"Date": "June 19", "Time": "23:00", "Home": "Scotland", "Away": "Morocco"},
+    {"Date": "June 20", "Time": "01:30", "Home": "Brazil", "Away": "Haiti"},
+    {"Date": "June 20", "Time": "04:00", "Home": "Türkiye", "Away": "Paraguay"},
+    {"Date": "June 20", "Time": "18:00", "Home": "Netherlands", "Away": "Sweden"},
+    {"Date": "June 20", "Time": "21:00", "Home": "Germany", "Away": "Ivory Coast"},
+    {"Date": "June 21", "Time": "01:00", "Home": "Ecuador", "Away": "Curaçao"},
+    {"Date": "June 21", "Time": "05:00", "Home": "Tunisia", "Away": "Japan"},
+    {"Date": "June 21", "Time": "17:00", "Home": "Spain", "Away": "Saudi Arabia"},
+    {"Date": "June 21", "Time": "20:00", "Home": "Belgium", "Away": "Iran"},
+    {"Date": "June 21", "Time": "23:00", "Home": "Uruguay", "Away": "Cabo Verde"},
+    {"Date": "June 22", "Time": "02:00", "Home": "New Zealand", "Away": "Egypt"},
+    {"Date": "June 22", "Time": "18:00", "Home": "Argentina", "Away": "Austria"},
+    {"Date": "June 22", "Time": "22:00", "Home": "France", "Away": "Iraq"},
+    {"Date": "June 23", "Time": "01:00", "Home": "Norway", "Away": "Senegal"},
+    {"Date": "June 23", "Time": "04:00", "Home": "Jordan", "Away": "Algeria"},
+    {"Date": "June 23", "Time": "18:00", "Home": "Portugal", "Away": "Uzbekistan"},
+    {"Date": "June 23", "Time": "21:00", "Home": "England", "Away": "Ghana"},
+    {"Date": "June 24", "Time": "00:00", "Home": "Panama", "Away": "Croatia"},
+    {"Date": "June 24", "Time": "03:00", "Home": "Colombia", "Away": "DR Congo"},
+    {"Date": "June 24", "Time": "20:00", "Home": "Switzerland", "Away": "Canada"},
+    {"Date": "June 24", "Time": "20:00", "Home": "Bosnia and Herzegovina", "Away": "Qatar"},
+    {"Date": "June 24", "Time": "23:00", "Home": "Morocco", "Away": "Haiti"},
+    {"Date": "June 24", "Time": "23:00", "Home": "Scotland", "Away": "Brazil"},
+    {"Date": "June 25", "Time": "02:00", "Home": "South Africa", "Away": "South Korea"},
+    {"Date": "June 25", "Time": "02:00", "Home": "Czechia", "Away": "Mexico"},
+    {"Date": "June 25", "Time": "21:00", "Home": "Curaçao", "Away": "Ivory Coast"},
+    {"Date": "June 25", "Time": "21:00", "Home": "Ecuador", "Away": "Germany"},
+    {"Date": "June 26", "Time": "00:00", "Home": "Tunisia", "Away": "Netherlands"},
+    {"Date": "June 26", "Time": "00:00", "Home": "Japan", "Away": "Sweden"},
+    {"Date": "June 26", "Time": "03:00", "Home": "Türkiye", "Away": "USA"},
+    {"Date": "June 26", "Time": "03:00", "Home": "Paraguay", "Away": "Australia"},
+    {"Date": "June 26", "Time": "20:00", "Home": "Norway", "Away": "France"},
+    {"Date": "June 26", "Time": "20:00", "Home": "Senegal", "Away": "Iraq"},
+    {"Date": "June 27", "Time": "01:00", "Home": "Cabo Verde", "Away": "Saudi Arabia"},
+    {"Date": "June 27", "Time": "01:00", "Home": "Uruguay", "Away": "Spain"},
+    {"Date": "June 27", "Time": "04:00", "Home": "New Zealand", "Away": "Belgium"},
+    {"Date": "June 27", "Time": "04:00", "Home": "Egypt", "Away": "Iran"},
+    {"Date": "June 27", "Time": "22:00", "Home": "Panama", "Away": "England"},
+    {"Date": "June 27", "Time": "22:00", "Home": "Croatia", "Away": "Ghana"},
+    {"Date": "June 28", "Time": "00:30", "Home": "Colombia", "Away": "Portugal"},
+    {"Date": "June 28", "Time": "00:30", "Home": "DR Congo", "Away": "Uzbekistan"},
+    {"Date": "June 28", "Time": "03:00", "Home": "Algeria", "Away": "Austria"},
+    {"Date": "June 28", "Time": "03:00", "Home": "Jordan", "Away": "Argentina"}
 ]
 
-# --- 1.5 SHARP STYLING WITH ABSOLUTE LIGHT MODE IMMUNITY ---
+# --- 1.5 PREMIUM THEME CSS ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap');
@@ -144,19 +145,13 @@ html, body, [data-testid="stAppViewContainer"] {
 
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
 
-/* DROPDOWN & INPUT ELEMENT OVERRIDES */
 div[data-baseweb="select"] > div {
     background-color: #1E052D !important;
     color: #FFFFFF !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
 }
-div[data-baseweb="select"] span, div[data-baseweb="select"] div {
-    color: #FFFFFF !important;
-}
-ul[role="listbox"], li[role="option"] {
-    background-color: #1E052D !important;
-    color: #FFFFFF !important;
-}
+div[data-baseweb="select"] span, div[data-baseweb="select"] div { color: #FFFFFF !important; }
+ul[role="listbox"], li[role="option"] { background-color: #1E052D !important; color: #FFFFFF !important; }
 
 div[data-baseweb="input"] {
     background-color: #1E052D !important;
@@ -211,7 +206,6 @@ div.stButton > button {
     border-radius: 6px !important;
 }
 
-/* CUSTOM HIGH-END RE-ENGINEERED WEB ROWS */
 .premium-card {
     background: rgba(30, 5, 45, 0.85) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -225,64 +219,14 @@ div.stButton > button {
     font-family: 'Inter', sans-serif !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important;
 }
-.card-left {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 4px !important;
-}
-.card-title {
-    font-size: 1.15rem !important;
-    font-weight: 700 !important;
-    color: #FFFFFF !important;
-}
-.card-subtitle {
-    font-size: 0.85rem !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-.card-right {
-    text-align: right !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    gap: 4px !important;
-}
-.badge-ft {
-    background-color: rgba(230, 29, 37, 0.2) !important;
-    color: #E61D25 !important;
-    border: 1px solid #E61D25 !important;
-    padding: 2px 8px !important;
-    border-radius: 4px !important;
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase;
-}
-.badge-upcoming {
-    background-color: rgba(198, 255, 0, 0.1) !important;
-    color: #C6FF00 !important;
-    border: 1px solid #C6FF00 !important;
-    padding: 2px 8px !important;
-    border-radius: 4px !important;
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase;
-}
-.badge-live {
-    background-color: rgba(0, 230, 115, 0.15) !important;
-    color: #00E673 !important;
-    border: 1px solid #00E673 !important;
-    padding: 2px 8px !important;
-    border-radius: 4px !important;
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase;
-}
-.score-display {
-    font-family: 'Montserrat', sans-serif !important;
-    font-size: 1.4rem !important;
-    font-weight: 800 !important;
-    color: #C6FF00 !important;
-    letter-spacing: 1px;
-}
+.card-left { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+.card-title { font-size: 1.15rem !important; font-weight: 700 !important; color: #FFFFFF !important; }
+.card-subtitle { font-size: 0.85rem !important; color: rgba(255, 255, 255, 0.6) !important; }
+.card-right { text-align: right !important; display: flex !important; flex-direction: column !important; align-items: flex-end !important; gap: 4px !important; }
+.badge-ft { background-color: rgba(230, 29, 37, 0.2) !important; color: #E61D25 !important; border: 1px solid #E61D25 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
+.badge-upcoming { background-color: rgba(198, 255, 0, 0.1) !important; color: #C6FF00 !important; border: 1px solid #C6FF00 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
+.badge-live { background-color: rgba(0, 230, 115, 0.15) !important; color: #00E673 !important; border: 1px solid #00E673 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
+.score-display { font-family: 'Montserrat', sans-serif !important; font-size: 1.4rem !important; font-weight: 800 !important; color: #C6FF00 !important; letter-spacing: 1px; }
 </style>
 """
 st.markdown(page_bg, unsafe_allow_html=True)
@@ -339,7 +283,7 @@ def process_match_calculations():
     except: pass
 
     for f in FIXED_FIXTURES:
-        home, away, match_date = f["Home"], f["Away"], f["Date"]
+        home, away, match_date, match_time = f["Home"], f["Away"], f["Date"], f["Time"]
         key = f"{home} vs {away}"
         
         hg, ag, is_finished, stage_label = None, None, False, "group stage"
@@ -356,8 +300,7 @@ def process_match_calculations():
         
         processed_fixtures_list.append({
             "Date": match_date,
-            "Home": home,
-            "Away": away,
+            "Time": match_time,
             "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
             "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
             "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
@@ -526,11 +469,12 @@ else:
         
         for _, row in display_cal.iterrows():
             badge_style = "badge-ft" if row['Status'] == "FT" else ("badge-live" if row['Status'] == "Live" else "badge-upcoming")
+            time_label = f"⏱️ Kickoff: {row['Time']}" if row['Status'] == "Upcoming" else "🏁 Match Concluded"
             st.markdown(f"""
             <div class="premium-card">
                 <div class="card-left">
                     <div class="card-title">{row['Match']}</div>
-                    <div class="card-subtitle">📅 Schedule Date: {row['Date']}</div>
+                    <div class="card-subtitle">📅 Date: {row['Date']} | {time_label}</div>
                 </div>
                 <div class="card-right">
                     <div style="margin-bottom: 4px;"><span class="{badge_style}">{row['Status']}</span></div>
