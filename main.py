@@ -12,8 +12,8 @@ import base64
 st.set_page_config(page_title="Cuerden & Co WC26", page_icon="🏆", layout="wide")
 ADMIN_PASSWORD = "Cuerden2026"
 
-# BALLDONTLIE API Setup
-API_KEY = st.secrets.get("FOOTBALL_API_KEY", "")
+# BALLDONTLIE API Setup - Hardcoded Key Configuration
+API_KEY = "deea4eaa-fd4a-4eb9-8191-dcb568c2b88d"
 API_URL = "https://api.balldontlie.io/worldcup/v1/matches" 
 
 ALL_TEAMS = [
@@ -96,12 +96,27 @@ div[data-baseweb="input"] input {
     color: #FFFFFF !important;
 }
 
+/* HARD-LOCK EXPANDER STYLING FOR LIGHT MODE IMMUNITY */
 div[data-testid="stExpander"] {
-    background-color: rgba(30, 5, 45, 0.8) !important;
+    background-color: #1E052D !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
-div[data-testid="stExpander"] p, div[data-testid="stExpander"] span {
+
+div[data-testid="stExpander"] summary {
+    background-color: #1E052D !important;
     color: #FFFFFF !important;
+}
+
+div[data-testid="stExpander"] p, 
+div[data-testid="stExpander"] span,
+div[data-testid="stExpander"] label,
+div[data-testid="stExpander"] summary text {
+    color: #FFFFFF !important;
+}
+
+/* Dataframe and table light-mode visibility corrections */
+div[data-testid="stDataFrame"] {
+    background-color: rgba(15, 5, 25, 0.8) !important;
 }
 
 div.stButton > button {
@@ -234,40 +249,47 @@ def fetch_live_points_and_activity(_key):
             knockout_participants = set()
             
             for m in matches:
-                # Extract dictionary values safely regardless of API format nesting structures
-                home_team_obj = m.get('home_team', {})
-                away_team_obj = m.get('visitor_team', {})
+                # Direct Multi-Tier Safety Extractors
+                home_obj = m.get('home_team', {})
+                away_obj = m.get('visitor_team', {})
                 
-                raw_home_name = home_team_obj.get('name', '') if isinstance(home_team_obj, dict) else str(home_team_obj)
-                raw_away_name = away_team_obj.get('name', '') if isinstance(away_team_obj, dict) else str(away_team_obj)
+                raw_home = home_obj.get('name', '') if isinstance(home_obj, dict) else str(home_obj)
+                raw_away = away_obj.get('name', '') if isinstance(away_obj, dict) else str(away_obj)
                 
-                if not raw_home_name or not raw_away_name: continue
+                if not raw_home or not raw_away:
+                    continue
                 
-                # Loose wildcard scanner matching check to map 'South Africa' or similar API variations flawlessly
-                home = next((t for t in ALL_TEAMS if t.lower() in raw_home_name.lower() or raw_home_name.lower() in t.lower()), raw_home_name)
-                away = next((t for t in ALL_TEAMS if t.lower() in raw_away_name.lower() or raw_away_name.lower() in t.lower()), raw_away_name)
+                # Match names dynamically using partial lowercase matching loops
+                home = next((t for t in ALL_TEAMS if t.lower() in raw_home.lower() or raw_home.lower() in t.lower()), None)
+                away = next((t for t in ALL_TEAMS if t.lower() in raw_away.lower() or raw_away.lower() in t.lower()), None)
                 
-                # Multi-tier safety structure fallback lookups for goal metrics 
+                if not home or not away:
+                    continue
+                
                 hg = m.get('home_team_score')
                 if hg is None: hg = m.get('scores', {}).get('home')
-                if hg is None: hg = home_team_obj.get('score')
+                if hg is None: hg = home_obj.get('score')
                 
                 ag = m.get('visitor_team_score')
                 if ag is None: ag = m.get('scores', {}).get('away')
-                if ag is None: ag = away_team_obj.get('score')
+                if ag is None: ag = away_obj.get('score')
                 
-                # Treat missing records as an un-kicked match cleanly
-                if hg is None or ag is None: continue
+                if hg is None or ag is None:
+                    continue
+
+                hg, ag = int(hg), int(ag)
 
                 raw_date = m.get('date', '')
                 date_str = str(raw_date)
+                stage_str = str(m.get('stage', '')).lower()
                 
-                is_knockout = ('2026-06-28' in date_str or '2026-07' in date_str) or (m.get('stage') not in [None, 'group', 'Group Stage'])
-                is_world_cup_final = ('2026-07-19' in date_str)
+                is_knockout = ('2026-06-28' in date_str or '2026-07' in date_str) or any(w in stage_str for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
+                is_world_cup_final = ('2026-07-19' in date_str) or ('final' in stage_str and 'semi' not in stage_str)
                 
                 multiplier = 2 if is_knockout else 1
-                status_label = str(m.get('status', '')).strip().lower()
-                is_finished = any(w in status_label for w in ['final', 'ft', 'end', 'finish'])
+                
+                status_raw = str(m.get('status', '')).strip().lower()
+                is_finished = any(w in status_raw for w in ['final', 'ft', 'end', 'finish', 'complete', 'closed']) or m.get('time') == 'Full Time'
                 
                 if not is_knockout and is_finished:
                     if home in group_stats:
@@ -337,8 +359,8 @@ def fetch_live_points_and_activity(_key):
                     ap -= (1 * multiplier)
                     away_breakdown.append(f"Conceded 3+ (-{1 * multiplier})")
                 
-                if home in team_points: team_points[home] += hp
-                if away in team_points: team_points[away] += ap
+                team_points[home] += hp
+                team_points[away] += ap
                 
                 status_emoji = "⏱️ FT" if is_finished else "🟢 Live"
                 knockout_tag = " 🏆 (2x Pts)" if multiplier == 2 else ""
