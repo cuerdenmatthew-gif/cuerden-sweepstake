@@ -32,16 +32,41 @@ TEAM_FLAGS = {
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-# --- CSS STYLING ---
-st.markdown("""
+# --- 1.5 PREMIUM THEME CSS ---
+page_bg = """
 <style>
-.premium-card { background: rgba(30, 5, 45, 0.85) !important; border-left: 4px solid #C6FF00 !important; padding: 15px !important; margin-bottom: 10px !important; border-radius: 8px !important; }
-.score-display { font-weight: 800 !important; color: #C6FF00 !important; }
-.badge-ft { color: #E61D25 !important; border: 1px solid #E61D25 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; }
-.badge-live { color: #00E673 !important; border: 1px solid #00E673 !important; padding: 2px 8px !important; font-size: 0.75rem !important; }
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap');
+html, body, [data-testid="stAppViewContainer"] {
+    background: linear-gradient(-45deg, #1A0033, #5F00A8, #8000FF, #3A0066) !important;
+    background-size: 400% 400% !important;
+    animation: gradientBG 15s ease infinite !important;
+    color: #FFFFFF !important;
+}
+@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+[data-testid="stAppViewContainer"] > .main { background: rgba(15, 5, 25, 0.65) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+[data-testid="stHeader"] { background: transparent !important; }
+[data-testid="stSidebar"] { background-color: #120024 !important; background-image: linear-gradient(180deg, #1C0038 0%, #0A0014 100%) !important; border-right: 1px solid rgba(255, 255, 255, 0.1) !important; }
+[data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] li, [data-testid="stSidebar"] div { color: #FFFFFF !important; }
+h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
+div[data-baseweb="select"] > div { background-color: #1E052D !important; color: #FFFFFF !important; border: 1px solid rgba(198, 255, 0, 0.4) !important; }
+div[data-baseweb="input"] { background-color: #1E052D !important; border: 1px solid rgba(198, 255, 0, 0.4) !important; }
+div.stButton > button { background-color: #4C0099 !important; color: #C6FF00 !important; border: 1px solid rgba(198, 255, 0, 0.3) !important; font-weight: 600 !important; }
+.premium-title { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; font-weight: 800; text-align: center; background: linear-gradient(to right, #FFFFFF, #C6FF00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
+.premium-subtitle { font-family: 'Inter', sans-serif; text-align: center; color: #E61D25; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 40px; }
+.premium-card { background: rgba(30, 5, 45, 0.85) !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; border-left: 4px solid #C6FF00 !important; border-radius: 8px !important; padding: 15px 20px !important; margin-bottom: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-family: 'Inter', sans-serif !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important; }
+.card-left { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+.card-title { font-size: 1.15rem !important; font-weight: 700 !important; color: #FFFFFF !important; }
+.card-subtitle { font-size: 0.85rem !important; color: rgba(255, 255, 255, 0.6) !important; }
+.card-right { text-align: right !important; display: flex !important; flex-direction: column !important; align-items: flex-end !important; gap: 4px !important; }
+.badge-ft { background-color: rgba(230, 29, 37, 0.2) !important; color: #E61D25 !important; border: 1px solid #E61D25 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; }
+.badge-live { background-color: rgba(0, 230, 115, 0.15) !important; color: #00E673 !important; border: 1px solid #00E673 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; }
+.badge-upcoming { background-color: rgba(198, 255, 0, 0.1) !important; color: #C6FF00 !important; border: 1px solid #C6FF00 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; }
+.score-display { font-family: 'Montserrat', sans-serif !important; font-size: 1.4rem !important; font-weight: 800 !important; color: #C6FF00 !important; }
 </style>
-""", unsafe_allow_html=True)
+"""
+st.markdown(page_bg, unsafe_allow_html=True)
 
+# --- 2. CONNECT TO GOOGLE SHEETS & LOGIC ---
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_db_from_sheets():
@@ -63,65 +88,58 @@ db = load_db_from_sheets()
 def process_match_calculations():
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
-    eliminated_teams_set = set()
     processed_fixtures_list = []
-    
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
-        if 'EliminatedTeam' in sheet_df.columns:
-            eliminated_teams_set = set(sheet_df['EliminatedTeam'].dropna().astype(str).str.strip().unique())
-            eliminated_teams_set.discard('')
-    except: pass
-
-    if not sheet_df.empty:
         for _, row in sheet_df.iterrows():
             home, away = str(row.get('HomeTeam', '')).strip(), str(row.get('AwayTeam', '')).strip()
             hg, ag = row.get('HomeScore'), row.get('AwayScore')
             status = str(row.get('Status', '')).lower()
-            date = str(row.get('Date', 'TBD'))
-            
-            is_finished = status in ['final', 'ft', 'finished']
-            processed_fixtures_list.append({"Date": date, "Match": f"{home} vs {away}", "Result": f"{hg}-{ag}" if pd.notna(hg) else "Scheduled", "Status": "FT" if is_finished else "Upcoming"})
-            
+            date = str(row.get('Date', 'Match Day'))
+            is_finished = status in ['final', 'ft', 'finished', 'complete']
+            processed_fixtures_list.append({"Date": date, "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}", "Result": f"{hg} - {ag}" if pd.notna(hg) else "📅 Scheduled", "Status": "FT" if is_finished else "Upcoming"})
             if pd.notna(hg) and pd.notna(ag):
                 hp = (3 if hg > ag else 0) + (1 if hg == ag else 0) + hg
                 ap = (3 if ag > hg else 0) + (1 if ag == hg else 0) + ag
-                team_points[home] += hp
-                team_points[away] += ap
-                activity_logs.append({"Date": date, "Match": f"{home} {hg}-{ag} {away}", "Team": home, "Points": hp, "Status": "FT" if is_finished else "Live"})
-                activity_logs.append({"Date": date, "Match": f"{home} {hg}-{ag} {away}", "Team": away, "Points": ap, "Status": "FT" if is_finished else "Live"})
-    return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
+                team_points[home] += hp; team_points[away] += ap
+                activity_logs.append({"Match": f"{home} {hg} - {ag} {away}", "Team": home, "Points": hp, "Status": "FT" if is_finished else "Live", "Breakdown": "Match points earned"})
+                activity_logs.append({"Match": f"{home} {hg} - {ag} {away}", "Team": away, "Points": ap, "Status": "FT" if is_finished else "Live", "Breakdown": "Match points earned"})
+    except: pass
+    return team_points, activity_logs, processed_fixtures_list
 
-team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = process_match_calculations()
+team_scores, raw_activity_logs, full_calendar_schedule = process_match_calculations()
 
-# --- APP INTERFACE ---
+# --- 4. DISPLAY LAYOUT ---
+st.markdown("<div style='text-align: center;'><div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div><div class='premium-subtitle'>Official Match Tracker</div></div>", unsafe_allow_html=True)
+
 if not db["locked"]:
-    st.write("Registration is open...")
+    st.header("Step 1: Registration Phase")
+    # ... (Keep existing registration logic)
 else:
-    tab1, tab2, tab3 = st.tabs(["🏆 Standings", "📊 Match Activity", "📅 Fixtures"])
+    tab1, tab2, tab3 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity", "📅 Fixtures Calendar"])
     team_to_player = {t: p for p, teams in db["assignments"].items() for t in teams}
 
     with tab1:
-        st.subheader("Leaderboard")
+        st.subheader("📊 Leaderboard")
         data = [{"Player": p, "Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
         for _, row in pd.DataFrame(data).sort_values("Points", ascending=False).iterrows():
-            st.markdown(f"<div class='premium-card'>{row['Player']}: {row['Points']} PTS</div>", unsafe_allow_html=True)
+            st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">🏆 {row['Player']}</div></div><div class="card-right"><div class="score-display">{row['Points']} PTS</div></div></div>""", unsafe_allow_html=True)
 
     with tab2:
-        st.subheader("Match Activity")
+        st.subheader("📊 Match Activity")
         players = ["All Players"] + sorted(list(db["assignments"].keys()))
         selected_player = st.selectbox("Filter by Player:", players)
         
         logs = pd.DataFrame(raw_activity_logs).iloc[::-1]
         if selected_player != "All Players":
-            relevant_teams = db["assignments"][selected_player]
-            logs = logs[logs["Team"].isin(relevant_teams)]
+            logs = logs[logs["Team"].isin(db["assignments"][selected_player])]
         
         for _, row in logs.iterrows():
-            st.markdown(f"<div class='premium-card'>{row['Match']} - {row['Points']} PTS</div>", unsafe_allow_html=True)
+            badge = "badge-ft" if row['Status'] == "FT" else "badge-live"
+            st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">{row['Match']}</div><div class="card-subtitle">{row['Breakdown']}</div></div><div class="card-right"><span class="{badge}">{row['Status']}</span><div class="score-display">+{row['Points']} PTS</div></div></div>""", unsafe_allow_html=True)
 
     with tab3:
-        st.subheader("Tournament Calendar")
+        st.subheader("📅 Tournament Calendar")
         dates = ["All Dates"] + sorted(list(set([str(d) for d in pd.DataFrame(full_calendar_schedule)["Date"]])))
         selected_date = st.selectbox("Filter by Date:", dates)
         
@@ -130,4 +148,5 @@ else:
             cal = cal[cal["Date"] == selected_date]
             
         for _, row in cal.iterrows():
-            st.markdown(f"<div class='premium-card'>{row['Date']} | {row['Match']} | {row['Result']}</div>", unsafe_allow_html=True)
+            badge = "badge-ft" if row['Status'] == "FT" else "badge-upcoming"
+            st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">{row['Match']}</div><div class="card-subtitle">{row['Date']}</div></div><div class="card-right"><span class="{badge}">{row['Status']}</span><div class="score-display">{row['Result']}</div></div></div>""", unsafe_allow_html=True)
