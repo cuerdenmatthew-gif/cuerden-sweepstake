@@ -274,82 +274,58 @@ db = load_db_from_sheets()
 def process_match_calculations():
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
+    eliminated_teams_set = set()
     processed_fixtures_list = []
-    
-    # Track teams that successfully made it to the Round of 32 dynamically
-    qualified_teams_set = set()
     
     group_stats = {t: {"pts": 0, "gd": 0, "gf": 0, "mp": 0} for t in ALL_TEAMS}
     
-    scores_dict = {}
-    group_winners = []
-    group_runners_up = []
-    
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
-        if not sheet_df.empty:
-            if 'GroupWinner' in sheet_df.columns:
-                group_winners = sheet_df['GroupWinner'].dropna().str.strip().tolist()
-            if 'GroupRunnerUp' in sheet_df.columns:
-                group_runners_up = sheet_df['GroupRunnerUp'].dropna().str.strip().tolist()
+    except Exception as e:
+        st.error(f"Error loading 'Scores' sheet: {e}")
+        return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
 
-            for _, row in sheet_df.iterrows():
-                h = str(row.get('HomeTeam', '')).strip()
-                a = str(row.get('AwayTeam', '')).strip()
-                stage = str(row.get('Stage', '')).strip().lower()
-                
-                # Dynamically collect every team featured in a "round of 32" match
-                if h and a and 'round of 32' in stage:
-                    qualified_teams_set.add(h)
-                    qualified_teams_set.add(a)
+    if sheet_df.empty:
+        return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
 
-                if h and a:
-                    scores_dict[f"{h} vs {a}"] = {
-                        "HomeScore": row.get('HomeScore'),
-                        "AwayScore": row.get('AwayScore'),
-                        "Status": str(row.get('Status', '')).strip().lower(),
-                        "Stage": stage
-                    }
-    except: pass
-
-    # Apply Group Standings Bonuses
-    for team in group_winners:
-        if team in team_points:
-            team_points[team] += 2
-            activity_logs.append({"Status": "FT", "Match": "🏆 Group Standings", "Team": team, "Player": "", "Points Earned": 2, "Breakdown": "🥇 Finished 1st in Group (+2)"})
-
-    for team in group_runners_up:
-        if team in team_points:
-            team_points[team] += 1
-            activity_logs.append({"Status": "FT", "Match": "🏆 Group Standings", "Team": team, "Player": "", "Points Earned": 1, "Breakdown": "🥈 Finished 2nd in Group (+1)"})
-
-    for f in FIXED_FIXTURES:
-        home, away, match_date, match_time = f["Home"], f["Away"], f["Date"], f["Time"]
-        key = f"{home} vs {away}"
+    # Loop dynamically over every row entered in the "Scores" sheet
+    for _, row in sheet_df.iterrows():
+        home = str(row.get('HomeTeam', '')).strip()
+        away = str(row.get('AwayTeam', '')).strip()
         
-        hg, ag, is_finished, stage_label = None, None, False, "group stage"
+        # Skip empty rows safely
+        if not home or not away or pd.isna(home) or pd.isna(away):
+            continue
+            
+        # Safe extraction of scores and statuses
+        home_score_raw = row.get('HomeScore')
+        away_score_raw = row.get('AwayScore')
+        status_label = str(row.get('Status', '')).strip().lower()
+        stage_label = str(row.get('Stage', '')).strip().lower()
         
-        if key in scores_dict:
-            s_data = scores_dict[key]
-            if not pd.isna(s_data["HomeScore"]) and not pd.isna(s_data["AwayScore"]):
-                hg, ag = int(s_data["HomeScore"]), int(s_data["AwayScore"])
-                is_finished = s_data["Status"] in ['final', 'ft', 'finished', 'complete']
-                stage_label = s_data["Stage"]
-                
+        # Determine if a score actually exists
+        has_scores = not pd.isna(home_score_raw) and not pd.isna(away_score_raw)
+        hg = int(home_score_raw) if has_scores else None
+        ag = int(away_score_raw) if has_scores else None
+        
+        is_finished = status_label in ['final', 'ft', 'finished', 'complete']
         is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
         multiplier = 2 if is_knockout else 1
         
+        # Append to the visual fixtures tab calendar view
         processed_fixtures_list.append({
-            "Date": match_date,
-            "Time": match_time,
+            "Date": "Match Day",  # Placeholder since Date column isn't in your spreadsheet grid
+            "Time": "FT" if is_finished else "Scheduled",
             "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
             "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
             "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
         })
 
+        # If no score recorded yet, skip applying point variations
         if hg is None or ag is None:
             continue
 
+        # Group stage standings point trackers (Only if not a knockout match)
         if not is_knockout and is_finished:
             group_stats[home]["mp"] += 1; group_stats[home]["gf"] += hg; group_stats[home]["gd"] += (hg - ag)
             group_stats[away]["mp"] += 1; group_stats[away]["gf"] += ag; group_stats[away]["gd"] += (ag - hg)
@@ -357,33 +333,42 @@ def process_match_calculations():
             elif ag > hg: group_stats[away]["pts"] += 3
             else: group_stats[home]["pts"] += 1; group_stats[away]["pts"] += 1
 
+        # Calculate user points adjustments using the dynamic ruleset multiplier
         hp, ap = 0, 0
         h_break, a_break = [], []
         
-        if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
-        elif hg == ag: hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
-        if hg > 0: hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
-        if ag == 0: hp += (1 * multiplier); h_break.append(f"Clean Sheet (+{1 * multiplier})")
-        if ag >= 3: hp -= (1 * multiplier); h_break.append(f"Conceded 3+ (-{1 * multiplier})")
+        if hg > ag: 
+            hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
+        elif hg == ag: 
+            hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
+            
+        if hg > 0: 
+            hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
+        if ag == 0: 
+            hp += (1 * multiplier); h_break.append(f"Clean Sheet (+{1 * multiplier})")
+        if ag >= 3: 
+            hp -= (1 * multiplier); h_break.append(f"Conceded 3+ (-{1 * multiplier})")
 
-        if ag > hg: ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
-        elif ag == hg: ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
-        if ag > 0: ap += (ag * multiplier); a_break.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
-        if hg == 0: ap += (1 * multiplier); a_break.append(f"Clean Sheet (+{1 * multiplier})")
-        if hg >= 3: ap -= (1 * multiplier); a_break.append(f"Conceded 3+ (-{1 * multiplier})")
+        if ag > hg: 
+            ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
+        elif ag == hg: 
+            ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
+            
+        if ag > 0: 
+            ap += (ag * multiplier); a_break.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
+        if hg == 0: 
+            ap += (1 * multiplier); a_break.append(f"Clean Sheet (+{1 * multiplier})")
+        if hg >= 3: 
+            ap -= (1 * multiplier); a_break.append(f"Conceded 3+ (-{1 * multiplier})")
 
-        team_points[home] += hp
-        team_points[away] += ap
+        # Fallback security constraints to prevent key registration crashes 
+        if home in team_points: team_points[home] += hp
+        if away in team_points: team_points[away] += ap
         
         activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
         activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Player": "", "Points Earned": ap, "Breakdown": " | ".join(a_break)})
 
-    # If Round of 32 has entries, construct final eliminated set out of those who didn't qualify
-    eliminated_teams_set = set(ALL_TEAMS) - qualified_teams_set if len(qualified_teams_set) > 0 else set()
-
     return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
-
-team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = process_match_calculations()
 
 # --- 4. DISPLAY LAYOUT ---
 if os.path.exists("logo.png"):
