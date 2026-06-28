@@ -26,15 +26,14 @@ TEAM_FLAGS = {
     "Iran": "🇮🇷", "Argentina": "🇦🇷", "Uzbekistan": "🇺🇿", "South Korea": "🇰🇷", "Jordan": "🇯🇴",
     "Australia": "🇦🇺", "Brazil": "🇧🇷", "Ecuador": "🇪🇨", "Uruguay": "🇺🇾", "Colombia": "🇨🇴",
     "Paraguay": "🇵🇾", "Morocco": "🇲🇦", "Tunisia": "🇹🇳", "Egypt": "🇪🇬", "Algeria": "🇩🇿",
-    "Ghana": "🇬🇭", "Cabo Verde": "🇨🇻", "Saudi Arabia": "🇸🇦", "Qatar": "🇶🇦", "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "Ghana": "🇬🇭", "Cabo Verde": "🇨🇻", "Saudi Arabia": "🇸🇦", "Qatar": "🇶🇦", "England": "🏴%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "Ivory Coast": "🇨🇮", "South Africa": "🇿🇦", "Senegal": "🇸🇳", "France": "🇫🇷", "Croatia": "🇭🇷",
     "Portugal": "🇵🇹", "Norway": "🇳🇴", "Germany": "🇩🇪", "Netherlands": "🇳🇱", "Belgium": "🇧🇪",
-    "Switzerland": "🇨🇭", "Spain": "🇪🇸", "Austria": "🇦🇹", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Curaçao": "🇨🇼",
+    "Switzerland": "🇨🇭", "Spain": "🇪🇸", "Austria": "🇦🇹", "Scotland": "🏴%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Curaçao": "🇨🇼",
     "Haiti": "🇭🇹", "Panama": "🇵🇦", "Sweden": "🇸🇪", "Türkiye": "🇹🇷", "Czechia": "🇨🇿",
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-# 72 Group Match Calendar Schedule Matrix with Official Kickoff Times Included
 FIXED_FIXTURES = [
     {"Date": "June 11", "Time": "Finished", "Home": "Mexico", "Away": "South Africa"},
     {"Date": "June 12", "Time": "03:00", "Home": "South Korea", "Away": "Czechia"},
@@ -68,7 +67,7 @@ FIXED_FIXTURES = [
     {"Date": "June 19", "Time": "23:00", "Home": "Scotland", "Away": "Morocco"},
     {"Date": "June 20", "Time": "01:30", "Home": "Brazil", "Away": "Haiti"},
     {"Date": "June 20", "Time": "04:00", "Home": "Türkiye", "Away": "Paraguay"},
-    {"Date": "June 20", "Time": "18:00", "Home": "Netherlands", "Away": "Sweden"},
+    {"data": "June 20", "Time": "18:00", "Home": "Netherlands", "Away": "Sweden"},
     {"Date": "June 20", "Time": "21:00", "Home": "Germany", "Away": "Ivory Coast"},
     {"Date": "June 21", "Time": "01:00", "Home": "Ecuador", "Away": "Curaçao"},
     {"Date": "June 21", "Time": "05:00", "Home": "Tunisia", "Away": "Japan"},
@@ -145,14 +144,12 @@ html, body, [data-testid="stAppViewContainer"] {
 
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
 
-/* DROPDOWN COLOR CONFIGURATION */
 div[data-baseweb="select"] > div {
     background-color: #1E052D !important;
     color: #FFFFFF !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
 }
 
-/* ANTI-KEYBOARD MOBILE FIX: Block direct pointer focus to internal select box input */
 div[data-baseweb="select"] input {
     pointer-events: none !important;
     caret-color: transparent !important;
@@ -235,6 +232,14 @@ div.stButton > button {
 .badge-upcoming { background-color: rgba(198, 255, 0, 0.1) !important; color: #C6FF00 !important; border: 1px solid #C6FF00 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
 .badge-live { background-color: rgba(0, 230, 115, 0.15) !important; color: #00E673 !important; border: 1px solid #00E673 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
 .score-display { font-family: 'Montserrat', sans-serif !important; font-size: 1.4rem !important; font-weight: 800 !important; color: #C6FF00 !important; letter-spacing: 1px; }
+
+/* Red line strike-through style for eliminated teams */
+.eliminated-team {
+    text-decoration: line-through !important;
+    text-decoration-color: #E61D25 !important;
+    text-decoration-thickness: 2px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+}
 </style>
 """
 st.markdown(page_bg, unsafe_allow_html=True)
@@ -269,26 +274,54 @@ db = load_db_from_sheets()
 def process_match_calculations():
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
-    eliminated_teams_set = set()
     processed_fixtures_list = []
+    
+    # Track teams that successfully made it to the Round of 32 dynamically
+    qualified_teams_set = set()
     
     group_stats = {t: {"pts": 0, "gd": 0, "gf": 0, "mp": 0} for t in ALL_TEAMS}
     
     scores_dict = {}
+    group_winners = []
+    group_runners_up = []
+    
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
         if not sheet_df.empty:
+            if 'GroupWinner' in sheet_df.columns:
+                group_winners = sheet_df['GroupWinner'].dropna().str.strip().tolist()
+            if 'GroupRunnerUp' in sheet_df.columns:
+                group_runners_up = sheet_df['GroupRunnerUp'].dropna().str.strip().tolist()
+
             for _, row in sheet_df.iterrows():
                 h = str(row.get('HomeTeam', '')).strip()
                 a = str(row.get('AwayTeam', '')).strip()
+                stage = str(row.get('Stage', '')).strip().lower()
+                
+                # Dynamically collect every team featured in a "round of 32" match
+                if h and a and 'round of 32' in stage:
+                    qualified_teams_set.add(h)
+                    qualified_teams_set.add(a)
+
                 if h and a:
                     scores_dict[f"{h} vs {a}"] = {
                         "HomeScore": row.get('HomeScore'),
                         "AwayScore": row.get('AwayScore'),
                         "Status": str(row.get('Status', '')).strip().lower(),
-                        "Stage": str(row.get('Stage', '')).strip().lower()
+                        "Stage": stage
                     }
     except: pass
+
+    # Apply Group Standings Bonuses
+    for team in group_winners:
+        if team in team_points:
+            team_points[team] += 2
+            activity_logs.append({"Status": "FT", "Match": "🏆 Group Standings", "Team": team, "Player": "", "Points Earned": 2, "Breakdown": "🥇 Finished 1st in Group (+2)"})
+
+    for team in group_runners_up:
+        if team in team_points:
+            team_points[team] += 1
+            activity_logs.append({"Status": "FT", "Match": "🏆 Group Standings", "Team": team, "Player": "", "Points Earned": 1, "Breakdown": "🥈 Finished 2nd in Group (+1)"})
 
     for f in FIXED_FIXTURES:
         home, away, match_date, match_time = f["Home"], f["Away"], f["Date"], f["Time"]
@@ -345,6 +378,9 @@ def process_match_calculations():
         activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
         activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Player": "", "Points Earned": ap, "Breakdown": " | ".join(a_break)})
 
+    # If Round of 32 has entries, construct final eliminated set out of those who didn't qualify
+    eliminated_teams_set = set(ALL_TEAMS) - qualified_teams_set if len(qualified_teams_set) > 0 else set()
+
     return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
 
 team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = process_match_calculations()
@@ -365,7 +401,9 @@ st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n*
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🏳️ Active Nations")
 for team in ALL_TEAMS:
-    if team not in eliminated_nations: st.sidebar.markdown(f"{TEAM_FLAGS.get(team, '🏳️')} {team}")
+    # Sidebar completely removes teams that didn't qualify for the Round of 32
+    if team not in eliminated_nations: 
+        st.sidebar.markdown(f"{TEAM_FLAGS.get(team, '🏳️')} {team}")
 
 st.sidebar.markdown("---")
 admin_input = st.sidebar.text_input("Admin Password", type="password")
@@ -416,7 +454,16 @@ else:
             st.subheader("📋 Your Teams")
             for p, teams in db["assignments"].items():
                 with st.expander(f"{p}'s Teams ({len(teams)})"):
-                    st.write(", ".join([f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]))
+                    formatted_team_list = []
+                    for t in teams:
+                        flag = TEAM_FLAGS.get(t, '🏳️')
+                        if t in eliminated_nations:
+                            # Apply markdown style wrapper for a red line through the name
+                            formatted_team_list.append(f"<span class='eliminated-team'>{flag} {t}</span>")
+                        else:
+                            formatted_team_list.append(f"<span>{flag} {t}</span>")
+                    
+                    st.markdown(", ".join(formatted_team_list), unsafe_allow_html=True)
         with c2:
             st.subheader("📊 Leaderboard")
             table = [{"Player": p, "Total Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
