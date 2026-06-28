@@ -26,90 +26,15 @@ TEAM_FLAGS = {
     "Iran": "🇮🇷", "Argentina": "🇦🇷", "Uzbekistan": "🇺🇿", "South Korea": "🇰🇷", "Jordan": "🇯🇴",
     "Australia": "🇦🇺", "Brazil": "🇧🇷", "Ecuador": "🇪🇨", "Uruguay": "🇺🇾", "Colombia": "🇨🇴",
     "Paraguay": "🇵🇾", "Morocco": "🇲🇦", "Tunisia": "🇹🇳", "Egypt": "🇪🇬", "Algeria": "🇩🇿",
-    "Ghana": "🇬🇭", "Cabo Verde": "🇨🇻", "Saudi Arabia": "🇸🇦", "Qatar": "🇶🇦", "England": "🏴%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "Ghana": "🇬🇭", "Cabo Verde": "🇨🇻", "Saudi Arabia": "🇸🇦", "Qatar": "🇶🇦", "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "Ivory Coast": "🇨🇮", "South Africa": "🇿🇦", "Senegal": "🇸🇳", "France": "🇫🇷", "Croatia": "🇭🇷",
     "Portugal": "🇵🇹", "Norway": "🇳🇴", "Germany": "🇩🇪", "Netherlands": "🇳🇱", "Belgium": "🇧🇪",
-    "Switzerland": "🇨🇭", "Spain": "🇪🇸", "Austria": "🇦🇹", "Scotland": "🏴%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴%F0%9F%8F%B4%F0%9F%8F%A7%F0%9F%8F%B5%F0%9F%8F%A2%F0%9F%8F%A7%E2%80%8D🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Curaçao": "🇨🇼",
+    "Switzerland": "🇨🇭", "Spain": "🇪🇸", "Austria": "🇦🇹", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Curaçao": "🇨🇼",
     "Haiti": "🇭🇹", "Panama": "🇵🇦", "Sweden": "🇸🇪", "Türkiye": "🇹🇷", "Czechia": "🇨🇿",
     "Bosnia and Herzegovina": "🇧🇦", "DR Congo": "🇨🇩", "Iraq": "🇮🇶"
 }
 
-FIXED_FIXTURES = [
-    {"Date": "June 11", "Time": "Finished", "Home": "Mexico", "Away": "South Africa"},
-    {"Date": "June 12", "Time": "03:00", "Home": "South Korea", "Away": "Czechia"},
-    {"Date": "June 12", "Time": "20:00", "Home": "Canada", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 13", "Time": "02:00", "Home": "USA", "Away": "Paraguay"},
-    {"Date": "June 13", "Time": "20:00", "Home": "Qatar", "Away": "Switzerland"},
-    {"Date": "June 13", "Time": "23:00", "Home": "Brazil", "Away": "Morocco"},
-    {"Date": "June 14", "Time": "02:00", "Home": "Haiti", "Away": "Scotland"},
-    {"Date": "June 14", "Time": "05:00", "Home": "Australia", "Away": "Türkiye"},
-    {"Date": "June 14", "Time": "18:00", "Home": "Germany", "Away": "Curaçao"},
-    {"Date": "June 14", "Time": "21:00", "Home": "Netherlands", "Away": "Japan"},
-    {"Date": "June 15", "Time": "00:00", "Home": "Ivory Coast", "Away": "Ecuador"},
-    {"Date": "June 15", "Time": "03:00", "Home": "Sweden", "Away": "Tunisia"},
-    {"Date": "June 15", "Time": "17:00", "Home": "Spain", "Away": "Cabo Verde"},
-    {"Date": "June 15", "Time": "20:00", "Home": "Belgium", "Away": "Egypt"},
-    {"Date": "June 15", "Time": "23:00", "Home": "Saudi Arabia", "Away": "Uruguay"},
-    {"Date": "June 16", "Time": "02:00", "Home": "Iran", "Away": "New Zealand"},
-    {"Date": "June 16", "Time": "20:00", "Home": "France", "Away": "Senegal"},
-    {"Date": "June 16", "Time": "23:00", "Home": "Iraq", "Away": "Norway"},
-    {"Date": "June 17", "Time": "02:00", "Home": "Argentina", "Away": "Algeria"},
-    {"Date": "June 17", "Time": "05:00", "Home": "Austria", "Away": "Jordan"},
-    {"Date": "June 17", "Time": "18:00", "Home": "Portugal", "Away": "DR Congo"},
-    {"Date": "June 17", "Time": "21:00", "Home": "England", "Away": "Croatia"},
-    {"Date": "June 18", "Time": "00:00", "Home": "Ghana", "Away": "Panama"},
-    {"Date": "June 18", "Time": "03:00", "Home": "Uzbekistan", "Away": "Colombia"},
-    {"Date": "June 18", "Time": "17:00", "Home": "Czechia", "Away": "South Africa"},
-    {"Date": "June 18", "Time": "20:00", "Home": "Switzerland", "Away": "Bosnia and Herzegovina"},
-    {"Date": "June 18", "Time": "23:00", "Home": "Canada", "Away": "Qatar"},
-    {"Date": "June 19", "Time": "02:00", "Home": "Mexico", "Away": "South Korea"},
-    {"Date": "June 19", "Time": "20:00", "Home": "USA", "Away": "Australia"},
-    {"Date": "June 19", "Time": "23:00", "Home": "Scotland", "Away": "Morocco"},
-    {"Date": "June 20", "Time": "01:30", "Home": "Brazil", "Away": "Haiti"},
-    {"Date": "June 20", "Time": "04:00", "Home": "Türkiye", "Away": "Paraguay"},
-    {"data": "June 20", "Time": "18:00", "Home": "Netherlands", "Away": "Sweden"},
-    {"Date": "June 20", "Time": "21:00", "Home": "Germany", "Away": "Ivory Coast"},
-    {"Date": "June 21", "Time": "01:00", "Home": "Ecuador", "Away": "Curaçao"},
-    {"Date": "June 21", "Time": "05:00", "Home": "Tunisia", "Away": "Japan"},
-    {"Date": "June 21", "Time": "17:00", "Home": "Spain", "Away": "Saudi Arabia"},
-    {"Date": "June 21", "Time": "20:00", "Home": "Belgium", "Away": "Iran"},
-    {"Date": "June 21", "Time": "23:00", "Home": "Uruguay", "Away": "Cabo Verde"},
-    {"Date": "June 22", "Time": "02:00", "Home": "New Zealand", "Away": "Egypt"},
-    {"Date": "June 22", "Time": "18:00", "Home": "Argentina", "Away": "Austria"},
-    {"Date": "June 22", "Time": "22:00", "Home": "France", "Away": "Iraq"},
-    {"Date": "June 23", "Time": "01:00", "Home": "Norway", "Away": "Senegal"},
-    {"Date": "June 23", "Time": "04:00", "Home": "Jordan", "Away": "Algeria"},
-    {"Date": "June 23", "Time": "18:00", "Home": "Portugal", "Away": "Uzbekistan"},
-    {"Date": "June 23", "Time": "21:00", "Home": "England", "Away": "Ghana"},
-    {"Date": "June 24", "Time": "00:00", "Home": "Panama", "Away": "Croatia"},
-    {"Date": "June 24", "Time": "03:00", "Home": "Colombia", "Away": "DR Congo"},
-    {"Date": "June 24", "Time": "20:00", "Home": "Switzerland", "Away": "Canada"},
-    {"Date": "June 24", "Time": "20:00", "Home": "Bosnia and Herzegovina", "Away": "Qatar"},
-    {"Date": "June 24", "Time": "23:00", "Home": "Morocco", "Away": "Haiti"},
-    {"Date": "June 24", "Time": "23:00", "Home": "Scotland", "Away": "Brazil"},
-    {"Date": "June 25", "Time": "02:00", "Home": "South Africa", "Away": "South Korea"},
-    {"Date": "June 25", "Time": "02:00", "Home": "Czechia", "Away": "Mexico"},
-    {"Date": "June 25", "Time": "21:00", "Home": "Curaçao", "Away": "Ivory Coast"},
-    {"Date": "June 25", "Time": "21:00", "Home": "Ecuador", "Away": "Germany"},
-    {"Date": "June 26", "Time": "00:00", "Home": "Tunisia", "Away": "Netherlands"},
-    {"Date": "June 26", "Time": "00:00", "Home": "Japan", "Away": "Sweden"},
-    {"Date": "June 26", "Time": "03:00", "Home": "Türkiye", "Away": "USA"},
-    {"Date": "June 26", "Time": "03:00", "Home": "Paraguay", "Away": "Australia"},
-    {"Date": "June 26", "Time": "20:00", "Home": "Norway", "Away": "France"},
-    {"Date": "June 26", "Time": "20:00", "Home": "Senegal", "Away": "Iraq"},
-    {"Date": "June 27", "Time": "01:00", "Home": "Cabo Verde", "Away": "Saudi Arabia"},
-    {"Date": "June 27", "Time": "01:00", "Home": "Uruguay", "Away": "Spain"},
-    {"Date": "June 27", "Time": "04:00", "Home": "New Zealand", "Away": "Belgium"},
-    {"Date": "June 27", "Time": "04:00", "Home": "Egypt", "Away": "Iran"},
-    {"Date": "June 27", "Time": "22:00", "Home": "Panama", "Away": "England"},
-    {"Date": "June 27", "Time": "22:00", "Home": "Croatia", "Away": "Ghana"},
-    {"Date": "June 28", "Time": "00:30", "Home": "Colombia", "Away": "Portugal"},
-    {"Date": "June 28", "Time": "00:30", "Home": "DR Congo", "Away": "Uzbekistan"},
-    {"Date": "June 28", "Time": "03:00", "Home": "Algeria", "Away": "Austria"},
-    {"Date": "June 28", "Time": "03:00", "Home": "Jordan", "Away": "Argentina"}
-]
-
-# --- 1.5 PREMIUM THEME CSS WITH INPUT KEYBOARD DISABLER ---
+# --- 1.5 PREMIUM THEME CSS ---
 page_bg = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap');
@@ -149,12 +74,10 @@ div[data-baseweb="select"] > div {
     color: #FFFFFF !important;
     border: 1px solid rgba(198, 255, 0, 0.4) !important;
 }
-
 div[data-baseweb="select"] input {
     pointer-events: none !important;
     caret-color: transparent !important;
 }
-
 div[data-baseweb="select"] span, div[data-baseweb="select"] div { color: #FFFFFF !important; }
 ul[role="listbox"], li[role="option"] { background-color: #1E052D !important; color: #FFFFFF !important; }
 
@@ -210,7 +133,6 @@ div.stButton > button {
     padding: 4px 10px !important;
     border-radius: 6px !important;
 }
-
 .premium-card {
     background: rgba(30, 5, 45, 0.85) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -232,14 +154,6 @@ div.stButton > button {
 .badge-upcoming { background-color: rgba(198, 255, 0, 0.1) !important; color: #C6FF00 !important; border: 1px solid #C6FF00 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
 .badge-live { background-color: rgba(0, 230, 115, 0.15) !important; color: #00E673 !important; border: 1px solid #00E673 !important; padding: 2px 8px !important; border-radius: 4px !important; font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase; }
 .score-display { font-family: 'Montserrat', sans-serif !important; font-size: 1.4rem !important; font-weight: 800 !important; color: #C6FF00 !important; letter-spacing: 1px; }
-
-/* Red line strike-through style for eliminated teams */
-.eliminated-team {
-    text-decoration: line-through !important;
-    text-decoration-color: #E61D25 !important;
-    text-decoration-thickness: 2px !important;
-    color: rgba(255, 255, 255, 0.4) !important;
-}
 </style>
 """
 st.markdown(page_bg, unsafe_allow_html=True)
@@ -277,98 +191,91 @@ def process_match_calculations():
     eliminated_teams_set = set()
     processed_fixtures_list = []
     
-    group_stats = {t: {"pts": 0, "gd": 0, "gf": 0, "mp": 0} for t in ALL_TEAMS}
-    
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
     except Exception as e:
         st.error(f"Error loading 'Scores' sheet: {e}")
         return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
 
-    if sheet_df.empty:
-        return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
-
-    # Loop dynamically over every row entered in the "Scores" sheet
-    for _, row in sheet_df.iterrows():
-        home = str(row.get('HomeTeam', '')).strip()
-        away = str(row.get('AwayTeam', '')).strip()
-        
-        # Skip empty rows safely
-        if not home or not away or pd.isna(home) or pd.isna(away):
-            continue
+    if not sheet_df.empty:
+        for _, row in sheet_df.iterrows():
+            home = str(row.get('HomeTeam', '')).strip()
+            away = str(row.get('AwayTeam', '')).strip()
             
-        # Safe extraction of scores and statuses
-        home_score_raw = row.get('HomeScore')
-        away_score_raw = row.get('AwayScore')
-        status_label = str(row.get('Status', '')).strip().lower()
-        stage_label = str(row.get('Stage', '')).strip().lower()
-        
-        # Determine if a score actually exists
-        has_scores = not pd.isna(home_score_raw) and not pd.isna(away_score_raw)
-        hg = int(home_score_raw) if has_scores else None
-        ag = int(away_score_raw) if has_scores else None
-        
-        is_finished = status_label in ['final', 'ft', 'finished', 'complete']
-        is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
-        multiplier = 2 if is_knockout else 1
-        
-        # Append to the visual fixtures tab calendar view
-        processed_fixtures_list.append({
-            "Date": "Match Day",  # Placeholder since Date column isn't in your spreadsheet grid
-            "Time": "FT" if is_finished else "Scheduled",
-            "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
-            "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
-            "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
-        })
-
-        # If no score recorded yet, skip applying point variations
-        if hg is None or ag is None:
-            continue
-
-        # Group stage standings point trackers (Only if not a knockout match)
-        if not is_knockout and is_finished:
-            group_stats[home]["mp"] += 1; group_stats[home]["gf"] += hg; group_stats[home]["gd"] += (hg - ag)
-            group_stats[away]["mp"] += 1; group_stats[away]["gf"] += ag; group_stats[away]["gd"] += (ag - hg)
-            if hg > ag: group_stats[home]["pts"] += 3
-            elif ag > hg: group_stats[away]["pts"] += 3
-            else: group_stats[home]["pts"] += 1; group_stats[away]["pts"] += 1
-
-        # Calculate user points adjustments using the dynamic ruleset multiplier
-        hp, ap = 0, 0
-        h_break, a_break = [], []
-        
-        if hg > ag: 
-            hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
-        elif hg == ag: 
-            hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
+            # 1. Process Group Placement Bonuses dynamically from sheet inputs
+            g_winner = str(row.get('GroupWinner', '')).strip()
+            g_runnerup = str(row.get('GroupRunnerUp', '')).strip()
             
-        if hg > 0: 
-            hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
-        if ag == 0: 
-            hp += (1 * multiplier); h_break.append(f"Clean Sheet (+{1 * multiplier})")
-        if ag >= 3: 
-            hp -= (1 * multiplier); h_break.append(f"Conceded 3+ (-{1 * multiplier})")
+            if g_winner and g_winner in team_points and f"Winner Bonus: {g_winner}" not in [x.get("Match") for x in activity_logs]:
+                team_points[g_winner] += 2
+                activity_logs.append({"Status": "FT", "Match": f"Winner Bonus: {g_winner}", "Team": g_winner, "Player": "", "Points Earned": 2, "Breakdown": "Finished 1st in Group (+2)"})
+            if g_runnerup and g_runnerup in team_points and f"Runner-Up Bonus: {g_runnerup}" not in [x.get("Match") for x in activity_logs]:
+                team_points[g_runnerup] += 1
+                activity_logs.append({"Status": "FT", "Match": f"Runner-Up Bonus: {g_runnerup}", "Team": g_runnerup, "Player": "", "Points Earned": 1, "Breakdown": "Finished 2nd in Group (+1)"})
 
-        if ag > hg: 
-            ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
-        elif ag == hg: 
-            ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
+            if not home or not away or pd.isna(home) or pd.isna(away):
+                continue
+                
+            home_score_raw = row.get('HomeScore')
+            away_score_raw = row.get('AwayScore')
+            status_label = str(row.get('Status', '')).strip().lower()
+            stage_label = str(row.get('Stage', '')).strip().lower()
             
-        if ag > 0: 
-            ap += (ag * multiplier); a_break.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
-        if hg == 0: 
-            ap += (1 * multiplier); a_break.append(f"Clean Sheet (+{1 * multiplier})")
-        if hg >= 3: 
-            ap -= (1 * multiplier); a_break.append(f"Conceded 3+ (-{1 * multiplier})")
+            has_scores = not pd.isna(home_score_raw) and not pd.isna(away_score_raw)
+            hg = int(home_score_raw) if has_scores else None
+            ag = int(away_score_raw) if has_scores else None
+            
+            is_finished = status_label in ['final', 'ft', 'finished', 'complete']
+            is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
+            multiplier = 2 if is_knockout else 1
+            
+            # Track eliminated teams dynamically in knockout stages
+            if is_knockout and is_finished and hg is not None and ag is not None:
+                if hg > ag: eliminated_teams_set.add(away)
+                elif ag > hg: eliminated_teams_set.add(home)
+                
+            # If World Cup Final is complete, hand out Champion Bonus
+            if "final" in stage_label and is_finished and hg is not None and ag is not None:
+                champion = home if hg > ag else away
+                if f"Champion Bonus: {champion}" not in [x.get("Match") for x in activity_logs]:
+                    team_points[champion] += 10
+                    activity_logs.append({"Status": "FT", "Match": f"Champion Bonus: {champion}", "Team": champion, "Player": "", "Points Earned": 10, "Breakdown": "World Cup Champions! (+10)"})
 
-        # Fallback security constraints to prevent key registration crashes 
-        if home in team_points: team_points[home] += hp
-        if away in team_points: team_points[away] += ap
-        
-        activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
-        activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Player": "", "Points Earned": ap, "Breakdown": " | ".join(a_break)})
+            processed_fixtures_list.append({
+                "Date": "Match Day",
+                "Time": "FT" if is_finished else "Scheduled",
+                "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
+                "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
+                "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
+            })
+
+            if hg is None or ag is None:
+                continue
+
+            hp, ap = 0, 0
+            h_break, a_break = [], []
+            
+            if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
+            elif hg == ag: hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
+            if hg > 0: hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
+            if ag == 0: hp += (1 * multiplier); h_break.append(f"Clean Sheet (+{1 * multiplier})")
+            if ag >= 3: hp -= (1 * multiplier); h_break.append(f"Conceded 3+ (-{1 * multiplier})")
+
+            if ag > hg: ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
+            elif ag == hg: ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
+            if ag > 0: ap += (ag * multiplier); a_break.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
+            if hg == 0: ap += (1 * multiplier); a_break.append(f"Clean Sheet (+{1 * multiplier})")
+            if hg >= 3: ap -= (1 * multiplier); a_break.append(f"Conceded 3+ (-{1 * multiplier})")
+
+            if home in team_points: team_points[home] += hp
+            if away in team_points: team_points[away] += ap
+            
+            activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
+            activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Player": "", "Points Earned": ap, "Breakdown": " | ".join(a_break)})
 
     return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
+
+team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = process_match_calculations()
 
 # --- 4. DISPLAY LAYOUT ---
 if os.path.exists("logo.png"):
@@ -386,7 +293,7 @@ st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n*
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🏳️ Active Nations")
 for team in ALL_TEAMS:
-    # Sidebar completely removes teams that didn't qualify for the Round of 32
+    # TYPO CRASH FIX APPLIED HERE
     if team not in eliminated_nations: 
         st.sidebar.markdown(f"{TEAM_FLAGS.get(team, '🏳️')} {team}")
 
@@ -439,16 +346,7 @@ else:
             st.subheader("📋 Your Teams")
             for p, teams in db["assignments"].items():
                 with st.expander(f"{p}'s Teams ({len(teams)})"):
-                    formatted_team_list = []
-                    for t in teams:
-                        flag = TEAM_FLAGS.get(t, '🏳️')
-                        if t in eliminated_nations:
-                            # Apply markdown style wrapper for a red line through the name
-                            formatted_team_list.append(f"<span class='eliminated-team'>{flag} {t}</span>")
-                        else:
-                            formatted_team_list.append(f"<span>{flag} {t}</span>")
-                    
-                    st.markdown(", ".join(formatted_team_list), unsafe_allow_html=True)
+                    st.write(", ".join([f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]))
         with c2:
             st.subheader("📊 Leaderboard")
             table = [{"Player": p, "Total Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
@@ -469,7 +367,7 @@ else:
             
             prize_pot = len(db["participants"]) * 20
             st.success(f"**Final Tournament Prize Pot: £{prize_pot}**")
-            st.markdown(f"💰 **Official Cash Split Structure:**\n* 🥇 **1st Place:** £{prize_pot - 60}\n* 🥈 **2nd Place:** £40 *(Double your money!)*\n* 🥾 **Last Place:** £20 *(Money back)*")
+            st.markdown(f"💰 **Official Cash Split Structure:**\n* 🥇 **1st Place:** £{prize_pot - 60}\n* 🥈 **2nd Place:** £40\n* 🥾 **Last Place:** £20")
 
     with tab2:
         st.subheader("⚽ Match Activity Points Breakdown")
@@ -479,8 +377,8 @@ else:
             log_copy["Player"] = team_to_player.get(log["Team"], "🍿 Unassigned")
             processed_logs.append(log_copy)
             
-        activity_df = pd.DataFrame(processed_logs)
-        if not activity_df.empty:
+        if processed_logs:
+            activity_df = pd.DataFrame(processed_logs)
             filter_option = st.selectbox("Filter Match Activity by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
             filtered_df = activity_df if filter_option == "All Players" else activity_df[activity_df["Player"] == filter_option]
             
@@ -502,23 +400,23 @@ else:
             st.info("Log final scores in your Google Sheet spreadsheet under the 'Scores' tab to populate updates!")
 
     with tab3:
-        st.subheader("📅 Group Stage Tournament Calendar")
-        cal_df = pd.DataFrame(full_calendar_schedule)
-        filter_date = st.selectbox("Filter Calendar by Date:", ["All Dates"] + sorted(list(set(cal_df["Date"].tolist()))))
-        display_cal = cal_df if filter_date == "All Dates" else cal_df[cal_df["Date"] == filter_date]
-        
-        for _, row in display_cal.iterrows():
-            badge_style = "badge-ft" if row['Status'] == "FT" else ("badge-live" if row['Status'] == "Live" else "badge-upcoming")
-            time_label = f"⏱️ Kickoff: {row['Time']}" if row['Status'] == "Upcoming" else "🏁 Match Concluded"
-            st.markdown(f"""
-            <div class="premium-card">
-                <div class="card-left">
-                    <div class="card-title">{row['Match']}</div>
-                    <div class="card-subtitle">📅 Date: {row['Date']} | {time_label}</div>
+        st.subheader("📅 Tournament Calendar")
+        if full_calendar_schedule:
+            cal_df = pd.DataFrame(full_calendar_schedule)
+            filter_date = st.selectbox("Filter Calendar by Date:", ["All Matches"])
+            
+            for _, row in cal_df.iterrows():
+                badge_style = "badge-ft" if row['Status'] == "FT" else ("badge-live" if row['Status'] == "Live" else "badge-upcoming")
+                time_label = "🏁 Match Concluded" if row['Status'] == "FT" else "⏱️ Live / Upcoming"
+                st.markdown(f"""
+                <div class="premium-card">
+                    <div class="card-left">
+                        <div class="card-title">{row['Match']}</div>
+                        <div class="card-subtitle">{time_label}</div>
+                    </div>
+                    <div class="card-right">
+                        <div style="margin-bottom: 4px;"><span class="{badge_style}">{row['Status']}</span></div>
+                        <div class="score-display">{row['Result']}</div>
+                    </div>
                 </div>
-                <div class="card-right">
-                    <div style="margin-bottom: 4px;"><span class="{badge_style}">{row['Status']}</span></div>
-                    <div class="score-display">{row['Result']}</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
