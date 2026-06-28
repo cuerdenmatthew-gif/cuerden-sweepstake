@@ -44,98 +44,25 @@ html, body, [data-testid="stAppViewContainer"] {
     animation: gradientBG 15s ease infinite !important;
     color: #FFFFFF !important;
 }
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-[data-testid="stAppViewContainer"] > .main {
-    background: rgba(15, 5, 25, 0.65) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-}
+@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+[data-testid="stAppViewContainer"] > .main { background: rgba(15, 5, 25, 0.65) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 [data-testid="stHeader"] { background: transparent !important; }
-[data-testid="stSidebar"] {
-    background-color: #120024 !important;
-    background-image: linear-gradient(180deg, #1C0038 0%, #0A0014 100%) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-[data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] h1, 
-[data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] li, [data-testid="stSidebar"] div {
-    color: #FFFFFF !important;
-}
+[data-testid="stSidebar"] { background-color: #120024 !important; background-image: linear-gradient(180deg, #1C0038 0%, #0A0014 100%) !important; border-right: 1px solid rgba(255, 255, 255, 0.1) !important; }
+[data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] li, [data-testid="stSidebar"] div { color: #FFFFFF !important; }
 h1, h2, h3, h4, p, span, label, li, [data-testid="stMarkdownContainer"] p { color: #FFFFFF !important; }
-div[data-baseweb="select"] > div {
-    background-color: #1E052D !important;
-    color: #FFFFFF !important;
-    border: 1px solid rgba(198, 255, 0, 0.4) !important;
-}
+div[data-baseweb="select"] > div { background-color: #1E052D !important; color: #FFFFFF !important; border: 1px solid rgba(198, 255, 0, 0.4) !important; }
 div[data-baseweb="select"] input { pointer-events: none !important; caret-color: transparent !important; }
 div[data-baseweb="select"] span, div[data-baseweb="select"] div { color: #FFFFFF !important; }
 ul[role="listbox"], li[role="option"] { background-color: #1E052D !important; color: #FFFFFF !important; }
-div[data-baseweb="input"] {
-    background-color: #1E052D !important;
-    border: 1px solid rgba(198, 255, 0, 0.4) !important;
-}
+div[data-baseweb="input"] { background-color: #1E052D !important; border: 1px solid rgba(198, 255, 0, 0.4) !important; }
 div[data-baseweb="input"] input { color: #FFFFFF !important; pointer-events: auto !important; }
-div[data-testid="stExpander"] {
-    background-color: #1E052D !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
+div[data-testid="stExpander"] { background-color: #1E052D !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; }
 div[data-testid="stExpander"] summary { background-color: #1E052D !important; color: #FFFFFF !important; }
-div.stButton > button {
-    background-color: #4C0099 !important;
-    color: #C6FF00 !important;
-    border: 1px solid rgba(198, 255, 0, 0.3) !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 12px rgba(128, 0, 255, 0.3) !important;
-}
-.premium-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3.5rem;
-    font-weight: 800;
-    text-align: center;
-    background: linear-gradient(to right, #FFFFFF, #C6FF00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.1;
-}
-.premium-subtitle {
-    font-family: 'Inter', sans-serif;
-    text-align: center;
-    color: #E61D25;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    margin-bottom: 40px;
-}
-.sidebar-hint-text {
-    position: fixed !important;
-    top: 15px !important;
-    left: 55px !important;
-    z-index: 9999999 !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 0.8rem !important;
-    font-weight: 600 !important;
-    color: #C6FF00 !important;
-    background: rgba(40, 0, 80, 0.95) !important;
-    padding: 4px 10px !important;
-    border-radius: 6px !important;
-}
-.premium-card {
-    background: rgba(30, 5, 45, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-left: 4px solid #C6FF00 !important;
-    border-radius: 8px !important;
-    padding: 15px 20px !important;
-    margin-bottom: 12px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    font-family: 'Inter', sans-serif !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important;
-}
+div.stButton > button { background-color: #4C0099 !important; color: #C6FF00 !important; border: 1px solid rgba(198, 255, 0, 0.3) !important; font-weight: 600 !important; box-shadow: 0 4px 12px rgba(128, 0, 255, 0.3) !important; }
+.premium-title { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; font-weight: 800; text-align: center; background: linear-gradient(to right, #FFFFFF, #C6FF00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
+.premium-subtitle { font-family: 'Inter', sans-serif; text-align: center; color: #E61D25; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 40px; }
+.sidebar-hint-text { position: fixed !important; top: 15px !important; left: 55px !important; z-index: 9999999 !important; font-family: 'Inter', sans-serif !important; font-size: 0.8rem !important; font-weight: 600 !important; color: #C6FF00 !important; background: rgba(40, 0, 80, 0.95) !important; padding: 4px 10px !important; border-radius: 6px !important; }
+.premium-card { background: rgba(30, 5, 45, 0.85) !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; border-left: 4px solid #C6FF00 !important; border-radius: 8px !important; padding: 15px 20px !important; margin-bottom: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-family: 'Inter', sans-serif !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important; }
 .card-left { display: flex !important; flex-direction: column !important; gap: 4px !important; }
 .card-title { font-size: 1.15rem !important; font-weight: 700 !important; color: #FFFFFF !important; }
 .card-subtitle { font-size: 0.85rem !important; color: rgba(255, 255, 255, 0.6) !important; }
@@ -192,7 +119,6 @@ def process_match_calculations():
         for _, row in sheet_df.iterrows():
             home = str(row.get('HomeTeam', '')).strip()
             away = str(row.get('AwayTeam', '')).strip()
-            
             g_winner = str(row.get('GroupWinner', '')).strip()
             g_runnerup = str(row.get('GroupRunnerUp', '')).strip()
             
@@ -204,19 +130,11 @@ def process_match_calculations():
                 activity_logs.append({"Status": "FT", "Match": f"Runner-Up Bonus: {g_runnerup}", "Team": g_runnerup, "Player": "", "Points Earned": 1, "Breakdown": "Finished 2nd in Group (+1)"})
 
             if not home or not away or pd.isna(home) or pd.isna(away): continue
-                
-            home_score_raw = row.get('HomeScore')
-            away_score_raw = row.get('AwayScore')
-            status_label = str(row.get('Status', '')).strip().lower()
-            stage_label = str(row.get('Stage', '')).strip().lower()
-            
+            home_score_raw = row.get('HomeScore'); away_score_raw = row.get('AwayScore')
+            status_label = str(row.get('Status', '')).strip().lower(); stage_label = str(row.get('Stage', '')).strip().lower()
             has_scores = not pd.isna(home_score_raw) and not pd.isna(away_score_raw)
-            hg = int(home_score_raw) if has_scores else None
-            ag = int(away_score_raw) if has_scores else None
-            
-            is_finished = status_label in ['final', 'ft', 'finished', 'complete']
-            is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
-            multiplier = 2 if is_knockout else 1
+            hg = int(home_score_raw) if has_scores else None; ag = int(away_score_raw) if has_scores else None
+            is_finished = status_label in ['final', 'ft', 'finished', 'complete']; is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final']); multiplier = 2 if is_knockout else 1
             
             if "final" in stage_label and is_finished and hg is not None and ag is not None:
                 champion = home if hg > ag else away
@@ -224,17 +142,10 @@ def process_match_calculations():
                     team_points[champion] += 10
                     activity_logs.append({"Status": "FT", "Match": f"Champion Bonus: {champion}", "Team": champion, "Player": "", "Points Earned": 10, "Breakdown": "World Cup Champions! (+10)"})
 
-            processed_fixtures_list.append({
-                "Date": "Match Day", "Time": "FT" if is_finished else "Scheduled",
-                "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
-                "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
-                "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
-            })
+            processed_fixtures_list.append({"Date": "Match Day", "Time": "FT" if is_finished else "Scheduled", "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}", "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled", "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")})
 
             if hg is None or ag is None: continue
-
-            hp, ap = 0, 0
-            h_break, a_break = [], []
+            hp, ap = 0, 0; h_break, a_break = [], []
             if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
             elif hg == ag: hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
             if hg > 0: hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
@@ -256,47 +167,27 @@ team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = pro
 
 # --- 4. DISPLAY LAYOUT ---
 st.markdown("<div style='text-align: center;'><div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div><div class='premium-subtitle'>Official Match Tracker</div></div>", unsafe_allow_html=True)
-st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
-
-st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n* **Goal Scored:** 1 pt\n* **Clean Sheet:** 1 pt\n* **3+ Goals Conceded:** -1 pt\n* 🥇 **Group Winner:** +2 pts\n* 🥈 **Group 2nd Place:** +1 pt\n* 🏆 **World Cup Champion:** +10 pts")
+st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n* **Goal Scored:** 1 pt\n* **Clean Sheet:** 1 pt\n* **3+ Goals Conceded:** -1 pt\n* 🥇 **Group Winner:** +2 pts\n* 🏆 **World Cup Champion:** +10 pts")
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🏳️ Active Nations")
 for team in ALL_TEAMS:
-    if team not in eliminated_nations: 
-        st.sidebar.markdown(f"{TEAM_FLAGS.get(team, '🏳️')} {team}")
-
-st.sidebar.markdown("---")
-admin_input = st.sidebar.text_input("Admin Password", type="password")
-if admin_input == ADMIN_PASSWORD and st.sidebar.button("RESET SWEEPSTAKE"):
-    save_db_to_sheets({"participants": [], "assignments": {}, "locked": False})
-    st.rerun()
+    if team not in eliminated_nations: st.sidebar.markdown(f"{TEAM_FLAGS.get(team, '🏳️')} {team}")
 
 if not db["locked"]:
     st.header("Step 1: Registration Phase")
     player_name = st.text_input("Enter name to join:")
     if st.button("Register") and player_name and player_name not in db["participants"]:
-        db["participants"].append(player_name)
-        save_db_to_sheets(db)
-        st.rerun()
+        db["participants"].append(player_name); save_db_to_sheets(db); st.rerun()
     st.write(f"**Registered Players ({len(db['participants'])}):** " + ", ".join(db["participants"]))
     if len(db["participants"]) > 0:
-        per_person = math.floor(48 / len(db["participants"]))
-        prize_pot = len(db["participants"]) * 20
-        st.success(f"**Current Prize Pot: £{prize_pot}**")
-        if admin_input == ADMIN_PASSWORD and st.button("🔴 EXECUTE RANDOM DRAW"):
+        if st.button("🔴 EXECUTE RANDOM DRAW"):
             TOP_13 = ["Spain", "France", "Argentina", "England", "Brazil", "Portugal", "Germany", "Netherlands", "Morocco", "Norway", "Belgium", "Colombia", "Senegal"]
-            shuffled_top = TOP_13.copy(); random.shuffle(shuffled_top)
-            db["assignments"] = {person: [] for person in db["participants"]}
-            for person in db["participants"]:
-                if shuffled_top: db["assignments"][person].append(shuffled_top.pop(0))
-            remaining_pool = shuffled_top + [t for t in ALL_TEAMS if t not in TOP_13]; random.shuffle(remaining_pool)
-            for person in db["participants"]:
-                needed = per_person - len(db["assignments"][person])
-                for _ in range(needed):
-                    if remaining_pool: db["assignments"][person].append(remaining_pool.pop(0))
-            if remaining_pool:
-                lucky_players = db["participants"].copy(); random.shuffle(lucky_players)
-                while remaining_pool and lucky_players: db["assignments"][lucky_players.pop(0)].append(remaining_pool.pop(0))
+            random.shuffle(TOP_13); db["assignments"] = {p: [] for p in db["participants"]}
+            for p in db["participants"]: 
+                if TOP_13: db["assignments"][p].append(TOP_13.pop(0))
+            remaining = TOP_13 + [t for t in ALL_TEAMS if t not in TOP_13]; random.shuffle(remaining)
+            for p in db["participants"]:
+                while len(db["assignments"][p]) < (48 // len(db["participants"])) and remaining: db["assignments"][p].append(remaining.pop(0))
             db["locked"] = True; save_db_to_sheets(db); st.rerun()
 else:
     tab1, tab2, tab3 = st.tabs(["🏆 Standings & Teams", "📊 Match Activity", "📅 Fixtures Calendar"])
@@ -307,43 +198,24 @@ else:
             st.subheader("📋 Your Teams")
             for p, teams in db["assignments"].items():
                 with st.expander(f"{p}'s Teams ({len(teams)})"):
-                    formatted_teams = []
-                    for t in teams:
-                        if t in eliminated_nations:
-                            formatted_teams.append(f"<s>{TEAM_FLAGS.get(t, '🏳️')} {t}</s>")
-                        else:
-                            formatted_teams.append(f"{TEAM_FLAGS.get(t, '🏳️')} {t}")
-                    st.write(", ".join(formatted_teams), unsafe_allow_html=True)
+                    formatted = [f"<s>{TEAM_FLAGS.get(t, '🏳️')} {t}</s>" if t in eliminated_nations else f"{TEAM_FLAGS.get(t, '🏳️')} {t}" for t in teams]
+                    st.write(", ".join(formatted), unsafe_allow_html=True)
         with c2:
             st.subheader("📊 Leaderboard")
             table = [{"Player": p, "Total Points": sum([team_scores.get(t, 0) for t in teams])} for p, teams in db["assignments"].items()]
-            if table: 
-                df_leaderboard = pd.DataFrame(table).sort_values("Total Points", ascending=False)
-                for idx, row in df_leaderboard.iterrows():
-                    st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">🏆 {row['Player']}</div><div class="card-subtitle">Tournament Sweepstake Contender</div></div><div class="card-right"><div class="score-display">{row['Total Points']} PTS</div></div></div>""", unsafe_allow_html=True)
-            prize_pot = len(db["participants"]) * 20
-            st.success(f"**Final Tournament Prize Pot: £{prize_pot}**")
-            st.markdown(f"💰 **Official Cash Split Structure:**\n* 🥇 **1st Place:** £{prize_pot - 60}\n* 🥈 **2nd Place:** £40\n* 🥾 **Last Place:** £20")
+            if table:
+                for idx, row in pd.DataFrame(table).sort_values("Total Points", ascending=False).iterrows():
+                    st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">🏆 {row['Player']}</div></div><div class="card-right"><div class="score-display">{row['Total Points']} PTS</div></div></div>""", unsafe_allow_html=True)
     with tab2:
-        st.subheader("⚽ Match Activity Points Breakdown")
-        processed_logs = []
-        for log in raw_activity_logs:
-            log_copy = log.copy()
-            log_copy["Player"] = team_to_player.get(log["Team"], "🍿 Unassigned")
-            processed_logs.append(log_copy)
+        st.subheader("⚽ Match Activity")
+        processed_logs = [{"Player": team_to_player.get(log["Team"], "Unassigned"), **log} for log in raw_activity_logs]
         if processed_logs:
-            activity_df = pd.DataFrame(processed_logs)
-            filter_option = st.selectbox("Filter Match Activity by Player:", ["All Players"] + sorted(list(db["assignments"].keys())))
-            filtered_df = activity_df if filter_option == "All Players" else activity_df[activity_df["Player"] == filter_option]
-            for _, row in filtered_df.iterrows():
-                badge_style = "badge-ft" if row['Status'] == "FT" else "badge-live"
-                st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">{TEAM_FLAGS.get(row['Team'], '🏳️')} {row['Match']}</div><div class="card-subtitle"><b>Owner:</b> {row['Player']} | {row['Breakdown']}</div></div><div class="card-right"><div style="margin-bottom: 4px;"><span class="{badge_style}">{row['Status']}</span></div><div class="score-display">{'+' if row['Points Earned'] >= 0 else ''}{row['Points Earned']} PTS</div></div></div>""", unsafe_allow_html=True)
-        else: st.info("Log final scores in your Google Sheet spreadsheet under the 'Scores' tab to populate updates!")
+            for _, row in pd.DataFrame(processed_logs).iloc[::-1].iterrows():
+                badge = "badge-ft" if row['Status'] == "FT" else "badge-live"
+                st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">{TEAM_FLAGS.get(row['Team'], '🏳️')} {row['Match']}</div><div class="card-subtitle">{row['Breakdown']}</div></div><div class="card-right"><span class="{badge}">{row['Status']}</span><div class="score-display">{row['Points Earned']} PTS</div></div></div>""", unsafe_allow_html=True)
     with tab3:
         st.subheader("📅 Tournament Calendar")
         if full_calendar_schedule:
-            cal_df = pd.DataFrame(full_calendar_schedule)
-            for _, row in cal_df.iterrows():
-                badge_style = "badge-ft" if row['Status'] == "FT" else ("badge-live" if row['Status'] == "Live" else "badge-upcoming")
-                time_label = "🏁 Match Concluded" if row['Status'] == "FT" else "⏱️ Live / Upcoming"
-                st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">{row['Match']}</div><div class="card-subtitle">{time_label}</div></div><div class="card-right"><div style="margin-bottom: 4px;"><span class="{badge_style}">{row['Status']}</span></div><div class="score-display">{row['Result']}</div></div></div>""", unsafe_allow_html=True)
+            for _, row in pd.DataFrame(full_calendar_schedule).iloc[::-1].iterrows():
+                badge = "badge-ft" if row['Status'] == "FT" else ("badge-live" if row['Status'] == "Live" else "badge-upcoming")
+                st.markdown(f"""<div class="premium-card"><div class="card-left"><div class="card-title">{row['Match']}</div></div><div class="card-right"><span class="{badge}">{row['Status']}</span><div class="score-display">{row['Result']}</div></div></div>""", unsafe_allow_html=True)
