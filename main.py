@@ -183,7 +183,6 @@ def process_match_calculations():
     
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
-        # Ensure column names are clean
         sheet_df.columns = sheet_df.columns.str.strip()
         
         if 'EliminatedTeam' in sheet_df.columns:
@@ -196,13 +195,16 @@ def process_match_calculations():
             home = str(row.get('HomeTeam', '')).strip()
             away = str(row.get('AwayTeam', '')).strip()
             
-            # --- PENALTY CHECK ---
-            pen_winner = str(row.get('PenaltyWinner', '')).strip()
+            # --- PENALTY CHECK (FIXED PANDAS NaN ISSUE) ---
+            raw_pen = row.get('PenaltyWinner')
+            if pd.isna(raw_pen) or str(raw_pen).strip().lower() == 'nan':
+                pen_winner = ""
+            else:
+                pen_winner = str(raw_pen).strip()
             
             g_winner = str(row.get('GroupWinner', '')).strip()
             g_runnerup = str(row.get('GroupRunnerUp', '')).strip()
             
-            # Bonus points logic
             if g_winner and g_winner in team_points and f"Winner Bonus: {g_winner}" not in [x.get("Match") for x in activity_logs]:
                 team_points[g_winner] += 2
                 activity_logs.append({"Status": "FT", "Match": f"Winner Bonus: {g_winner}", "Team": g_winner, "Player": "", "Points Earned": 2, "Breakdown": "Finished 1st in Group (+2)"})
@@ -244,13 +246,11 @@ def process_match_calculations():
             hp, ap = 0, 0
             h_break, a_break = [], []
             
-            # 1. Determine Win/Draw Points
-            if pen_winner:
-                # If there's a penalty winner, that team gets the Win Points (3 * multiplier)
-                if pen_winner == home:
-                    hp += (3 * multiplier); h_break.append(f"Penalty Win (+{3 * multiplier})")
-                else:
-                    ap += (3 * multiplier); a_break.append(f"Penalty Win (+{3 * multiplier})")
+            # 1. Determine Win/Draw Points (Fixed Logic)
+            if pen_winner == home:
+                hp += (3 * multiplier); h_break.append(f"Penalty Win (+{3 * multiplier})")
+            elif pen_winner == away:
+                ap += (3 * multiplier); a_break.append(f"Penalty Win (+{3 * multiplier})")
             else:
                 # Normal regulation points
                 if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
