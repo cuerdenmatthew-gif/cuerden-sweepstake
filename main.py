@@ -280,7 +280,7 @@ team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = pro
 st.markdown("<div style='text-align: center;'><div class='premium-title'>Cuerden & Co<br>WC26 Sweepstake</div><div class='premium-subtitle'>Official Match Tracker</div></div>", unsafe_allow_html=True)
 st.markdown("<div class='sidebar-hint-text'>👈 Rules & Teams</div>", unsafe_allow_html=True)
 
-st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n* **Goal Scored:** 1 pt\n* **Clean Sheet:** 1 pt\n* **3+ Goals Conceded:** -1 pt\n* 🥇 **Group Winner:** +2 pts\n* 🥈 **Group 2nd Place:** +1 pt\n* 🏆 **World Cup Champion:** +10 pts")
+st.sidebar.markdown("### 📜 Point System\n* **Win:** 3 pts | **Draw:** 1 pt\n* **Goal Scored:** 1 pt\n* **Clean Sheet:** 1 pt\n* **3+ Goals Conceded:** -1 pt\n* 🥇 **Group Winner:** +2 pts\n* 🥈 **Group 2nd Place:** +1 pt\n* 🏆 **World Cup Champion:** +10 pts\n* ⚡ **Knockout Stage:** All points are **2x**")
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🏳️ Active Nations")
 for team in ALL_TEAMS:
