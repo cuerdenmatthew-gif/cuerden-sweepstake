@@ -176,6 +176,8 @@ db = load_db_from_sheets()
 
 # --- 3. MATCH CALCULATIONS ENGINE ---
 def process_match_calculations():
+    # Create a lookup dictionary for case-insensitive matching
+    team_lookup = {t.lower(): t for t in ALL_TEAMS}
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
     processed_fixtures_list = []
@@ -185,54 +187,47 @@ def process_match_calculations():
         sheet_df.columns = sheet_df.columns.str.strip()
         
         for _, row in sheet_df.iterrows():
-            home = str(row.get('HomeTeam', '')).strip()
-            away = str(row.get('AwayTeam', '')).strip()
-            hg = row.get('HomeScore')
-            ag = row.get('AwayScore')
-            pen_winner = str(row.get('PenaltyWinner', '')).strip()
-            status = str(row.get('Status', '')).lower()
-            date = str(row.get('Date', 'Match Day'))
+            # Get and clean team names
+            home_raw = str(row.get('HomeTeam', '')).strip()
+            away_raw = str(row.get('AwayTeam', '')).strip()
+            home = team_lookup.get(home_raw.lower())
+            away = team_lookup.get(away_raw.lower())
             
+            # Get scores safely
+            hg_val = row.get('HomeScore')
+            ag_val = row.get('AwayScore')
+            
+            # Get penalty winner safely
+            pen_raw = str(row.get('PenaltyWinner', '')).strip()
+            pen_winner = team_lookup.get(pen_raw.lower()) if pen_raw else None
+            
+            status = str(row.get('Status', '')).lower()
             is_finished = status in ['final', 'ft', 'finished', 'complete']
             
-            if pd.notna(hg) and pd.notna(ag):
-                # 1. Determine Win Points
-                if pen_winner and pen_winner in ALL_TEAMS:
-                    # Penalty winner gets the 3 points, loser gets 0
-                    hp = 3 if pen_winner == home else 0
-                    ap = 3 if pen_winner == away else 0
-                else:
-                    # Standard regulation logic
-                    hp = (3 if hg > ag else 0) + (1 if hg == ag else 0)
-                    ap = (3 if ag > hg else 0) + (1 if hg == ag else 0)
-                
-                # 2. Add goal points (1pt per goal scored)
-                hp += int(hg)
-                ap += int(ag)
-                
-                # 3. Update scores
-                if home in team_points: team_points[home] += hp
-                if away in team_points: team_points[away] += ap
-                
-                activity_logs.append({
-                    "Match": f"{home} {hg}-{ag} {away} {'(Pen)' if pen_winner else ''}", 
-                    "Team": home, "Points": hp, "Status": "FT" if is_finished else "Live", 
-                    "Breakdown": "Match points earned"
-                })
-                activity_logs.append({
-                    "Match": f"{home} {hg}-{ag} {away} {'(Pen)' if pen_winner else ''}", 
-                    "Team": away, "Points": ap, "Status": "FT" if is_finished else "Live", 
-                    "Breakdown": "Match points earned"
-                })
+            # Only process if valid teams are found
+            if home and away and pd.notna(hg_val) and pd.notna(ag_val):
+                try:
+                    hg, ag = int(hg_val), int(ag_val)
+                    
+                    if pen_winner:
+                        hp = 3 if pen_winner == home else 0
+                        ap = 3 if pen_winner == away else 0
+                    else:
+                        hp = (3 if hg > ag else 0) + (1 if hg == ag else 0)
+                        ap = (3 if ag > hg else 0) + (1 if hg == ag else 0)
+                    
+                    team_points[home] += (hp + hg)
+                    team_points[away] += (ap + ag)
+                    
+                    activity_logs.append({"Match": f"{home} {hg}-{ag} {away}", "Team": home, "Points": hp + hg, "Status": "FT" if is_finished else "Live", "Breakdown": "Match points"})
+                    activity_logs.append({"Match": f"{home} {hg}-{ag} {away}", "Team": away, "Points": ap + ag, "Status": "FT" if is_finished else "Live", "Breakdown": "Match points"})
+                except ValueError:
+                    continue # Skip rows where scores aren't numbers
             
-            processed_fixtures_list.append({
-                "Date": date, 
-                "Match": f"{home} vs {away}", 
-                "Result": f"{hg}-{ag} {'(P)' if pen_winner else ''}" if pd.notna(hg) else "Scheduled", 
-                "Status": "FT" if is_finished else "Upcoming"
-            })
+            processed_fixtures_list.append({"Date": "Match Day", "Match": f"{home_raw} vs {away_raw}", "Result": f"{hg_val}-{ag_val}" if pd.notna(hg_val) else "Scheduled", "Status": "FT" if is_finished else "Upcoming"})
+            
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Processing Error: {e}")
         
     return team_points, activity_logs, processed_fixtures_list
     
