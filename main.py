@@ -178,80 +178,64 @@ db = load_db_from_sheets()
 def process_match_calculations():
     team_points = {team: 0 for team in ALL_TEAMS}
     activity_logs = []
-    eliminated_teams_set = set()
     processed_fixtures_list = []
     
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
-        if 'EliminatedTeam' in sheet_df.columns:
-            eliminated_teams_set = set(sheet_df['EliminatedTeam'].dropna().astype(str).str.strip().unique())
-            eliminated_teams_set.discard('')
-    except: pass
-
-    if not sheet_df.empty:
+        sheet_df.columns = sheet_df.columns.str.strip()
+        
         for _, row in sheet_df.iterrows():
             home = str(row.get('HomeTeam', '')).strip()
             away = str(row.get('AwayTeam', '')).strip()
+            hg = row.get('HomeScore')
+            ag = row.get('AwayScore')
+            pen_winner = str(row.get('PenaltyWinner', '')).strip()
+            status = str(row.get('Status', '')).lower()
+            date = str(row.get('Date', 'Match Day'))
             
-            g_winner = str(row.get('GroupWinner', '')).strip()
-            g_runnerup = str(row.get('GroupRunnerUp', '')).strip()
+            is_finished = status in ['final', 'ft', 'finished', 'complete']
             
-            if g_winner and g_winner in team_points and f"Winner Bonus: {g_winner}" not in [x.get("Match") for x in activity_logs]:
-                team_points[g_winner] += 2
-                activity_logs.append({"Status": "FT", "Match": f"Winner Bonus: {g_winner}", "Team": g_winner, "Player": "", "Points Earned": 2, "Breakdown": "Finished 1st in Group (+2)"})
-            if g_runnerup and g_runnerup in team_points and f"Runner-Up Bonus: {g_runnerup}" not in [x.get("Match") for x in activity_logs]:
-                team_points[g_runnerup] += 1
-                activity_logs.append({"Status": "FT", "Match": f"Runner-Up Bonus: {g_runnerup}", "Team": g_runnerup, "Player": "", "Points Earned": 1, "Breakdown": "Finished 2nd in Group (+1)"})
-
-            if not home or not away or pd.isna(home) or pd.isna(away): continue
+            if pd.notna(hg) and pd.notna(ag):
+                # 1. Determine Win Points
+                if pen_winner and pen_winner in ALL_TEAMS:
+                    # Penalty winner gets the 3 points, loser gets 0
+                    hp = 3 if pen_winner == home else 0
+                    ap = 3 if pen_winner == away else 0
+                else:
+                    # Standard regulation logic
+                    hp = (3 if hg > ag else 0) + (1 if hg == ag else 0)
+                    ap = (3 if ag > hg else 0) + (1 if hg == ag else 0)
                 
-            home_score_raw = row.get('HomeScore')
-            away_score_raw = row.get('AwayScore')
-            status_label = str(row.get('Status', '')).strip().lower()
-            stage_label = str(row.get('Stage', '')).strip().lower()
+                # 2. Add goal points (1pt per goal scored)
+                hp += int(hg)
+                ap += int(ag)
+                
+                # 3. Update scores
+                if home in team_points: team_points[home] += hp
+                if away in team_points: team_points[away] += ap
+                
+                activity_logs.append({
+                    "Match": f"{home} {hg}-{ag} {away} {'(Pen)' if pen_winner else ''}", 
+                    "Team": home, "Points": hp, "Status": "FT" if is_finished else "Live", 
+                    "Breakdown": "Match points earned"
+                })
+                activity_logs.append({
+                    "Match": f"{home} {hg}-{ag} {away} {'(Pen)' if pen_winner else ''}", 
+                    "Team": away, "Points": ap, "Status": "FT" if is_finished else "Live", 
+                    "Breakdown": "Match points earned"
+                })
             
-            has_scores = not pd.isna(home_score_raw) and not pd.isna(away_score_raw)
-            hg = int(home_score_raw) if has_scores else None
-            ag = int(away_score_raw) if has_scores else None
-            
-            is_finished = status_label in ['final', 'ft', 'finished', 'complete']
-            is_knockout = any(w in stage_label for w in ['knockout', 'round', 'quarter', 'semi', 'final'])
-            multiplier = 2 if is_knockout else 1
-            
-            if "final" in stage_label and is_finished and hg is not None and ag is not None:
-                champion = home if hg > ag else away
-                if f"Champion Bonus: {champion}" not in [x.get("Match") for x in activity_logs]:
-                    team_points[champion] += 10
-                    activity_logs.append({"Status": "FT", "Match": f"Champion Bonus: {champion}", "Team": champion, "Player": "", "Points Earned": 10, "Breakdown": "World Cup Champions! (+10)"})
-
             processed_fixtures_list.append({
-                "Date": "Match Day", "Time": "FT" if is_finished else "Scheduled",
-                "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
-                "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
-                "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
+                "Date": date, 
+                "Match": f"{home} vs {away}", 
+                "Result": f"{hg}-{ag} {'(P)' if pen_winner else ''}" if pd.notna(hg) else "Scheduled", 
+                "Status": "FT" if is_finished else "Upcoming"
             })
-
-            if hg is None or ag is None: continue
-
-            hp, ap = 0, 0
-            h_break, a_break = [], []
-            if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
-            elif hg == ag: hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
-            if hg > 0: hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
-            if ag == 0: hp += (1 * multiplier); h_break.append(f"Clean Sheet (+{1 * multiplier})")
-            if ag >= 3: hp -= (1 * multiplier); h_break.append(f"Conceded 3+ (-{1 * multiplier})")
-            if ag > hg: ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
-            elif ag == hg: ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
-            if ag > 0: ap += (ag * multiplier); a_break.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
-            if hg == 0: ap += (1 * multiplier); a_break.append(f"Clean Sheet (+{1 * multiplier})")
-            if hg >= 3: ap -= (1 * multiplier); a_break.append(f"Conceded 3+ (-{1 * multiplier})")
-            if home in team_points: team_points[home] += hp
-            if away in team_points: team_points[away] += ap
-            activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
-            activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": away, "Player": "", "Points Earned": ap, "Breakdown": " | ".join(a_break)})
-
-    return team_points, activity_logs, eliminated_teams_set, processed_fixtures_list
-
+    except Exception as e:
+        st.error(f"Error: {e}")
+        
+    return team_points, activity_logs, processed_fixtures_list
+    
 team_scores, raw_activity_logs, eliminated_nations, full_calendar_schedule = process_match_calculations()
 
 # --- 4. DISPLAY LAYOUT ---
