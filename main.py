@@ -183,6 +183,9 @@ def process_match_calculations():
     
     try:
         sheet_df = conn.read(worksheet="Scores", ttl=0)
+        # Ensure column names are clean
+        sheet_df.columns = sheet_df.columns.str.strip()
+        
         if 'EliminatedTeam' in sheet_df.columns:
             eliminated_teams_set = set(sheet_df['EliminatedTeam'].dropna().astype(str).str.strip().unique())
             eliminated_teams_set.discard('')
@@ -193,9 +196,13 @@ def process_match_calculations():
             home = str(row.get('HomeTeam', '')).strip()
             away = str(row.get('AwayTeam', '')).strip()
             
+            # --- PENALTY CHECK ---
+            pen_winner = str(row.get('PenaltyWinner', '')).strip()
+            
             g_winner = str(row.get('GroupWinner', '')).strip()
             g_runnerup = str(row.get('GroupRunnerUp', '')).strip()
             
+            # Bonus points logic
             if g_winner and g_winner in team_points and f"Winner Bonus: {g_winner}" not in [x.get("Match") for x in activity_logs]:
                 team_points[g_winner] += 2
                 activity_logs.append({"Status": "FT", "Match": f"Winner Bonus: {g_winner}", "Team": g_winner, "Player": "", "Points Earned": 2, "Breakdown": "Finished 1st in Group (+2)"})
@@ -227,24 +234,39 @@ def process_match_calculations():
             processed_fixtures_list.append({
                 "Date": "Match Day", "Time": "FT" if is_finished else "Scheduled",
                 "Match": f"{TEAM_FLAGS.get(home, '🏳️')} {home} vs {away} {TEAM_FLAGS.get(away, '🏳️')}",
-                "Result": f"{hg} - {ag}" if hg is not None else "📅 Scheduled",
+                "Result": f"{hg} - {ag} {'(P)' if pen_winner else ''}" if hg is not None else "📅 Scheduled",
                 "Status": "FT" if is_finished else ("Live" if hg is not None else "Upcoming")
             })
 
             if hg is None or ag is None: continue
 
+            # --- CALCULATE POINTS WITH PENALTY OVERRIDE ---
             hp, ap = 0, 0
             h_break, a_break = [], []
-            if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
-            elif hg == ag: hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
+            
+            # 1. Determine Win/Draw Points
+            if pen_winner:
+                # If there's a penalty winner, that team gets the Win Points (3 * multiplier)
+                if pen_winner == home:
+                    hp += (3 * multiplier); h_break.append(f"Penalty Win (+{3 * multiplier})")
+                else:
+                    ap += (3 * multiplier); a_break.append(f"Penalty Win (+{3 * multiplier})")
+            else:
+                # Normal regulation points
+                if hg > ag: hp += (3 * multiplier); h_break.append(f"Win (+{3 * multiplier})")
+                elif hg == ag: hp += (1 * multiplier); h_break.append(f"Draw (+{1 * multiplier})")
+                if ag > hg: ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
+                elif ag == hg: ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
+
+            # 2. Add Goals/Clean Sheets
             if hg > 0: hp += (hg * multiplier); h_break.append(f"{hg} Goal{'s' if hg>1 else ''} (+{hg * multiplier})")
             if ag == 0: hp += (1 * multiplier); h_break.append(f"Clean Sheet (+{1 * multiplier})")
             if ag >= 3: hp -= (1 * multiplier); h_break.append(f"Conceded 3+ (-{1 * multiplier})")
-            if ag > hg: ap += (3 * multiplier); a_break.append(f"Win (+{3 * multiplier})")
-            elif ag == hg: ap += (1 * multiplier); a_break.append(f"Draw (+{1 * multiplier})")
+            
             if ag > 0: ap += (ag * multiplier); a_break.append(f"{ag} Goal{'s' if ag>1 else ''} (+{ag * multiplier})")
             if hg == 0: ap += (1 * multiplier); a_break.append(f"Clean Sheet (+{1 * multiplier})")
             if hg >= 3: ap -= (1 * multiplier); a_break.append(f"Conceded 3+ (-{1 * multiplier})")
+            
             if home in team_points: team_points[home] += hp
             if away in team_points: team_points[away] += ap
             activity_logs.append({"Status": "FT" if is_finished else "Live", "Match": f"{home} {hg} - {ag} {away}", "Team": home, "Player": "", "Points Earned": hp, "Breakdown": " | ".join(h_break)})
